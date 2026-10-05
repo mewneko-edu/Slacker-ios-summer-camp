@@ -300,7 +300,7 @@ OopsBomb/
 
 ## Demo
 
-**YouTube demo:** Coming soon — the team will add the video link here.
+**YouTube demo:** https://youtu.be/saLcLm0DvoI?si=l5B_yHEQ4kx0uuV_
 
 The demo follows the nine feature chapters above, with particular attention to four moments:
 
