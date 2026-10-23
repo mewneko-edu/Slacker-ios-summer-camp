@@ -159,6 +159,8 @@ private struct TaskProgressDashboard: View {
     let isActive: Bool
     @State private var animatedProgress = 0.0
     @State private var animationTask: Task<Void, Never>?
+    /// 百分比是儀表板的主要讀數；縮放上限由 minimumScaleFactor 擋住，避免溢出儀表。
+    @ScaledMetric(relativeTo: .largeTitle) private var readoutSize: CGFloat = 46
 
     var body: some View {
         ZStack {
@@ -166,8 +168,10 @@ private struct TaskProgressDashboard: View {
 
             VStack(spacing: 7) {
                 Text("\(Int(animatedProgress.rounded()))%")
-                    .font(.system(size: 46, weight: .black, design: .rounded))
+                    .font(.system(size: readoutSize, weight: .black, design: .rounded))
                     .monospacedDigit()
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.6)
                     .foregroundStyle(BombTheme.ink)
 
                 Text(L10n.text("待完成任務進度"))

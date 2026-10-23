@@ -677,6 +677,8 @@ private struct SmartAgendaMeetingSession: View {
     let isLeader: Bool
     @Environment(\.dismiss) private var dismiss
     @State private var error: String?
+    /// 會議中的剩餘時間是主要資訊，必須跟著系統字級放大。
+    @ScaledMetric(relativeTo: .largeTitle) private var countdownSize: CGFloat = 48
     var body: some View {
         NavigationStack {
             TimelineView(.periodic(from: .now, by: 1)) { context in
@@ -686,7 +688,9 @@ private struct SmartAgendaMeetingSession: View {
                     VStack(alignment: .leading, spacing: 20) {
                         Text(agenda.displayTopic).font(.title2.bold())
                         Text(String(format: "%02d:%02d", remaining / 60, remaining % 60))
-                            .font(.system(size: 48, weight: .bold, design: .monospaced))
+                            .font(.system(size: countdownSize, weight: .bold, design: .monospaced))
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.6)
                         if let current = agenda.stages.first(where: { elapsed < $0.end * 60 }) {
                             Text(current.time).foregroundStyle(BombTheme.secondaryText)
                             Text(agenda.displayTitle(current)).font(.title3.bold())
