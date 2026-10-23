@@ -8,6 +8,7 @@ struct PokeReceptionOverlay: View {
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var isPulsing = false
     @State private var isWobbling = false
+    @State private var hasArrived = false
 
     var body: some View {
         ZStack {
@@ -61,7 +62,14 @@ struct PokeReceptionOverlay: View {
         }
         .accessibilityElement(children: .contain)
         .accessibilityLabel("\(headline)，\(reception.groupName)，\(countMessage)")
+        // 被戳是觸覺最該出場的時刻；強度跟著 style 的視覺升級曲線走。
+        .sensoryFeedback(trigger: hasArrived) { _, arrived in
+            arrived ? effectFeedback : nil
+        }
         .task {
+            // 觸覺不受 reduceMotion 限制，必須在提前 return 之前設定。
+            hasArrived = true
+
             guard !reduceMotion else { return }
 
             withAnimation(.easeOut(duration: 1).repeatForever(autoreverses: false)) {
@@ -70,6 +78,14 @@ struct PokeReceptionOverlay: View {
             withAnimation(.bouncy(duration: 0.25).repeatForever(autoreverses: true)) {
                 isWobbling = true
             }
+        }
+    }
+
+    private var effectFeedback: SensoryFeedback {
+        switch reception.style {
+        case .gentle: .impact(weight: .light)
+        case .meme: .impact(weight: .medium)
+        case .alarm: .warning
         }
     }
 

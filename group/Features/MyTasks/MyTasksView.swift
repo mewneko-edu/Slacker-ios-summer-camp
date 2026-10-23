@@ -56,26 +56,25 @@ struct MyTasksView: View {
                             .padding(.vertical, 42)
                     } else if let syncError = model.cloudGroupSyncErrorMessage,
                               model.projectTasks.isEmpty {
-                        ContentUnavailableView {
-                            Label(L10n.text("無法載入任務"), systemImage: "exclamationmark.triangle.fill")
-                        } description: {
-                            Text(syncError)
-                        } actions: {
+                        BombEmptyState(
+                            systemImage: "exclamationmark.triangle.fill",
+                            title: L10n.text("無法載入任務"),
+                            message: syncError,
+                            verticalPadding: 42
+                        ) {
                             Button(L10n.text("重新整理")) {
                                 Task { await model.reloadCloudGroups() }
                             }
                             .buttonStyle(.borderedProminent)
                             .tint(BombTheme.ink)
+                            .padding(.top, 4)
                         }
-                        .frame(maxWidth: .infinity)
-                        .padding(.vertical, 42)
                     } else if visibleTasks.isEmpty {
-                        ContentUnavailableView(
-                            showCompleted ? L10n.text("還沒有完成任務") : L10n.text("目前沒有待完成任務"),
-                            systemImage: showCompleted ? "checkmark.seal.fill" : "bolt.fill"
+                        BombEmptyState(
+                            systemImage: showCompleted ? "checkmark.seal.fill" : "bolt.fill",
+                            title: showCompleted ? L10n.text("還沒有完成任務") : L10n.text("目前沒有待完成任務"),
+                            verticalPadding: 42
                         )
-                        .frame(maxWidth: .infinity)
-                        .padding(.vertical, 42)
                     } else {
                         ForEach(visibleTasks) { task in
                             let group = model.groups.first { $0.id == task.groupID }

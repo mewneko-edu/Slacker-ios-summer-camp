@@ -137,6 +137,10 @@ struct GroupListView: View {
             }
         }
         .animation(.easeOut(duration: 0.2), value: joinSuccessMessage != nil && !isAddGroupPresented)
+        // 只在成功提示「出現」時震動；關閉時不再震一次。
+        .sensoryFeedback(trigger: joinSuccessMessage != nil && !isAddGroupPresented) { _, isShown in
+            isShown ? .success : nil
+        }
     }
 
     private func joinSuccessOverlay(message: String) -> some View {
@@ -178,15 +182,12 @@ struct GroupListView: View {
     }
 
     private var emptyState: some View {
-        VStack(spacing: 14) {
-            Image(systemName: "person.3.fill")
-                .font(.system(size: 36, weight: .black))
-            Text(L10n.text("還沒有群組"))
-                .font(.title3.weight(.black))
-            Text(L10n.text("建立自己的群組，或使用邀請碼加入"))
-                .font(.subheadline.weight(.bold))
-                .foregroundStyle(BombTheme.ink.opacity(0.65))
-
+        BombEmptyState(
+            systemImage: "person.3.fill",
+            title: L10n.text("還沒有群組"),
+            message: L10n.text("建立自己的群組，或使用邀請碼加入"),
+            verticalPadding: 80
+        ) {
             VStack(spacing: 12) {
                 Button {
                     presentAddGroup(mode: .create)
@@ -207,23 +208,12 @@ struct GroupListView: View {
             .containerRelativeFrame(.horizontal) { width, _ in width * 0.66 }
             .padding(.top, 22)
         }
-        .frame(maxWidth: .infinity)
-        .padding(.vertical, 80)
     }
 
     private func syncStatus(_ message: String) -> some View {
-        VStack(spacing: 12) {
-            Label(message, systemImage: "icloud.slash")
-                .font(.subheadline.weight(.semibold))
-                .multilineTextAlignment(.center)
-            Button(L10n.text("重試")) {
-                Task { await model.reloadCloudGroups() }
-            }
-            .font(.subheadline.bold())
-            .disabled(model.isLoadingCloudGroups)
+        BombSyncStatus(message: message, isRetrying: model.isLoadingCloudGroups) {
+            Task { await model.reloadCloudGroups() }
         }
-        .foregroundStyle(BombTheme.ink)
-        .frame(maxWidth: .infinity)
     }
 
     private func presentAddGroup(mode: GroupEntryMode) {
@@ -380,9 +370,11 @@ private struct AddGroupSheet: View {
             },
             set: { if !$0 { joinStore.reset(); joinError = nil } }
         )) {
+            #if DEBUG
             if case .failure(.activeProjectLimit) = joinStore.state {
                 Button(L10n.text("升級至 Pro")) { showsSubscription = true }
             }
+            #endif
             Button(L10n.text("知道了")) { }
         } message: {
             if let joinError {
@@ -395,9 +387,11 @@ private struct AddGroupSheet: View {
             get: { creationError != nil },
             set: { if !$0 { creationError = nil } }
         )) {
+            #if DEBUG
             if creationHitQuota {
                 Button(L10n.text("升級至 Pro")) { showsSubscription = true }
             }
+            #endif
             Button(L10n.text("知道了")) { }
         } message: {
             Text(creationError ?? "")

@@ -14,6 +14,8 @@ struct ProfilePhotoService {
             image.draw(in: CGRect(origin: .zero, size: CGSize(width: size.width * scale, height: size.height * scale)))
         }
         guard let jpeg = resized.jpegData(compressionQuality: 0.85) else { throw AttachmentOperationError.invalidFile }
+        let profileRef = Firestore.firestore().collection("profiles").document(user.uid)
+        let previousPath = try await profileRef.getDocument().data()?["avatarPath"] as? String
         let path = "avatars/\(user.uid)/\(UUID().uuidString.lowercased()).jpg"
         let ref = Storage.storage().reference(withPath: path)
         let metadata = StorageMetadata()
@@ -21,10 +23,13 @@ struct ProfilePhotoService {
         _ = try await ref.putDataAsync(jpeg, metadata: metadata)
         do {
             guard Auth.auth().currentUser?.uid == user.uid else { throw AttachmentOperationError.signedOut }
-            try await Firestore.firestore().collection("profiles").document(user.uid).setData(["avatarPath": path], merge: true)
+            try await profileRef.setData(["avatarPath": path], merge: true)
         } catch {
             try? await ref.delete()
             throw error
+        }
+        if let previousPath, previousPath != path {
+            try? await Storage.storage().reference(withPath: previousPath).delete()
         }
         try await share(jpeg, uid: user.uid, groupIDs: groupIDs)
     }

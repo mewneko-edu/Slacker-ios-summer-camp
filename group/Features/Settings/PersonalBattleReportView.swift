@@ -7,6 +7,9 @@ struct PersonalBattleReportView: View {
     let model: GroupBombModel
     @State private var exportedReport: ExportedPersonalReport?
     @State private var exportError: String?
+    /// 平均分是這頁最主要的閱讀內容，跟著使用者的字級設定縮放。
+    /// 預設字級下仍是原本的 42pt，外觀不變。
+    @ScaledMetric(relativeTo: .largeTitle) private var averageScoreSize: CGFloat = 42
 
     private var projects: [PersonalPeerReviewProject] {
         model.personalReviewProjectsForReport
@@ -128,18 +131,11 @@ struct PersonalBattleReportView: View {
     }
 
     private var emptyState: some View {
-        VStack(spacing: 12) {
-            Image(systemName: "chart.line.uptrend.xyaxis")
-                .font(.system(size: 42, weight: .black))
-            Text(L10n.text("還沒有個人戰力紀錄"))
-                .font(.title3.weight(.black))
-            Text(L10n.text("專案結束且全員完成互評後，分數會自動累積在這裡。"))
-                .font(.subheadline)
-                .foregroundStyle(.secondary)
-                .multilineTextAlignment(.center)
-        }
-        .frame(maxWidth: .infinity)
-        .padding(.vertical, 48)
+        BombEmptyState(
+            systemImage: "chart.line.uptrend.xyaxis",
+            title: L10n.text("還沒有個人戰力紀錄"),
+            message: L10n.text("專案結束且全員完成互評後，分數會自動累積在這裡。")
+        )
         .padding(.horizontal, 24)
         .comicCard()
     }
@@ -156,7 +152,7 @@ struct PersonalBattleReportView: View {
                 }
                 Spacer()
                 Text(String(format: "%.1f", averageScore))
-                    .font(.system(size: 42, weight: .black, design: .rounded))
+                    .font(.system(size: averageScoreSize, weight: .black, design: .rounded))
                 Text("/ 5")
                     .font(.caption.weight(.black))
             }

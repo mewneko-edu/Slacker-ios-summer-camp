@@ -90,7 +90,11 @@ struct GroupAdmissionReviewSheet: View {
                     }
                     Divider()
                     if !isPending {
-                        ContentUnavailableView(L10n.text("此申請已更新"), systemImage: "checkmark.circle")
+                        BombEmptyState(
+                            systemImage: "checkmark.circle",
+                            title: L10n.text("此申請已更新"),
+                            verticalPadding: 24
+                        )
                     } else if isLoading {
                         ProgressView(L10n.text("載入戰力檔案…")).frame(maxWidth: .infinity)
                     } else if let loadError {

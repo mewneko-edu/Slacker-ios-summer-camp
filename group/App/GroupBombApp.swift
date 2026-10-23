@@ -18,17 +18,23 @@ struct GroupBombApp: App {
 
     var body: some Scene {
         WindowGroup {
-            #if DEBUG
-            if ProcessInfo.processInfo.arguments.contains("-preview-smart-agenda") {
-                SmartAgendaPreview()
-            } else if ProcessInfo.processInfo.arguments.contains("-preview-entry-animation") {
-                BombEntryAnimationPreview()
-            } else {
+            // 專案自有的 Group 模型會遮蔽 SwiftUI.Group，這裡需完整命名。
+            SwiftUI.Group {
+                #if DEBUG
+                if ProcessInfo.processInfo.arguments.contains("-preview-smart-agenda") {
+                    SmartAgendaPreview()
+                } else if ProcessInfo.processInfo.arguments.contains("-preview-entry-animation") {
+                    BombEntryAnimationPreview()
+                } else {
+                    AppRootView()
+                }
+                #else
                 AppRootView()
+                #endif
             }
-            #else
-            AppRootView()
-            #endif
+            // BombTheme 是硬編碼的淺色漫畫配色，鎖定淺色外觀，避免未指定
+            // foregroundStyle 的文字在深色模式翻成白字、壓在黃底上看不清。
+            .preferredColorScheme(.light)
         }
     }
 }

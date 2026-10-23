@@ -8,6 +8,27 @@ private struct CountdownTimeComponents {
     let minutes: Int
 }
 
+/// 只在進入畫面與截止時刻各送出一次更新。
+///
+/// `GroupDeadlineOutcome.resolve` 唯一受時間影響的轉折就是 `now` 跨過 deadline，
+/// 其餘輸入（settledAt、progress）都是 @Observable 狀態、會自行觸發重繪。
+/// 因此整個詳情頁不需要每秒輪詢；只有倒數卡片的數字需要，那部分自己包一層
+/// `.periodic` TimelineView，重繪範圍就限縮在那個子樹裡。
+private struct GroupDeadlineSchedule: TimelineSchedule {
+    let deadline: Date
+
+    func entries(from startDate: Date, mode: TimelineScheduleMode) -> AnyIterator<Date> {
+        var pending = [startDate]
+        if deadline > startDate { pending.append(deadline) }
+        var index = 0
+        return AnyIterator {
+            guard index < pending.count else { return nil }
+            defer { index += 1 }
+            return pending[index]
+        }
+    }
+}
+
 /// Group detail backed by the app's shared Group, Member, and ProjectTask data.
 struct GroupDetailView: View {
     @Environment(\.dismiss) private var dismiss
@@ -84,7 +105,7 @@ struct GroupDetailView: View {
 #endif
 
     var body: some View {
-        TimelineView(.periodic(from: .now, by: 1)) { context in
+        TimelineView(GroupDeadlineSchedule(deadline: currentGroup.deadline)) { context in
             GeometryReader { proxy in
                 ZStack(alignment: .bottom) {
                     ZStack {
@@ -95,7 +116,10 @@ struct GroupDetailView: View {
                                 VStack(alignment: .leading, spacing: 12) {
                                     groupIdentity
                                     if deadlineOutcome(now: context.date) == .active {
-                                        countdownCard(now: context.date)
+                                        // 只有這裡需要每秒跳動，重繪範圍限縮在倒數卡片子樹內。
+                                        TimelineView(.periodic(from: .now, by: 1)) { tick in
+                                            countdownCard(now: tick.date)
+                                        }
                                         if canManuallySettle {
                                             manualSettlementButton
                                         }
@@ -314,6 +338,14 @@ struct GroupDetailView: View {
         }
         .animation(.easeOut(duration: 0.2), value: shouldShowExplosionMeme(now: .now))
         .animation(.easeOut(duration: 0.2), value: shouldShowSuccessMeme(now: .now))
+        // 專案結算是整個 App 情緒最強的時刻，補上對應的觸覺回饋。
+        // 用 closure 形式，只在「出現」時震動，關閉動畫時不會再震一次。
+        .sensoryFeedback(trigger: shouldShowExplosionMeme(now: .now)) { _, isShown in
+            isShown ? .error : nil
+        }
+        .sensoryFeedback(trigger: shouldShowSuccessMeme(now: .now)) { _, isShown in
+            isShown ? .success : nil
+        }
         .overlay {
             if showsEditOptions {
                 editGroupOptionsOverlay

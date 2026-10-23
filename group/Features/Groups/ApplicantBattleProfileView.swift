@@ -27,7 +27,10 @@ struct ApplicantBattleProfileView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 18) {
             if projects.isEmpty {
-                ContentUnavailableView(L10n.text("尚無歷史戰力紀錄"), systemImage: "chart.bar.xaxis")
+                BombEmptyState(
+                    systemImage: "chart.bar.xaxis",
+                    title: L10n.text("尚無歷史戰力紀錄")
+                )
             } else {
                 VStack(alignment: .leading, spacing: 14) {
                     Text(L10n.text("能力概覽"))
