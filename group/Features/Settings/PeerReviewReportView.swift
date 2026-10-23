@@ -213,6 +213,9 @@ private struct RadarReportCard: View {
     let isGenerating: Bool
     let errorMessage: String?
     let onRetry: () -> Void
+    /// 平均分是這張卡最主要的閱讀內容，跟著使用者的字級設定縮放。
+    /// 預設字級下仍是原本的 42pt，外觀不變。
+    @ScaledMetric(relativeTo: .largeTitle) private var averageScoreSize: CGFloat = 42
 
     var body: some View {
         VStack(spacing: 8) {
@@ -228,7 +231,7 @@ private struct RadarReportCard: View {
                 }
                 Spacer()
                 Text(averageScore.map(String.init) ?? "—")
-                    .font(.system(size: 42, weight: .black, design: .rounded))
+                    .font(.system(size: averageScoreSize, weight: .black, design: .rounded))
             }
             .padding(.horizontal, 28)
             .padding(.top, 18)

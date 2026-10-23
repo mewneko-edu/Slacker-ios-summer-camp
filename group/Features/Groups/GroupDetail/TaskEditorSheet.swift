@@ -81,7 +81,7 @@ struct TaskEditorSheet: View {
             VStack(alignment: .leading, spacing: 6) {
                 fieldLabel(L10n.text("任務名稱"), isRequired: true)
                 TextField(L10n.text("例如「製作競品分析」"), text: $title)
-                    .textInputAutocapitalization(.never)
+                    .textInputAutocapitalization(.sentences)
                     .bombFormField()
             }
 
@@ -107,7 +107,7 @@ struct TaskEditorSheet: View {
             ForEach($subtaskDrafts) { $draft in
                 HStack(spacing: 9) {
                     TextField(L10n.text("例如「整理簡報架構」"), text: $draft.title)
-                        .textInputAutocapitalization(.never)
+                        .textInputAutocapitalization(.sentences)
                         .bombFormField()
 
                     if subtaskDrafts.count > 1 {
