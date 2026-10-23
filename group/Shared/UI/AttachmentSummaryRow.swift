@@ -10,7 +10,7 @@ struct AttachmentSummaryRow: View {
         HStack(spacing: 12) {
             AttachmentPhotoThumbnail(model: model, taskID: taskID, deliverable: deliverable)
                 .frame(width: 64, height: 64)
-                .clipShape(RoundedRectangle(cornerRadius: 6))
+                .clipShape(RoundedRectangle(cornerRadius: BombRadius.thumbnail))
             VStack(alignment: .leading, spacing: 5) {
                 Text(deliverable.title)
                     .font(.subheadline.weight(.black))
@@ -23,8 +23,8 @@ struct AttachmentSummaryRow: View {
                 .font(.title3.weight(.bold))
         }
         .padding(10)
-        .background(BombTheme.paper, in: RoundedRectangle(cornerRadius: 10))
-        .overlay(RoundedRectangle(cornerRadius: 10).stroke(BombTheme.ink.opacity(0.12), lineWidth: 1))
+        .background(BombTheme.paper, in: RoundedRectangle(cornerRadius: BombRadius.chip))
+        .overlay(RoundedRectangle(cornerRadius: BombRadius.chip).stroke(BombTheme.ink.opacity(0.12), lineWidth: BombBorder.hairline))
         .foregroundStyle(BombTheme.ink)
     }
 }

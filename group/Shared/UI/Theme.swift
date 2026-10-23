@@ -10,6 +10,43 @@ enum BombTheme {
     static let green = Color(red: 0.16, green: 0.55, blue: 0.32)
 }
 
+/// 圓角的角色命名。
+///
+/// 這裡刻意記錄「目前實際在用的數值」，而不是一套理想尺度 —— 共用層原本
+/// 就有 28／24／22 三種浮動面板圓角，要收斂成哪一階必須對照畫面決定，
+/// 不該在沒有視覺驗證的情況下改掉。先把角色命名固定下來，讓後續新畫面
+/// 有唯一來源可引用；收斂提案與差異清單見 docs/visual-handbook.md。
+enum BombRadius {
+    /// 覆蓋整個畫面的浮動面板：表單 Sheet、Poke 覆蓋層。
+    static let overlay: CGFloat = 28
+    /// 對話框。
+    static let dialog: CGFloat = 24
+    /// 主要內容卡：群組卡、新手教學卡。
+    static let card: CGFloat = 22
+    /// 區塊卡，即 `comicCard()` 的共用treatment。
+    static let panel: CGFloat = 18
+    /// 輸入欄位。
+    static let field: CGFloat = 15
+    /// 卡片內的小區塊、標籤。
+    static let chip: CGFloat = 10
+    /// 進度徽章一類的小底板。
+    static let badge: CGFloat = 8
+    /// 縮圖。
+    static let thumbnail: CGFloat = 6
+}
+
+/// 外框粗細。黃黑漫畫風靠粗黑邊界定，粗細代表層級而非裝飾。
+enum BombBorder {
+    /// 卡片、對話框、浮動面板的主外框。
+    static let card: CGFloat = 3
+    /// 卡片內部元素、膠囊按鈕。
+    static let inner: CGFloat = 2
+    /// 新手教學的強調外框。
+    static let emphasis: CGFloat = 4
+    /// 極淡的分隔描邊。
+    static let hairline: CGFloat = 1
+}
+
 private struct BombSafeAreaInsetsKey: EnvironmentKey {
     static let defaultValue = EdgeInsets()
 }
@@ -25,8 +62,8 @@ extension EnvironmentValues {
 struct ComicCard: ViewModifier {
     func body(content: Content) -> some View {
         content.padding(16).background(BombTheme.paper)
-            .clipShape(RoundedRectangle(cornerRadius: 18))
-            .overlay(RoundedRectangle(cornerRadius: 18).stroke(BombTheme.ink, lineWidth: 3))
+            .clipShape(RoundedRectangle(cornerRadius: BombRadius.panel))
+            .overlay(RoundedRectangle(cornerRadius: BombRadius.panel).stroke(BombTheme.ink, lineWidth: BombBorder.card))
             .compositingGroup()
             .shadow(color: BombTheme.ink, radius: 0, x: 5, y: 5)
     }

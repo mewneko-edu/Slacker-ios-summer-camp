@@ -46,7 +46,7 @@ struct AttachmentActionButton<Label: View>: View {
                         .font(.caption.bold())
                 }
                 .padding(8)
-                .background(BombTheme.yellow, in: RoundedRectangle(cornerRadius: 8))
+                .background(BombTheme.yellow, in: RoundedRectangle(cornerRadius: BombRadius.badge))
                 .foregroundStyle(BombTheme.ink)
                 .accessibilityElement(children: .combine)
             }
