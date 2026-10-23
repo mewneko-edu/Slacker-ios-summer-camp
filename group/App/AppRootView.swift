@@ -56,6 +56,7 @@ struct AppRootView: View {
             store.changeCloudAccount(to: authSession.currentUserID)
             await subscription.syncUser(authSession.currentUserID)
             if scenePhase == .active { store.resumeCloudSync() }
+            await store.applyPendingWidgetTodoActions()
         }
         .task { await subscription.listenForUpdates() }
         .onChange(of: authSession.currentUserID) { previousUserID, userID in
@@ -73,7 +74,11 @@ struct AppRootView: View {
             store.updateDeveloperAccess(allowed, for: authSession.currentUserID)
         }
         .onChange(of: authSession.isCheckingSession) { _, _ in openPendingReview() }
-        .onChange(of: store.isLoadingCloudGroups) { _, _ in openPendingReview() }
+        .onChange(of: store.isLoadingCloudGroups) { _, isLoading in
+            openPendingReview()
+            // Widget ticks can only be replayed once the cloud tasks they refer to are here.
+            if !isLoading { Task { await store.applyPendingWidgetTodoActions() } }
+        }
         .onChange(of: store.groups) { _, _ in openPendingReview() }
         .onChange(of: scenePhase) { _, phase in
             if phase == .active {
@@ -81,6 +86,8 @@ struct AppRootView: View {
                 authSession.refreshDeveloperAccess(forceRefresh: true)
                 store.resumeCloudSync()
                 Task { await subscription.refresh() }
+                // Push the to-dos the user ticked on the widget while the app was away.
+                Task { await store.applyPendingWidgetTodoActions() }
             }
             else if phase == .background {
                 // Prepare the entrance before iOS snapshots the backgrounded app.

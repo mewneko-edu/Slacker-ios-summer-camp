@@ -1022,17 +1022,11 @@ final class AppStore {
         return tasks.reduce(0) { $0 + $1.progress * $1.weight } / totalWeight
     }
 
-    /// Writes the nearest group deadline and calculated project progress for the widget.
+    /// Writes the current user's unfinished subtasks for the widget.
     private func publishWidgetSnapshot() {
-        let group = groups.min(by: { $0.deadline < $1.deadline })
-        let snapshot = group.map {
-            WidgetProgressSnapshot(
-                groupName: $0.name,
-                progress: projectProgress(for: $0.id),
-                deadline: $0.deadline
-            )
-        }
-        WidgetSnapshotStore.save(snapshot)
+        // Ticks made on the widget are hidden until the backend confirms them, so a
+        // snapshot published before that confirmation does not resurrect the row.
+        let pendingWidgetSubtaskIDs = WidgetTodoActionQueue.pendingSubtaskIDs()
 
         let todoTasks = projectTasks
             .filter { $0.ownerMemberID == currentUserID && !$0.isCompleted }
@@ -1042,7 +1036,7 @@ final class AppStore {
                 return $0.id.uuidString < $1.id.uuidString
             }
         let items = todoTasks.flatMap { task in
-            task.subtasks.filter { !$0.isComplete }.map {
+            task.subtasks.filter { !$0.isComplete && !pendingWidgetSubtaskIDs.contains($0.id) }.map {
                 WidgetTodoItem(
                     id: $0.id,
                     title: $0.title,
@@ -1056,6 +1050,41 @@ final class AppStore {
             count: items.count,
             items: Array(items.prefix(6))
         ))
+    }
+
+    /// Replays the subtasks the user ticked on the widget, which cannot reach the backend
+    /// from the extension. Call this whenever the app becomes active.
+    ///
+    /// A queued tick is only applied while its subtask is still incomplete, so replaying the
+    /// same queue twice cannot toggle a completed subtask back open. An entry is dropped once
+    /// the backend confirms it, or once it is too old to replay.
+    ///
+    /// An entry whose task is not in `projectTasks` is kept rather than dropped: the cloud
+    /// tasks may simply not have loaded yet. Expiry is what eventually clears a tick that can
+    /// never be replayed.
+    func applyPendingWidgetTodoActions() async {
+        let actions = WidgetTodoActionQueue.pending()
+        guard !actions.isEmpty else { return }
+
+        var resolved: Set<UUID> = []
+        for action in actions {
+            if action.isStale() {
+                resolved.insert(action.subtaskID)
+                continue
+            }
+            guard let task = projectTasks.first(where: { $0.id == action.taskID }),
+                  let subtask = task.subtasks.first(where: { $0.id == action.subtaskID }) else {
+                continue
+            }
+            if subtask.isComplete {
+                resolved.insert(action.subtaskID)
+                continue
+            }
+            await toggleSubtask(taskID: action.taskID, subtaskID: action.subtaskID)
+        }
+
+        WidgetTodoActionQueue.remove(subtaskIDs: resolved)
+        publishWidgetSnapshot()
     }
 
     /// 依該成員負責任務的子任務完成狀態計算個人進度。
