@@ -238,3 +238,39 @@ struct BombHeaderButtonStyle: ButtonStyle {
             .animation(.snappy(duration: 0.16), value: configuration.isPressed)
     }
 }
+
+/// 保持視覺尺寸不變，只把可點擊範圍撐到 HIG 要求的最小值。
+///
+/// 用在「圖示看起來就該是小的、但手指需要更大範圍」的地方，例如列內的
+/// 鉛筆／加號鈕。外層 frame 會讓版面多佔幾點，這是刻意的取捨：
+/// 命中範圍不足比位移幾點嚴重得多。
+extension View {
+    func bombHitTarget(_ minimum: CGFloat = 44) -> some View {
+        frame(minWidth: minimum, minHeight: minimum).contentShape(.rect)
+    }
+}
+
+/// 共用的圓形關閉鈕。
+///
+/// 收斂前專案有 10 處各自手寫的 xmark 圓鈕，尺寸（36／40）、構造
+/// （`background(_:in:)` 對 `background` + `clipShape`）與前景色
+/// （`.white` 對 `BombTheme.paper`）三個軸都不一致，且都沒有 44pt 命中範圍。
+/// 這裡採用原本占多數的 36pt／`.white` 規格。
+struct BombCloseButton: View {
+    var systemImage: String = "xmark"
+    var label: String?
+    let action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            Image(systemName: systemImage)
+                .font(.headline.weight(.black))
+                .foregroundStyle(.white)
+                .frame(width: 36, height: 36)
+                .background(BombTheme.ink, in: Circle())
+                .bombHitTarget()
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel(label ?? L10n.text("取消"))
+    }
+}

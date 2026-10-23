@@ -111,17 +111,7 @@ struct SmartAgendaDetailView: View {
                     .font(.title2.weight(.black))
                     .accessibilityAddTraits(.isHeader)
                 Spacer()
-                Button {
-                    showsEditOptions = false
-                } label: {
-                    Image(systemName: "xmark")
-                        .font(.headline.weight(.black))
-                        .foregroundStyle(.white)
-                        .frame(width: 36, height: 36)
-                        .background(BombTheme.ink, in: Circle())
-                }
-                .buttonStyle(.plain)
-                .accessibilityLabel(L10n.text("取消"))
+                BombCloseButton { showsEditOptions = false }
             }
 
             ScrollView {
@@ -489,15 +479,7 @@ struct SmartAgendaMeetingEditor: View {
                         .font(.title2.weight(.black))
                         .accessibilityAddTraits(.isHeader)
                     Spacer()
-                    Button(action: onDismiss) {
-                        Image(systemName: "xmark")
-                            .font(.headline.weight(.black))
-                            .foregroundStyle(.white)
-                            .frame(width: 36, height: 36)
-                            .background(BombTheme.ink, in: Circle())
-                    }
-                    .buttonStyle(.plain)
-                    .accessibilityLabel(L10n.text("取消"))
+                    BombCloseButton(action: onDismiss)
                 }
                 VStack(alignment: .leading, spacing: 6) {
                     Text(L10n.text("會議主題")).font(.subheadline.weight(.black))
@@ -611,15 +593,7 @@ private struct SmartAgendaMaterialEditor: View {
                         .font(.title2.weight(.black))
                         .accessibilityAddTraits(.isHeader)
                     Spacer()
-                    Button(action: onDismiss) {
-                        Image(systemName: "xmark")
-                            .font(.headline.weight(.black))
-                            .foregroundStyle(.white)
-                            .frame(width: 36, height: 36)
-                            .background(BombTheme.ink, in: Circle())
-                    }
-                    .buttonStyle(.plain)
-                    .accessibilityLabel(L10n.text("取消"))
+                    BombCloseButton(action: onDismiss)
                 }
                 VStack(alignment: .leading, spacing: 6) {
                     Text(L10n.text("準備內容")).font(.subheadline.weight(.black))

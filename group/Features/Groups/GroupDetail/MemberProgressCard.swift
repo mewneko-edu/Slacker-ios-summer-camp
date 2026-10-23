@@ -381,11 +381,11 @@ struct MemberProgressCard: View {
                 if isCurrentUser, task.deliverable != nil {
                     HStack(spacing: 4) {
                         Button { managedTask = task } label: {
-                            Image(systemName: "pencil").frame(width: 36, height: 36)
+                            Image(systemName: "pencil").frame(width: 36, height: 36).bombHitTarget()
                         }
                         .accessibilityLabel(L10n.text("編輯附件"))
                         Button { uploadTask = task } label: {
-                            Image(systemName: "plus").frame(width: 36, height: 36)
+                            Image(systemName: "plus").frame(width: 36, height: 36).bombHitTarget()
                         }
                         .accessibilityLabel(L10n.text("新增附件"))
                     }

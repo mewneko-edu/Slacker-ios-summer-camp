@@ -44,15 +44,7 @@ struct SmartAgendaLinkEditor: View {
                             .font(.title2.weight(.black))
                             .accessibilityAddTraits(.isHeader)
                         Spacer()
-                        Button(action: onDismiss) {
-                            Image(systemName: "xmark")
-                                .font(.headline.weight(.black))
-                                .foregroundStyle(.white)
-                                .frame(width: 36, height: 36)
-                                .background(BombTheme.ink, in: Circle())
-                        }
-                        .buttonStyle(.plain)
-                        .accessibilityLabel(L10n.text("取消"))
+                        BombCloseButton(action: onDismiss)
                     }
                     fields
                     actionButton(L10n.text(store.isSaving ? "儲存中…" : "儲存"),

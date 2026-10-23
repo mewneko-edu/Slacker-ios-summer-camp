@@ -270,7 +270,7 @@ struct ChatRoomView: View {
                     Image(systemName: "xmark")
                         .font(.caption.weight(.black))
                         .frame(width: 32, height: 32)
-                        .contentShape(Rectangle())
+                        .bombHitTarget()
                 }
                 .buttonStyle(.plain)
                 .accessibilityLabel(L10n.text("取消置頂訊息"))
@@ -446,6 +446,7 @@ struct ChatRoomView: View {
                         .background(BombTheme.paper)
                         .clipShape(.circle)
                         .overlay(Circle().stroke(BombTheme.ink, lineWidth: 2))
+                        .bombHitTarget()
                 }
                 .buttonStyle(.plain)
                 .accessibilityLabel(showsShortcuts ? L10n.text("收起快捷指令") : L10n.text("展開快捷指令"))

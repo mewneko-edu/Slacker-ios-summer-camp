@@ -34,14 +34,8 @@ struct SmartAgendaManager: View {
                                 .font(.title2.weight(.black))
                                 .accessibilityAddTraits(.isHeader)
                             Spacer()
-                            Button(action: onClose) {
-                                Image(systemName: "xmark").font(.headline.weight(.black))
-                                    .foregroundStyle(.white).frame(width: 36, height: 36)
-                                    .background(BombTheme.ink, in: Circle())
-                            }
-                            .buttonStyle(.plain)
-                            .accessibilityLabel(L10n.text("取消"))
-                            .disabled(deleting)
+                            BombCloseButton(action: onClose)
+                                .disabled(deleting)
                         }
                         if let deletion {
                             Text(deletion.topic).font(.headline)

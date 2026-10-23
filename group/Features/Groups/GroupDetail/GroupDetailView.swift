@@ -1065,15 +1065,7 @@ struct GroupDetailView: View {
 
                     Spacer()
 
-                    Button(action: dismissEditOptions) {
-                        Image(systemName: "xmark")
-                            .font(.headline.weight(.black))
-                            .foregroundStyle(.white)
-                            .frame(width: 36, height: 36)
-                            .background(BombTheme.ink, in: Circle())
-                    }
-                    .buttonStyle(.plain)
-                    .accessibilityLabel(L10n.text("取消"))
+                    BombCloseButton(action: dismissEditOptions)
                 }
 
                 Button {
@@ -1353,15 +1345,7 @@ struct GroupDetailView: View {
                             .font(.title2.weight(.black))
                             .accessibilityAddTraits(.isHeader)
                         Spacer()
-                        Button { showsPinnedMemberPicker = false } label: {
-                            Image(systemName: "xmark")
-                                .font(.headline.weight(.black))
-                                .foregroundStyle(.white)
-                                .frame(width: 36, height: 36)
-                                .background(BombTheme.ink, in: Circle())
-                        }
-                        .buttonStyle(.plain)
-                        .accessibilityLabel(L10n.text("取消"))
+                        BombCloseButton { showsPinnedMemberPicker = false }
                     }
                     ScrollView {
                         LazyVStack(spacing: 8) {
@@ -1423,15 +1407,7 @@ struct GroupDetailView: View {
                             .font(.title2.weight(.black))
                             .accessibilityAddTraits(.isHeader)
                         Spacer()
-                        Button { showsLeaderPicker = false } label: {
-                            Image(systemName: "xmark")
-                                .font(.headline.weight(.black))
-                                .foregroundStyle(.white)
-                                .frame(width: 36, height: 36)
-                                .background(BombTheme.ink, in: Circle())
-                        }
-                        .buttonStyle(.plain)
-                        .accessibilityLabel(L10n.text("取消"))
+                        BombCloseButton { showsLeaderPicker = false }
                         .disabled(isChoosingLeader)
                     }
                     leadershipSection
@@ -2035,6 +2011,7 @@ private struct ExplosionMemeOverlay: View {
                                     .frame(width: 40, height: 40)
                                     .background(BombTheme.ink)
                                     .clipShape(Circle())
+                                    .bombHitTarget()
                             }
                             .buttonStyle(.plain)
                             .accessibilityLabel(L10n.text("關閉梗圖"))
@@ -2214,6 +2191,7 @@ private struct SuccessMemeOverlay: View {
                                     .frame(width: 40, height: 40)
                                     .background(BombTheme.ink)
                                     .clipShape(Circle())
+                                    .bombHitTarget()
                             }
                             .buttonStyle(.plain)
                             .accessibilityLabel(L10n.text("關閉梗圖"))
