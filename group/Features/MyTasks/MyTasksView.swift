@@ -41,7 +41,14 @@ struct MyTasksView: View {
             ScrollView {
                 VStack(alignment: .leading, spacing: 18) {
                     if !pendingTasks.isEmpty || !completedTasks.isEmpty {
+                        // 儀表環是尺寸固定的 Canvas，不會跟著文字長大，所以讀數無上限
+                        // 放大時會撞出環外、蓋住 0／100 刻度。封頂只套在這張圖表上；
+                        // 底下的任務清單不受影響，維持完整縮放。
+                        //
+                        // 封頂必須加在呼叫端：@ScaledMetric 讀的是父層傳入的環境，
+                        // 在 TaskProgressDashboard 自己的 body 裡加沒有作用。
                         TaskProgressDashboard(progress: personalProgress, isActive: isSelected)
+                            .dynamicTypeSize(...DynamicTypeSize.accessibility1)
                     }
 
                     if model.cloudGroupSyncErrorMessage != nil && !model.projectTasks.isEmpty {
