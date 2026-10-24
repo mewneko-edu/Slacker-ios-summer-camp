@@ -287,7 +287,7 @@ struct DeliverableSubmissionSheet: View {
     private func pickerPlaceholder(icon: String, title: String) -> some View {
         VStack(spacing: 10) {
             Image(systemName: icon)
-                .font(.system(size: 32, weight: .black))
+                .font(.system(.largeTitle, weight: .black))
             Text(title)
                 .font(.subheadline.weight(.black))
                 .multilineTextAlignment(.center)
@@ -396,7 +396,7 @@ private struct PhotoSelectionLabel: View {
         } else {
             VStack(spacing: 10) {
                 Image(systemName: "photo.badge.plus")
-                    .font(.system(size: 32, weight: .black))
+                    .font(.system(.largeTitle, weight: .black))
                 Text(title)
                     .font(.subheadline.weight(.black))
             }

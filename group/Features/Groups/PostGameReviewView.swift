@@ -55,7 +55,7 @@ struct PostGameReviewView: View {
         VStack(alignment: .leading, spacing: 16) {
             HStack(alignment: .top, spacing: 12) {
                 Image(systemName: "trophy.fill")
-                    .font(.system(size: 34, weight: .black))
+                    .font(.system(.largeTitle, weight: .black))
                     .foregroundStyle(BombTheme.green)
 
                 VStack(alignment: .leading, spacing: 4) {

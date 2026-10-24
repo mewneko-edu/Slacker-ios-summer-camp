@@ -590,6 +590,8 @@ private struct PokeActionButton: View {
 private struct DeliverablePhotoPreview: View {
     @Environment(\.dismiss) private var dismiss
     let deliverable: Deliverable
+    /// 42pt 沒有對應的語意字級，所以用 @ScaledMetric 讓圖示跟著檔名一起縮放。
+    @ScaledMetric(relativeTo: .largeTitle) private var placeholderIconSize: CGFloat = 42
 
     var body: some View {
         NavigationStack {
@@ -603,7 +605,7 @@ private struct DeliverablePhotoPreview: View {
                 } else {
                     VStack(spacing: 12) {
                         Image(systemName: deliverable.url == nil ? "doc.fill" : "link")
-                            .font(.system(size: 42, weight: .black))
+                            .font(.system(size: placeholderIconSize, weight: .black))
                         Text(deliverable.originalFilename ?? L10n.text("成果附件"))
                             .font(.headline.weight(.black))
                     }

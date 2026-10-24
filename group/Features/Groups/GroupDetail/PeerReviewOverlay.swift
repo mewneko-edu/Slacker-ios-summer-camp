@@ -130,7 +130,7 @@ struct PeerReviewOverlay: View {
 
             HStack(alignment: .top, spacing: 14) {
                 Image(systemName: theme.iconName)
-                    .font(.system(size: 32, weight: .black))
+                    .font(.system(.largeTitle, weight: .black))
                     .foregroundStyle(theme.accentColor)
                     .frame(width: 58, height: 58)
                     .background(theme.iconBackground)

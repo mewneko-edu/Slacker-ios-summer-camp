@@ -1990,7 +1990,7 @@ private struct ExplosionMemeOverlay: View {
                     VStack(spacing: 16) {
                         HStack(alignment: .center, spacing: 12) {
                             Image(systemName: "exclamationmark.triangle.fill")
-                                .font(.system(size: 28, weight: .black))
+                                .font(.system(.title, weight: .black))
                                 .foregroundStyle(BombTheme.red)
 
                             VStack(alignment: .leading, spacing: 3) {
@@ -2003,17 +2003,7 @@ private struct ExplosionMemeOverlay: View {
 
                             Spacer(minLength: 0)
 
-                            Button(action: onDismiss) {
-                                Image(systemName: "xmark")
-                                    .font(.headline.weight(.black))
-                                    .foregroundStyle(BombTheme.paper)
-                                    .frame(width: 40, height: 40)
-                                    .background(BombTheme.ink)
-                                    .clipShape(Circle())
-                                    .bombHitTarget()
-                            }
-                            .buttonStyle(.plain)
-                            .accessibilityLabel(L10n.text("關閉梗圖"))
+                            BombCloseButton(label: L10n.text("關閉梗圖"), action: onDismiss)
                         }
 
                         FailureMemeImage(
@@ -2170,7 +2160,7 @@ private struct SuccessMemeOverlay: View {
                     VStack(spacing: 16) {
                         HStack(alignment: .center, spacing: 12) {
                             Image(systemName: "checkmark.seal.fill")
-                                .font(.system(size: 28, weight: .black))
+                                .font(.system(.title, weight: .black))
                                 .foregroundStyle(BombTheme.green)
 
                             VStack(alignment: .leading, spacing: 3) {
@@ -2183,17 +2173,7 @@ private struct SuccessMemeOverlay: View {
 
                             Spacer(minLength: 0)
 
-                            Button(action: onDismiss) {
-                                Image(systemName: "xmark")
-                                    .font(.headline.weight(.black))
-                                    .foregroundStyle(BombTheme.paper)
-                                    .frame(width: 40, height: 40)
-                                    .background(BombTheme.ink)
-                                    .clipShape(Circle())
-                                    .bombHitTarget()
-                            }
-                            .buttonStyle(.plain)
-                            .accessibilityLabel(L10n.text("關閉梗圖"))
+                            BombCloseButton(label: L10n.text("關閉梗圖"), action: onDismiss)
                         }
 
                         SuccessMemeImage(groupName: groupName)

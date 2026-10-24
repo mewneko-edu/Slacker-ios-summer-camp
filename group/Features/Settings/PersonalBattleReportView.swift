@@ -172,7 +172,7 @@ struct PersonalBattleReportView: View {
     private var evidencePendingCard: some View {
         VStack(spacing: 14) {
             Image(systemName: "chart.line.uptrend.xyaxis")
-                .font(.system(size: 34, weight: .black))
+                .font(.system(.largeTitle, weight: .black))
             Text(L10n.text("資料累積中"))
                 .font(.system(.title2, design: .rounded, weight: .black))
             Text(L10n.format("目前只有 {0} 個專案，仍可匯出分享，但會標示為初步資料。累積 3 個專案後，結果會更具參考性。", String(describing: projects.count)))
