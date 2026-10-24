@@ -267,16 +267,30 @@ SF Symbol 吃語意字級就會自動跟著 Dynamic Type，而且剛好等值：
 
 ## 11. 待你裁決的開放問題
 
-前八項已全數處理完畢（見下一節）。剩下的：
+原本的八項已全數處理完畢（見下一節）。剩下兩項：
 
-1. **`MissionBoardView` 是死碼** —— 全專案無任何引用，內含寫死的 `"48:16:09"`。
-   **要刪還是要接上？這是產品決定，需要你回答。**
-2. **間距 4pt 尺度** —— 目前 `spacing:` 用了 19 種值、`padding` 用了 28 種。
+1. **間距 4pt 尺度** —— 目前 `spacing:` 用了 19 種值、`padding` 用了 28 種。
    建議收斂成 4／8／12／16／24／32，但**不要順手改**：三百多處、每處位移
    只有 1–2pt，看不出好壞，而只要有一處其實是刻意微調就會被破壞，且沒有
    任何自動化手段能發現。適合單獨一支分支、逐頁截圖比對。
-3. **62 處 `.white` 是否收成語意 token** —— 鎖定淺色模式下不會出錯，不急。
+2. **62 處 `.white` 是否收成語意 token** —— 鎖定淺色模式下不會出錯，不急。
    將來若要做深色模式，這是第一個要處理的。
+
+### 已刪除：舊任務看板與特工頁
+
+`MissionBoardView`（184 行）全專案零引用，`AgentsView`（312 行）只能從
+它的 toolbar 進入，兩者都是使用者到不了的畫面。它們是已上線功能的原型：
+任務看板的檔頭寫著「等著變成 GroupDetailView」，而那早就做完了；特工頁
+原型的戳人流程，現在由 `MemberProgressCard` ＋ `PokeRepository` ＋
+`PokeNotificationService` ＋ `PokeReceptionOverlay` 真正實作。
+
+連同背後的 `MissionTask`、`Agent`、`tasks`／`agents`／`radar` 屬性與
+`claim`／`shield`／`poke(agentID:)`，共移除約 600 行。
+
+**刪除的真正理由不是行數，是三組會被誤用的同名 API**：`model.tasks`
+（舊）對 `model.projectTasks`（正式）、`poke(agentID:style:)` 對
+`poke(memberID:in:style:)`（overload，打錯會編譯成功）、`Agent` 對
+`Member`。死碼不會害人，會被誤用的死 API 會。
 
 ---
 
