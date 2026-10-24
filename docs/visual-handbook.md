@@ -145,6 +145,31 @@
 - 固定圖形框內的字，例如頭像縮寫、七段顯示器旁的 `%`
 - 徽章數字（未讀數），其可讀性由 `accessibilityValue` 負責
 
+### 固定幾何的外框必須封頂
+
+**規則：把文字包在固定尺寸圖形裡的「外框」，要限制自身的縮放上限；
+承載內容的區域永遠不封頂。**
+
+判斷標準是「這個容器會不會跟著文字長大」。不會的就是固定幾何，
+例如 `Canvas` 畫的儀表環、鎖住寬度的分頁列膠囊、固定 `frame(height:)`
+的卡片。文字無上限放大時，這類容器撐不開，結果就是重疊、遮蔽、擠出畫面。
+
+```swift
+.dynamicTypeSize(...DynamicTypeSize.xxxLarge)        // 外框層
+.dynamicTypeSize(...DynamicTypeSize.accessibility1)  // 圖表層
+```
+
+系統分頁列也是這樣處理的（封頂，改用長按放大的 HUD），**這不等於忽略無障礙** ——
+前提是任務卡、清單、說明文字等內容區完全不受影響。
+
+**實作陷阱：`@ScaledMetric` 讀的是「父層傳進來的環境」。** 在某個 View 自己的
+`body` 裡加 `.dynamicTypeSize(...)`，**不會**影響那個 View 自己宣告的
+`@ScaledMetric`，只會影響它的子層。要封住某個 View 的 `@ScaledMetric`，
+修飾子必須加在**呼叫端**。見 `MyTasksView:44` 的 `TaskProgressDashboard`。
+
+實測斷裂點（iPhone 17）：一般字級到 xxxLarge 全部正常，AX1 尚可，
+AX2–AX3 開始重疊，AX4–AX5 明顯破版。封頂後 AX5 恢復正常。
+
 ### 提案：裝飾圖示是否也跟著縮放
 
 `BombEmptyState` 已經用 `@ScaledMetric` 讓圖示跟著字級縮放，理由是
@@ -254,17 +279,33 @@
 6. **`MissionBoardView` 是死碼** —— 全專案無任何引用，內含寫死的 `"48:16:09"`。
    要刪還是要接上？
 7. **62 處 `.white` 是否收成語意 token** —— 鎖定淺色模式下不急。
+8. **AX4–AX5 仍有兩處內容層的粗糙** —— 封頂解決了外框崩壞，但這兩個是內容、
+   本來就該完整縮放，所以沒有一併封頂：
+   - 待完成／已完成 切換器文字折行成「待 完成」
+   - 任務卡標題截斷成 `[... Fi`
+   兩者都仍可讀可點，不影響操作。真要處理的話方向是大字級時改為縱向排列
+   （`AnyLayout`，`SmartAgendaSection` 已有同樣寫法可參考），而不是封頂。
 
 ---
 
 ## 12. 本輪已套用 / 刻意未套用
 
-**已套用**（三個 commit，皆通過 Debug build）
+**已套用**（四個 commit，皆通過 Debug build）
 
 - `a373fcd` 圓形關閉鈕統一成 `BombCloseButton`（10 處手寫收成 1 個元件），
   並補齊 44pt 命中範圍：成果鉛筆／加號、取消置頂、聊天室輸入列切換。
 - `cde004a` 會議倒數與我的任務百分比改用 `@ScaledMetric`，恢復 Dynamic Type。
 - `648ee97` 建立 `BombRadius` / `BombBorder`，共用層改為引用 token（數值未變）。
+- `c2be1db` 分頁列與進度儀表在輔助使用字級下封頂，修正 AX2 以上的破版。
+
+**模擬器驗證**（iPhone 17 / iOS 27.0，非僅 build 通過）
+
+- `BombCloseButton` 外觀與改動前一致。
+- 44pt 命中範圍實測有效：點在距圓心 20pt（視覺圓圈外、面板內）仍觸發關閉。
+- `ExplosionMemeOverlay` 的 40pt 關閉鈕外觀完好。
+- Dynamic Type 以改動前的 build 做了對照，確認 AX 破版多數屬既有問題。
+- 封頂後 AX5 的分頁列與儀表恢復正常。
+- **未驗證**：會議倒數（需組長開始會議才會出現），寫法與儀表相同但不宣稱已驗。
 
 **刻意未套用**
 
