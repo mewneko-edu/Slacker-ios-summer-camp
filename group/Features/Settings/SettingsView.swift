@@ -341,7 +341,7 @@ private struct ProfileCard: View {
             .clipShape(.circle)
 
             VStack(alignment: .leading, spacing: 5) {
-                Text(name).font(.title2.weight(.black))
+                Text(name).font(.system(.title2, design: .rounded, weight: .black))
                 if !role.isEmpty {
                     Text(role).font(.subheadline.bold()).foregroundStyle(.secondary)
                 }
@@ -383,7 +383,7 @@ private struct SettingsSection<Content: View>: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
-            Text(title).font(.title2.weight(.black))
+            Text(title).font(.system(.title2, design: .rounded, weight: .black))
             VStack(spacing: 0) { content }
                 .comicCard()
         }
@@ -427,10 +427,10 @@ private struct GroupManagementView: View {
         ZStack {
             BombTheme.yellow.ignoresSafeArea()
             VStack(alignment: .leading, spacing: 18) {
-                Text(L10n.text("群組管理")).font(.largeTitle.weight(.black))
+                Text(L10n.text("群組管理")).font(.system(.largeTitle, design: .rounded, weight: .black))
                 ForEach(model.groups) { group in
                     VStack(alignment: .leading, spacing: 14) {
-                        Text(group.name).font(.title3.weight(.black))
+                        Text(group.name).font(.system(.title3, design: .rounded, weight: .black))
                         Button(L10n.text("複製邀請碼"), systemImage: "doc.on.doc.fill") {
                             UIPasteboard.general.string = group.inviteCode
                             model.lastEvent = L10n.text("邀請碼已複製")

@@ -24,7 +24,7 @@ struct BombEmptyState<Actions: View>: View {
                 .accessibilityHidden(true)
 
             Text(title)
-                .font(.title3.weight(.black))
+                .font(.system(.title3, design: .rounded, weight: .black))
 
             if let message {
                 Text(message)

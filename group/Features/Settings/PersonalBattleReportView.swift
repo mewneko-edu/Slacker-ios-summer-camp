@@ -62,7 +62,7 @@ struct PersonalBattleReportView: View {
 
                         HStack {
                             Text(L10n.text("專案紀錄"))
-                                .font(.title2.weight(.black))
+                                .font(.system(.title2, design: .rounded, weight: .black))
                             Spacer()
                             Text(L10n.format("{0} 個專案", String(describing: projects.count)))
                                 .font(.caption.weight(.black))
@@ -175,7 +175,7 @@ struct PersonalBattleReportView: View {
             Image(systemName: "chart.line.uptrend.xyaxis")
                 .font(.system(size: 34, weight: .black))
             Text(L10n.text("資料累積中"))
-                .font(.title2.weight(.black))
+                .font(.system(.title2, design: .rounded, weight: .black))
             Text(L10n.format("目前只有 {0} 個專案，仍可匯出分享，但會標示為初步資料。累積 3 個專案後，結果會更具參考性。", String(describing: projects.count)))
                 .font(.subheadline.weight(.semibold))
                 .foregroundStyle(.secondary)
@@ -235,7 +235,7 @@ struct ProjectRecordCard: View {
             Spacer()
             VStack(alignment: .trailing, spacing: 2) {
                 Text("\(project.overallAverage.formatted(.number.precision(.fractionLength(1)))) / 5")
-                    .font(.title3.weight(.black).monospacedDigit())
+                    .font(.system(.title3, design: .rounded, weight: .black).monospacedDigit())
                 Text(L10n.text("專案平均"))
                     .font(.caption2.weight(.bold))
                     .foregroundStyle(.secondary)

@@ -31,7 +31,7 @@ struct SmartAgendaManager: View {
                     VStack(alignment: .leading, spacing: 16) {
                         HStack {
                             Label(L10n.text(deletion == nil ? "管理議程" : "刪除議程"), systemImage: "list.bullet")
-                                .font(.title2.weight(.black))
+                                .font(.system(.title2, design: .rounded, weight: .black))
                                 .accessibilityAddTraits(.isHeader)
                             Spacer()
                             BombCloseButton(action: onClose)

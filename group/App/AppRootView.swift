@@ -176,7 +176,7 @@ struct AppRootView: View {
 
             VStack(alignment: .leading, spacing: 16) {
                 Label(L10n.text("雲端同步"), systemImage: "icloud.slash.fill")
-                    .font(.title2.weight(.black))
+                    .font(.system(.title2, design: .rounded, weight: .black))
                     .foregroundStyle(BombTheme.red)
 
                 Text(message)

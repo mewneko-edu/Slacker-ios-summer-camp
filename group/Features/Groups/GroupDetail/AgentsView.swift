@@ -57,7 +57,7 @@ private struct AgentCard: View {
         HStack(spacing: 14) {
             ZStack {
                 Circle().fill(agent.isShielded ? BombTheme.green : BombTheme.ink)
-                Text(String(agent.name.prefix(1))).font(.title.bold()).foregroundStyle(.white)
+                Text(String(agent.name.prefix(1))).font(.system(.title, design: .rounded, weight: .black)).foregroundStyle(.white)
             }
             .frame(width: 54, height: 54)
             VStack(alignment: .leading, spacing: 6) {
@@ -147,7 +147,7 @@ private struct PokeSheet: View {
             ZStack {
                 Circle().fill(BombTheme.ink)
                 Text(String(agent.name.prefix(1)))
-                    .font(.title3.weight(.black))
+                    .font(.system(.title3, design: .rounded, weight: .black))
                     .foregroundStyle(BombTheme.yellow)
             }
             .frame(width: 48, height: 48)

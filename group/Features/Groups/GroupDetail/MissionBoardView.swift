@@ -84,7 +84,7 @@ struct ProjectStatusHeader: View {
             HStack(alignment: .firstTextBaseline) {
                 Text("48:16:09").font(.system(size: 38, weight: .black, design: .monospaced))
                 Spacer()
-                Text("\(progress)%").font(.title3.weight(.black))
+                Text("\(progress)%").font(.system(.title3, design: .rounded, weight: .black))
             }
             ProgressView(value: Double(progress), total: 100).tint(BombTheme.yellow)
         }
@@ -105,7 +105,7 @@ private struct Stat: View {
 
     var body: some View {
         VStack {
-            Text(value).font(.title2.weight(.black))
+            Text(value).font(.system(.title2, design: .rounded, weight: .black))
             Text(label).font(.caption.bold())
         }
         .frame(maxWidth: .infinity)

@@ -150,7 +150,7 @@ struct GroupListView: View {
 
             VStack(alignment: .leading, spacing: 16) {
                 Label(L10n.text("加入群組"), systemImage: "person.3.fill")
-                    .font(.title2.weight(.black))
+                    .font(.system(.title2, design: .rounded, weight: .black))
                     .foregroundStyle(BombTheme.ink)
 
                 Text(message)
@@ -473,7 +473,7 @@ private struct AddGroupSheet: View {
     private var joinInviteTicket: some View {
         VStack(spacing: 16) {
             Text(L10n.text("6 位邀請碼"))
-                .font(.title3.weight(.black))
+                .font(.system(.title3, design: .rounded, weight: .black))
 
             inviteCodeBoxes
 
@@ -936,7 +936,7 @@ private struct GroupRow: View {
                         .font(.title2.weight(.black))
                         .foregroundStyle(statusForegroundColor)
                     Text(group.name)
-                        .font(.title2.weight(.black))
+                        .font(.system(.title2, design: .rounded, weight: .black))
                         .fixedSize(horizontal: false, vertical: true)
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)

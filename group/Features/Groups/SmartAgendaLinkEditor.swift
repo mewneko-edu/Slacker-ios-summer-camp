@@ -41,7 +41,7 @@ struct SmartAgendaLinkEditor: View {
                 VStack(alignment: .leading, spacing: 16) {
                     HStack {
                         Label(L10n.text(draft.link == nil ? "新增會議連結" : "編輯會議連結"), systemImage: "link")
-                            .font(.title2.weight(.black))
+                            .font(.system(.title2, design: .rounded, weight: .black))
                             .accessibilityAddTraits(.isHeader)
                         Spacer()
                         BombCloseButton(action: onDismiss)

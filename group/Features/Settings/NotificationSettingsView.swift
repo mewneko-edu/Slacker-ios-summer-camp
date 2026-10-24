@@ -24,7 +24,7 @@ struct NotificationSettingsView: View {
                     }
 
                     VStack(alignment: .leading, spacing: 10) {
-                        Text(L10n.text("通知分類")).font(.title2.weight(.black))
+                        Text(L10n.text("通知分類")).font(.system(.title2, design: .rounded, weight: .black))
                         VStack(spacing: 0) {
                             category(L10n.text("戳戳"), icon: "hand.tap.fill", isOn: $model.notificationCategories.pokes)
                             Divider()
@@ -41,7 +41,7 @@ struct NotificationSettingsView: View {
                     }
 
                     VStack(alignment: .leading, spacing: 10) {
-                        Text(L10n.text("提醒時間")).font(.title2.weight(.black))
+                        Text(L10n.text("提醒時間")).font(.system(.title2, design: .rounded, weight: .black))
                         VStack(alignment: .leading, spacing: 8) {
                             DatePicker(
                                 L10n.text("任務與專案提醒時間"),

@@ -108,7 +108,7 @@ struct SmartAgendaDetailView: View {
         return VStack(alignment: .leading, spacing: 16) {
             HStack {
                 Label(L10n.text("編輯議程"), systemImage: "square.and.pencil")
-                    .font(.title2.weight(.black))
+                    .font(.system(.title2, design: .rounded, weight: .black))
                     .accessibilityAddTraits(.isHeader)
                 Spacer()
                 BombCloseButton { showsEditOptions = false }
@@ -476,7 +476,7 @@ struct SmartAgendaMeetingEditor: View {
             VStack(alignment: .leading, spacing: 16) {
                 HStack {
                     Label(L10n.text(revision == nil ? "設定會議" : "編輯會議"), systemImage: "list.bullet")
-                        .font(.title2.weight(.black))
+                        .font(.system(.title2, design: .rounded, weight: .black))
                         .accessibilityAddTraits(.isHeader)
                     Spacer()
                     BombCloseButton(action: onDismiss)
@@ -590,7 +590,7 @@ private struct SmartAgendaMaterialEditor: View {
             VStack(alignment: .leading, spacing: 16) {
                 HStack {
                     Label(L10n.text(draft.material == nil ? "新增我的資料" : "編輯我的資料"), systemImage: "person.crop.circle")
-                        .font(.title2.weight(.black))
+                        .font(.system(.title2, design: .rounded, weight: .black))
                         .accessibilityAddTraits(.isHeader)
                     Spacer()
                     BombCloseButton(action: onDismiss)
@@ -686,16 +686,16 @@ private struct SmartAgendaMeetingSession: View {
                     let elapsed = max(0, Int(context.date.timeIntervalSince(started)))
                     let remaining = max(0, agenda.duration * 60 - elapsed)
                     VStack(alignment: .leading, spacing: 20) {
-                        Text(agenda.displayTopic).font(.title2.bold())
+                        Text(agenda.displayTopic).font(.system(.title2, design: .rounded, weight: .black))
                         Text(String(format: "%02d:%02d", remaining / 60, remaining % 60))
                             .font(.system(size: countdownSize, weight: .bold, design: .monospaced))
                             .lineLimit(1)
                             .minimumScaleFactor(0.6)
                         if let current = agenda.stages.first(where: { elapsed < $0.end * 60 }) {
                             Text(current.time).foregroundStyle(BombTheme.secondaryText)
-                            Text(agenda.displayTitle(current)).font(.title3.bold())
+                            Text(agenda.displayTitle(current)).font(.system(.title3, design: .rounded, weight: .black))
                             Text(agenda.displayGoal(current))
-                        } else { Text(L10n.text("會議已結束")).font(.title3.bold()) }
+                        } else { Text(L10n.text("會議已結束")).font(.system(.title3, design: .rounded, weight: .black)) }
                         Spacer()
                         if let error { Text(L10n.text(error)).font(.caption).foregroundStyle(BombTheme.red) }
                         if isLeader {

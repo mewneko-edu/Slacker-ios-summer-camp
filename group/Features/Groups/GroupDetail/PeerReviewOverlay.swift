@@ -282,7 +282,7 @@ struct PeerReviewOverlay: View {
             HStack(spacing: 12) {
                 avatar(for: member, size: 52)
                 VStack(alignment: .leading, spacing: 3) {
-                    Text(member.name).font(.title2.weight(.black))
+                    Text(member.name).font(.system(.title2, design: .rounded, weight: .black))
                     Text(member.role.title).font(.subheadline.weight(.bold)).foregroundStyle(.secondary)
                 }
             }
@@ -501,7 +501,7 @@ struct PeerReviewOverlay: View {
             BombTheme.ink.opacity(0.48).ignoresSafeArea()
 
             VStack(alignment: .leading, spacing: 16) {
-                Text(theme.confirmationTitle).font(.title2.weight(.black))
+                Text(theme.confirmationTitle).font(.system(.title2, design: .rounded, weight: .black))
                 Text(theme.confirmationMessage)
                     .font(.subheadline.weight(.bold))
 
@@ -552,7 +552,7 @@ struct PeerReviewOverlay: View {
 
             VStack(alignment: .leading, spacing: 16) {
                 Label(L10n.text("尚未送出評價"), systemImage: "exclamationmark.triangle.fill")
-                    .font(.title2.weight(.black))
+                    .font(.system(.title2, design: .rounded, weight: .black))
                     .foregroundStyle(BombTheme.red)
 
                 Text(L10n.text("目前填寫的評分與評語尚未送出，確定要離開嗎？"))
@@ -606,7 +606,7 @@ struct PeerReviewOverlay: View {
         return VStack(alignment: .leading, spacing: 18) {
             titleBlock
             Label(theme.submissionSuccessMessage(for: member.name), systemImage: theme.successIconName)
-                .font(.title3.weight(.black))
+                .font(.system(.title3, design: .rounded, weight: .black))
                 .foregroundStyle(theme.accentColor)
 
             Text(L10n.format("剩餘 {0} 位隊員尚未評價", String(describing: remainingCount)))
@@ -631,7 +631,7 @@ struct PeerReviewOverlay: View {
             }
 
             titleBlock
-            Text(theme.completionTitle).font(.title2.weight(.black))
+            Text(theme.completionTitle).font(.system(.title2, design: .rounded, weight: .black))
             Text(theme.completionMessage)
                 .font(.subheadline.weight(.bold))
 

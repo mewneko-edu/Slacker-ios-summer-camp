@@ -257,7 +257,7 @@ private struct NotificationDetailView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 18) {
                 Label(item.title, systemImage: item.kind.symbol)
-                    .font(.title2.weight(.black))
+                    .font(.system(.title2, design: .rounded, weight: .black))
                 Text(item.message).font(.body)
                 Text(item.createdAt, format: Date.FormatStyle(date: .abbreviated, time: .shortened).locale(L10n.locale))
                     .font(.caption)

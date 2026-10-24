@@ -335,7 +335,7 @@ private struct MyTaskCard: View {
 
                 HStack(alignment: .firstTextBaseline, spacing: 8) {
                     Text(task.title)
-                        .font(.title3.weight(.black))
+                        .font(.system(.title3, design: .rounded, weight: .black))
                         .foregroundStyle(task.isCompleted ? Color.secondary : BombTheme.ink)
                         .strikethrough(task.isCompleted)
                         .layoutPriority(1)
@@ -351,7 +351,7 @@ private struct MyTaskCard: View {
                 Spacer(minLength: 0)
 
                 Text("\(task.progress)%")
-                    .font(.title3.monospacedDigit().weight(.black))
+                    .font(.system(.title3, design: .rounded, weight: .black).monospacedDigit())
                     .fixedSize()
 
                 Image(systemName: "chevron.right")
@@ -498,7 +498,7 @@ struct MyTaskDetailView: View {
                 Spacer(minLength: 8)
 
                 Text("\(task.progress)%")
-                    .font(.title3.monospacedDigit().weight(.black))
+                    .font(.system(.title3, design: .rounded, weight: .black).monospacedDigit())
                     .monospacedDigit()
             }
 

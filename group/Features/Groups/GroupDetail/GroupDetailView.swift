@@ -464,7 +464,7 @@ struct GroupDetailView: View {
                     L10n.format("確定退出「{0}」？", String(describing: currentGroup.name)),
                     systemImage: "exclamationmark.triangle.fill"
                 )
-                .font(.title2.weight(.black))
+                .font(.system(.title2, design: .rounded, weight: .black))
                 .foregroundStyle(BombTheme.red)
 
                 Text(L10n.text("退出後將無法查看此群組。最後一位成員退出後，群組資料會永久刪除。"))
@@ -587,7 +587,7 @@ struct GroupDetailView: View {
                 VStack(alignment: .leading, spacing: 10) {
                     HStack {
                         Text(L10n.text("測試工具"))
-                            .font(.title2.weight(.black))
+                            .font(.system(.title2, design: .rounded, weight: .black))
                         Spacer()
                         Button(L10n.text("關閉")) { showsDebugPanel = false }
                             .font(.caption.weight(.black))
@@ -1061,7 +1061,7 @@ struct GroupDetailView: View {
             VStack(alignment: .leading, spacing: 16) {
                 HStack {
                     Label(L10n.text("修改群組"), systemImage: "pencil")
-                        .font(.title2.weight(.black))
+                        .font(.system(.title2, design: .rounded, weight: .black))
 
                     Spacer()
 
@@ -1342,7 +1342,7 @@ struct GroupDetailView: View {
                 VStack(alignment: .leading, spacing: 16) {
                     HStack {
                         Label(L10n.text("釘選成員"), systemImage: "pin.fill")
-                            .font(.title2.weight(.black))
+                            .font(.system(.title2, design: .rounded, weight: .black))
                             .accessibilityAddTraits(.isHeader)
                         Spacer()
                         BombCloseButton { showsPinnedMemberPicker = false }
@@ -1404,7 +1404,7 @@ struct GroupDetailView: View {
                 VStack(alignment: .leading, spacing: 16) {
                     HStack {
                         Label(L10n.text("更換組長"), systemImage: "crown.fill")
-                            .font(.title2.weight(.black))
+                            .font(.system(.title2, design: .rounded, weight: .black))
                             .accessibilityAddTraits(.isHeader)
                         Spacer()
                         BombCloseButton { showsLeaderPicker = false }
@@ -1643,7 +1643,7 @@ struct GroupDetailView: View {
                     L10n.format("確定刪除「{0}」？", String(describing: task.title)),
                     systemImage: "trash.fill"
                 )
-                .font(.title2.weight(.black))
+                .font(.system(.title2, design: .rounded, weight: .black))
                 .foregroundStyle(BombTheme.red)
 
                 Text(L10n.text("刪除後，這項任務的子任務、進度與成果附件都無法復原。"))
@@ -2035,7 +2035,7 @@ private struct ExplosionMemeOverlay: View {
 
                         VStack(spacing: 9) {
                             Text(groupName)
-                                .font(.title3.weight(.black))
+                                .font(.system(.title3, design: .rounded, weight: .black))
                                 .multilineTextAlignment(.center)
 
                             HStack(spacing: 12) {

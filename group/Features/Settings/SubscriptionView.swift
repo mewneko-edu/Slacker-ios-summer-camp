@@ -11,7 +11,7 @@ struct SubscriptionView: View {
                 Text(subscription.isPro
                      ? L10n.text("已解鎖不限數量的未結束專案")
                      : L10n.text("免費最多 2 個未結束專案；升級後不限數量。"))
-                    .font(.title3.bold())
+                    .font(.system(.title3, design: .rounded, weight: .black))
                 if let package = subscription.monthlyPackage, !subscription.isPro {
                     Text(L10n.text("月訂閱") + " · " + package.localizedPriceString)
                         .font(.headline)

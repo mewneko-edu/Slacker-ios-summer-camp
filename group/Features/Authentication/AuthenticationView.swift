@@ -300,7 +300,7 @@ struct PasswordResetView: View {
                         Image(systemName: "envelope.badge.fill")
                             .font(.system(size: 44, weight: .black))
                         Text(session.text("重設信已寄出"))
-                            .font(.title2.weight(.black))
+                            .font(.system(.title2, design: .rounded, weight: .black))
                         Text(session.text("若此信箱已註冊，請從信件中的連結設定新密碼。"))
                             .font(.subheadline.weight(.semibold))
                             .foregroundStyle(BombTheme.ink.opacity(0.65))
