@@ -152,7 +152,7 @@ struct MyTasksView: View {
         .foregroundStyle(BombTheme.ink)
         .padding(12)
         .background(.white.opacity(0.72))
-        .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
+        .clipShape(RoundedRectangle(cornerRadius: BombRadius.control, style: .continuous))
     }
 
     private var personalProgress: Int {
@@ -387,8 +387,8 @@ private struct MyTaskCard: View {
         }
         .foregroundStyle(BombTheme.ink)
         .padding(16)
-        .background(BombTheme.paper, in: RoundedRectangle(cornerRadius: 16))
-        .overlay(RoundedRectangle(cornerRadius: 16).stroke(BombTheme.ink, lineWidth: 3))
+        .background(BombTheme.paper, in: RoundedRectangle(cornerRadius: BombRadius.panel))
+        .overlay(RoundedRectangle(cornerRadius: BombRadius.panel).stroke(BombTheme.ink, lineWidth: 3))
         .padding(.vertical, 2)
     }
 
@@ -561,7 +561,7 @@ struct MyTaskDetailView: View {
                         .contentShape(.rect)
                         .padding(.horizontal, 12)
                         .padding(.vertical, 10)
-                        .background(BombTheme.ink.opacity(0.04), in: RoundedRectangle(cornerRadius: 10))
+                        .background(BombTheme.ink.opacity(0.04), in: RoundedRectangle(cornerRadius: BombRadius.inner))
                     }
                     .buttonStyle(.plain)
                 }
@@ -587,7 +587,7 @@ struct MyTaskDetailView: View {
                             .font(.headline)
                             .frame(width: 40, height: 40)
                             .background(BombTheme.yellow.opacity(0.55))
-                            .clipShape(RoundedRectangle(cornerRadius: 11, style: .continuous))
+                            .clipShape(RoundedRectangle(cornerRadius: BombRadius.inner, style: .continuous))
 
                         Text(deliverable.title)
                             .font(.subheadline.weight(.bold))
@@ -621,9 +621,9 @@ private struct TaskDetailCard: ViewModifier {
         content
             .padding(14)
             .background(BombTheme.paper)
-            .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
+            .clipShape(RoundedRectangle(cornerRadius: BombRadius.control, style: .continuous))
             .overlay {
-                RoundedRectangle(cornerRadius: 14, style: .continuous)
+                RoundedRectangle(cornerRadius: BombRadius.control, style: .continuous)
                     .stroke(BombTheme.ink, lineWidth: 3)
             }
     }

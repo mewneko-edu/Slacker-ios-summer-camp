@@ -127,7 +127,7 @@ struct PersonalBattleReportView: View {
             .font(.caption.weight(.bold))
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(12)
-            .background(BombTheme.paper, in: RoundedRectangle(cornerRadius: 16))
+            .background(BombTheme.paper, in: RoundedRectangle(cornerRadius: BombRadius.panel))
     }
 
     private var emptyState: some View {
@@ -164,8 +164,8 @@ struct PersonalBattleReportView: View {
         }
         .padding(16)
         .background(BombTheme.paper)
-        .clipShape(RoundedRectangle(cornerRadius: 24))
-        .overlay(RoundedRectangle(cornerRadius: 24).stroke(BombTheme.ink, lineWidth: 3))
+        .clipShape(RoundedRectangle(cornerRadius: BombRadius.card))
+        .overlay(RoundedRectangle(cornerRadius: BombRadius.card).stroke(BombTheme.ink, lineWidth: 3))
         .compositingGroup()
         .shadow(color: BombTheme.ink, radius: 0, x: 5, y: 5)
     }
@@ -186,8 +186,8 @@ struct PersonalBattleReportView: View {
         .frame(maxWidth: .infinity)
         .padding(24)
         .background(BombTheme.paper)
-        .clipShape(RoundedRectangle(cornerRadius: 24))
-        .overlay(RoundedRectangle(cornerRadius: 24).stroke(BombTheme.ink, lineWidth: 3))
+        .clipShape(RoundedRectangle(cornerRadius: BombRadius.card))
+        .overlay(RoundedRectangle(cornerRadius: BombRadius.card).stroke(BombTheme.ink, lineWidth: 3))
         .compositingGroup()
         .shadow(color: BombTheme.ink, radius: 0, x: 5, y: 5)
     }

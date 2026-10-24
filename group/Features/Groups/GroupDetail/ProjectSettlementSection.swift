@@ -79,8 +79,8 @@ struct ProjectSettlementSection: View {
             .foregroundStyle(BombTheme.ink)
             .padding(16)
             .background(BombTheme.paper)
-            .clipShape(RoundedRectangle(cornerRadius: 20))
-            .overlay(RoundedRectangle(cornerRadius: 20).stroke(BombTheme.ink, lineWidth: 3))
+            .clipShape(RoundedRectangle(cornerRadius: BombRadius.card))
+            .overlay(RoundedRectangle(cornerRadius: BombRadius.card).stroke(BombTheme.ink, lineWidth: 3))
         }
         .buttonStyle(.plain)
         .accessibilityLabel(L10n.text("查看團隊戰報 AI 分析"))
@@ -132,8 +132,8 @@ struct ProjectSettlementSection: View {
         }
         .padding(16)
         .background(BombTheme.paper)
-        .clipShape(RoundedRectangle(cornerRadius: 20))
-        .overlay(RoundedRectangle(cornerRadius: 20).stroke(BombTheme.ink, lineWidth: 3))
+        .clipShape(RoundedRectangle(cornerRadius: BombRadius.card))
+        .overlay(RoundedRectangle(cornerRadius: BombRadius.card).stroke(BombTheme.ink, lineWidth: 3))
     }
 
     private var peerReviewProgress: some View {
@@ -205,8 +205,8 @@ struct ProjectSettlementSection: View {
         }
         .padding(16)
         .background(BombTheme.paper)
-        .clipShape(RoundedRectangle(cornerRadius: 20))
-        .overlay(RoundedRectangle(cornerRadius: 20).stroke(BombTheme.ink, lineWidth: 3))
+        .clipShape(RoundedRectangle(cornerRadius: BombRadius.card))
+        .overlay(RoundedRectangle(cornerRadius: BombRadius.card).stroke(BombTheme.ink, lineWidth: 3))
     }
 
     private var reviewResults: some View {
@@ -275,15 +275,15 @@ struct ProjectSettlementSection: View {
                         .padding(12)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .background(Color.white.opacity(0.45))
-                        .clipShape(RoundedRectangle(cornerRadius: 12))
+                        .clipShape(RoundedRectangle(cornerRadius: BombRadius.control))
                     }
                 }
             }
         }
         .padding(16)
         .background(BombTheme.paper)
-        .clipShape(RoundedRectangle(cornerRadius: 20))
-        .overlay(RoundedRectangle(cornerRadius: 20).stroke(BombTheme.ink, lineWidth: 3))
+        .clipShape(RoundedRectangle(cornerRadius: BombRadius.card))
+        .overlay(RoundedRectangle(cornerRadius: BombRadius.card).stroke(BombTheme.ink, lineWidth: 3))
     }
 
     private func metric(value: String, label: String) -> some View {
@@ -297,7 +297,7 @@ struct ProjectSettlementSection: View {
         .frame(maxWidth: .infinity)
         .padding(.vertical, 10)
         .background(BombTheme.yellow.opacity(0.28))
-        .clipShape(RoundedRectangle(cornerRadius: 12))
+        .clipShape(RoundedRectangle(cornerRadius: BombRadius.control))
     }
 
     private var outcomeColor: Color {

@@ -151,7 +151,7 @@ struct AppRootView: View {
                     .foregroundStyle(BombTheme.paper)
                     .padding(.horizontal, 18)
                     .padding(.vertical, 12)
-                    .background(BombTheme.ink, in: RoundedRectangle(cornerRadius: 16))
+                    .background(BombTheme.ink, in: RoundedRectangle(cornerRadius: BombRadius.panel))
                     .padding(.horizontal, 20)
                     .padding(.top, 12)
                     .allowsHitTesting(false)
@@ -220,8 +220,8 @@ struct AppRootView: View {
             }
             .padding(20)
             .background(BombTheme.paper)
-            .clipShape(RoundedRectangle(cornerRadius: 22))
-            .overlay(RoundedRectangle(cornerRadius: 22).stroke(BombTheme.ink, lineWidth: 3))
+            .clipShape(RoundedRectangle(cornerRadius: BombRadius.card))
+            .overlay(RoundedRectangle(cornerRadius: BombRadius.card).stroke(BombTheme.ink, lineWidth: 3))
             .padding(.horizontal, 28)
             .frame(maxWidth: 480)
         }

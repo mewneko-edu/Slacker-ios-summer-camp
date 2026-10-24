@@ -93,7 +93,7 @@ struct PostGameReviewView: View {
         .frame(maxWidth: .infinity)
         .padding(.vertical, 10)
         .background(BombTheme.yellow.opacity(0.35))
-        .clipShape(RoundedRectangle(cornerRadius: 12))
+        .clipShape(RoundedRectangle(cornerRadius: BombRadius.control))
     }
 
     private var contributionCard: some View {
@@ -184,7 +184,7 @@ struct PostGameReviewView: View {
             }
             .padding(12)
             .background(BombTheme.yellow.opacity(0.35))
-            .clipShape(RoundedRectangle(cornerRadius: 14))
+            .clipShape(RoundedRectangle(cornerRadius: BombRadius.control))
 
             retrospectiveList(title: L10n.text("團隊亮點"), items: demo.highlights, marker: "✓")
             retrospectiveList(title: L10n.text("改善建議"), items: demo.improvements, marker: "•")
@@ -197,8 +197,8 @@ struct PostGameReviewView: View {
             }
             .padding(13)
             .background(Color.white.opacity(0.38))
-            .clipShape(RoundedRectangle(cornerRadius: 14))
-            .overlay(RoundedRectangle(cornerRadius: 14).stroke(BombTheme.ink, lineWidth: 2))
+            .clipShape(RoundedRectangle(cornerRadius: BombRadius.control))
+            .overlay(RoundedRectangle(cornerRadius: BombRadius.control).stroke(BombTheme.ink, lineWidth: 2))
 
             Text(L10n.text("AI 分析僅供參考。"))
                 .font(.caption2.weight(.bold))
@@ -252,8 +252,8 @@ private struct PostGameCardModifier: ViewModifier {
         content
             .padding(17)
             .background(BombTheme.paper)
-            .clipShape(RoundedRectangle(cornerRadius: 22))
-            .overlay(RoundedRectangle(cornerRadius: 22).stroke(BombTheme.ink, lineWidth: 3))
+            .clipShape(RoundedRectangle(cornerRadius: BombRadius.card))
+            .overlay(RoundedRectangle(cornerRadius: BombRadius.card).stroke(BombTheme.ink, lineWidth: 3))
             .compositingGroup()
             .shadow(color: BombTheme.ink, radius: 0, x: 5, y: 5)
     }

@@ -101,9 +101,9 @@ extension View {
     func bombFormField() -> some View {
         font(.subheadline.weight(.semibold))
             .padding(13)
-            .background(BombTheme.paper, in: RoundedRectangle(cornerRadius: BombRadius.field))
+            .background(BombTheme.paper, in: RoundedRectangle(cornerRadius: BombRadius.control))
             .overlay {
-                RoundedRectangle(cornerRadius: BombRadius.field)
+                RoundedRectangle(cornerRadius: BombRadius.control)
                     .stroke(BombTheme.ink, lineWidth: BombBorder.inner)
             }
     }

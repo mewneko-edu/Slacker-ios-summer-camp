@@ -91,7 +91,7 @@ struct ProjectStatusHeader: View {
         .foregroundStyle(.white)
         .padding(18)
         .background(BombTheme.ink)
-        .clipShape(RoundedRectangle(cornerRadius: 22))
+        .clipShape(RoundedRectangle(cornerRadius: BombRadius.card))
         .overlay(alignment: .top) {
             HazardStripe().clipShape(.capsule).padding(.horizontal, 20).offset(y: -5)
         }

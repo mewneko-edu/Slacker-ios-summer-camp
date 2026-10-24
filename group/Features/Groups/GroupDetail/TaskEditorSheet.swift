@@ -64,9 +64,9 @@ struct TaskEditorSheet: View {
             )
         }
         .background(BombTheme.yellow)
-        .clipShape(RoundedRectangle(cornerRadius: 30, style: .continuous))
+        .clipShape(RoundedRectangle(cornerRadius: BombRadius.overlay, style: .continuous))
         .overlay {
-            RoundedRectangle(cornerRadius: 30, style: .continuous)
+            RoundedRectangle(cornerRadius: BombRadius.overlay, style: .continuous)
                 .stroke(BombTheme.ink, lineWidth: 3)
         }
         .shadow(color: BombTheme.ink.opacity(0.3), radius: 14, y: 4)

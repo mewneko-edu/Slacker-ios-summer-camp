@@ -235,9 +235,9 @@ private struct NotificationRow: View {
         }
         .foregroundStyle(BombTheme.ink)
         .padding(16)
-        .background(BombTheme.paper, in: RoundedRectangle(cornerRadius: 20))
-        .overlay(RoundedRectangle(cornerRadius: 20).stroke(BombTheme.ink, lineWidth: item.isRead ? 1 : 2))
-        .contentShape(RoundedRectangle(cornerRadius: 20))
+        .background(BombTheme.paper, in: RoundedRectangle(cornerRadius: BombRadius.card))
+        .overlay(RoundedRectangle(cornerRadius: BombRadius.card).stroke(BombTheme.ink, lineWidth: item.isRead ? 1 : 2))
+        .contentShape(RoundedRectangle(cornerRadius: BombRadius.card))
         .accessibilityElement(children: .combine)
         .accessibilityValue(item.isRead ? L10n.text("已讀") : L10n.text("未讀"))
     }

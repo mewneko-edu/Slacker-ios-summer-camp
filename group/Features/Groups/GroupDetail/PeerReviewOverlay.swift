@@ -164,8 +164,8 @@ struct PeerReviewOverlay: View {
             }
             .padding(14)
             .background(theme.summaryBackground)
-            .clipShape(RoundedRectangle(cornerRadius: 16))
-            .overlay(RoundedRectangle(cornerRadius: 16).stroke(BombTheme.ink, lineWidth: 2))
+            .clipShape(RoundedRectangle(cornerRadius: BombRadius.panel))
+            .overlay(RoundedRectangle(cornerRadius: BombRadius.panel).stroke(BombTheme.ink, lineWidth: 2))
 
             if theme.isIncident && !unfinishedTasks.isEmpty {
                 VStack(alignment: .leading, spacing: 8) {
@@ -181,8 +181,8 @@ struct PeerReviewOverlay: View {
                 .padding(14)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .background(BombTheme.red.opacity(0.1))
-                .clipShape(RoundedRectangle(cornerRadius: 16))
-                .overlay(RoundedRectangle(cornerRadius: 16).stroke(BombTheme.red, lineWidth: 2))
+                .clipShape(RoundedRectangle(cornerRadius: BombRadius.panel))
+                .overlay(RoundedRectangle(cornerRadius: BombRadius.panel).stroke(BombTheme.red, lineWidth: 2))
             }
 
             Button(theme.startButtonTitle) {
@@ -273,8 +273,8 @@ struct PeerReviewOverlay: View {
         }
         .padding(12)
         .background(BombTheme.paper)
-        .clipShape(RoundedRectangle(cornerRadius: 16))
-        .overlay(RoundedRectangle(cornerRadius: 16).stroke(BombTheme.ink, lineWidth: 2))
+        .clipShape(RoundedRectangle(cornerRadius: BombRadius.panel))
+        .overlay(RoundedRectangle(cornerRadius: BombRadius.panel).stroke(BombTheme.ink, lineWidth: 2))
     }
 
     private func reviewForm(for member: Member) -> some View {
@@ -326,8 +326,8 @@ struct PeerReviewOverlay: View {
                         isCommentFocused = false
                     }
             }
-            .clipShape(RoundedRectangle(cornerRadius: 16))
-            .overlay(RoundedRectangle(cornerRadius: 16).stroke(BombTheme.ink, lineWidth: 2))
+            .clipShape(RoundedRectangle(cornerRadius: BombRadius.panel))
+            .overlay(RoundedRectangle(cornerRadius: BombRadius.panel).stroke(BombTheme.ink, lineWidth: 2))
 
             anonymityNotice
                 .contentShape(Rectangle())
@@ -363,8 +363,8 @@ struct PeerReviewOverlay: View {
         }
         .padding(12)
         .background(BombTheme.paper)
-        .clipShape(RoundedRectangle(cornerRadius: 14))
-        .overlay(RoundedRectangle(cornerRadius: 14).stroke(BombTheme.ink, lineWidth: 2))
+        .clipShape(RoundedRectangle(cornerRadius: BombRadius.control))
+        .overlay(RoundedRectangle(cornerRadius: BombRadius.control).stroke(BombTheme.ink, lineWidth: 2))
     }
 
     private func summaryRow(label: String, value: String, font: Font = .caption) -> some View {
@@ -486,8 +486,8 @@ struct PeerReviewOverlay: View {
             .padding(8)
             .id("peer-review-comment")
             .background(Color.white.opacity(0.55))
-            .clipShape(RoundedRectangle(cornerRadius: 14))
-            .overlay(RoundedRectangle(cornerRadius: 14).stroke(BombTheme.ink, lineWidth: 2))
+            .clipShape(RoundedRectangle(cornerRadius: BombRadius.control))
+            .overlay(RoundedRectangle(cornerRadius: BombRadius.control).stroke(BombTheme.ink, lineWidth: 2))
 
             Text("\(comment.count) / 200")
                 .font(.caption2.weight(.black))
@@ -538,8 +538,8 @@ struct PeerReviewOverlay: View {
             }
             .padding(20)
             .background(BombTheme.paper)
-            .clipShape(RoundedRectangle(cornerRadius: 22))
-            .overlay(RoundedRectangle(cornerRadius: 22).stroke(BombTheme.ink, lineWidth: 3))
+            .clipShape(RoundedRectangle(cornerRadius: BombRadius.card))
+            .overlay(RoundedRectangle(cornerRadius: BombRadius.card).stroke(BombTheme.ink, lineWidth: 3))
             .padding(.horizontal, 28)
             .frame(maxWidth: 480)
         }
@@ -591,8 +591,8 @@ struct PeerReviewOverlay: View {
             }
             .padding(20)
             .background(BombTheme.paper)
-            .clipShape(RoundedRectangle(cornerRadius: 22))
-            .overlay(RoundedRectangle(cornerRadius: 22).stroke(BombTheme.ink, lineWidth: 3))
+            .clipShape(RoundedRectangle(cornerRadius: BombRadius.card))
+            .overlay(RoundedRectangle(cornerRadius: BombRadius.card).stroke(BombTheme.ink, lineWidth: 3))
             .padding(.horizontal, 28)
             .frame(maxWidth: 480)
         }

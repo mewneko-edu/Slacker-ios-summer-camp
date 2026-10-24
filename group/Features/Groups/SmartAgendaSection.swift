@@ -140,8 +140,8 @@ struct SmartAgendaDetailView: View {
         }
         .foregroundStyle(BombTheme.ink)
         .padding(20)
-        .background(BombTheme.paper, in: RoundedRectangle(cornerRadius: 22))
-        .overlay(RoundedRectangle(cornerRadius: 22).stroke(BombTheme.ink, lineWidth: 3))
+        .background(BombTheme.paper, in: RoundedRectangle(cornerRadius: BombRadius.card))
+        .overlay(RoundedRectangle(cornerRadius: BombRadius.card).stroke(BombTheme.ink, lineWidth: 3))
         .padding(.horizontal, 28)
         .frame(maxWidth: 480)
     }
@@ -155,8 +155,8 @@ struct SmartAgendaDetailView: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.horizontal, 16)
                 .padding(.vertical, 14)
-                .background(highlighted ? BombTheme.yellow : BombTheme.ink, in: RoundedRectangle(cornerRadius: 14))
-                .contentShape(RoundedRectangle(cornerRadius: 14))
+                .background(highlighted ? BombTheme.yellow : BombTheme.ink, in: RoundedRectangle(cornerRadius: BombRadius.control))
+                .contentShape(RoundedRectangle(cornerRadius: BombRadius.control))
         }
         .buttonStyle(.plain)
     }
@@ -256,9 +256,9 @@ private struct SmartAgendaCard: View {
             if store.isDownloading { ProgressView().padding(.top, 8) }
         }
         .padding(16)
-        .background(BombTheme.paper, in: RoundedRectangle(cornerRadius: 20))
-        .overlay(RoundedRectangle(cornerRadius: 20).stroke(BombTheme.ink, lineWidth: 3))
-        .contentShape(RoundedRectangle(cornerRadius: 20))
+        .background(BombTheme.paper, in: RoundedRectangle(cornerRadius: BombRadius.card))
+        .overlay(RoundedRectangle(cornerRadius: BombRadius.card).stroke(BombTheme.ink, lineWidth: 3))
+        .contentShape(RoundedRectangle(cornerRadius: BombRadius.card))
     }
 
     private var preparedMembers: [Member] {
@@ -507,8 +507,8 @@ struct SmartAgendaMeetingEditor: View {
             .foregroundStyle(BombTheme.ink)
             .tint(BombTheme.ink)
             .padding(20)
-            .background(BombTheme.paper, in: RoundedRectangle(cornerRadius: 22))
-            .overlay(RoundedRectangle(cornerRadius: 22).stroke(BombTheme.ink, lineWidth: 3))
+            .background(BombTheme.paper, in: RoundedRectangle(cornerRadius: BombRadius.card))
+            .overlay(RoundedRectangle(cornerRadius: BombRadius.card).stroke(BombTheme.ink, lineWidth: 3))
             .padding(.horizontal, 28)
             .padding(.vertical, 20)
             .frame(maxWidth: 480)
@@ -529,8 +529,8 @@ struct SmartAgendaMeetingEditor: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.horizontal, 16)
                 .padding(.vertical, 14)
-                .background(highlighted ? BombTheme.yellow : BombTheme.ink, in: RoundedRectangle(cornerRadius: 14))
-                .contentShape(RoundedRectangle(cornerRadius: 14))
+                .background(highlighted ? BombTheme.yellow : BombTheme.ink, in: RoundedRectangle(cornerRadius: BombRadius.control))
+                .contentShape(RoundedRectangle(cornerRadius: BombRadius.control))
         }
         .buttonStyle(.plain)
     }
@@ -627,8 +627,8 @@ private struct SmartAgendaMaterialEditor: View {
             .foregroundStyle(BombTheme.ink)
             .tint(BombTheme.ink)
             .padding(20)
-            .background(BombTheme.paper, in: RoundedRectangle(cornerRadius: 22))
-            .overlay(RoundedRectangle(cornerRadius: 22).stroke(BombTheme.ink, lineWidth: 3))
+            .background(BombTheme.paper, in: RoundedRectangle(cornerRadius: BombRadius.card))
+            .overlay(RoundedRectangle(cornerRadius: BombRadius.card).stroke(BombTheme.ink, lineWidth: 3))
             .padding(.horizontal, 28)
             .padding(.vertical, 20)
             .frame(maxWidth: 480)
@@ -654,8 +654,8 @@ private struct SmartAgendaMaterialEditor: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.horizontal, 16)
                 .padding(.vertical, 14)
-                .background(highlighted ? BombTheme.yellow : BombTheme.ink, in: RoundedRectangle(cornerRadius: 14))
-                .contentShape(RoundedRectangle(cornerRadius: 14))
+                .background(highlighted ? BombTheme.yellow : BombTheme.ink, in: RoundedRectangle(cornerRadius: BombRadius.control))
+                .contentShape(RoundedRectangle(cornerRadius: BombRadius.control))
         }
         .buttonStyle(.plain)
     }

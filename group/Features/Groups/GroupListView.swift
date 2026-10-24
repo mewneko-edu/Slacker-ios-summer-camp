@@ -174,8 +174,8 @@ struct GroupListView: View {
             }
             .padding(20)
             .background(BombTheme.paper)
-            .clipShape(RoundedRectangle(cornerRadius: 22))
-            .overlay(RoundedRectangle(cornerRadius: 22).stroke(BombTheme.ink, lineWidth: 3))
+            .clipShape(RoundedRectangle(cornerRadius: BombRadius.card))
+            .overlay(RoundedRectangle(cornerRadius: BombRadius.card).stroke(BombTheme.ink, lineWidth: 3))
             .padding(.horizontal, 28)
             .frame(maxWidth: 480)
         }
@@ -524,9 +524,9 @@ private struct AddGroupSheet: View {
                         .frame(maxWidth: .infinity)
                         .frame(height: 52)
                         .background(BombTheme.paper)
-                        .clipShape(RoundedRectangle(cornerRadius: 8))
+                        .clipShape(RoundedRectangle(cornerRadius: BombRadius.inner))
                         .overlay {
-                            RoundedRectangle(cornerRadius: 8)
+                            RoundedRectangle(cornerRadius: BombRadius.inner)
                                 .stroke(BombTheme.ink.opacity(0.18), lineWidth: 1.5)
                         }
                 }
@@ -987,9 +987,9 @@ private struct GroupRow: View {
         .foregroundStyle(BombTheme.ink)
         .padding(20)
         .background(BombTheme.paper)
-        .clipShape(RoundedRectangle(cornerRadius: 22))
+        .clipShape(RoundedRectangle(cornerRadius: BombRadius.card))
         .overlay {
-            RoundedRectangle(cornerRadius: 22)
+            RoundedRectangle(cornerRadius: BombRadius.card)
                 .stroke(BombTheme.ink, lineWidth: 3)
         }
         .task(id: animationSequence) {

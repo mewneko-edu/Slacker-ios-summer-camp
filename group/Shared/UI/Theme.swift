@@ -10,29 +10,28 @@ enum BombTheme {
     static let green = Color(red: 0.16, green: 0.55, blue: 0.32)
 }
 
-/// 圓角的角色命名。
+/// 圓角尺度。五階，**不要再寫裸數字，也不要新增階級**。
 ///
-/// 這裡刻意記錄「目前實際在用的數值」，而不是一套理想尺度 —— 共用層原本
-/// 就有 28／24／22 三種浮動面板圓角，要收斂成哪一階必須對照畫面決定，
-/// 不該在沒有視覺驗證的情況下改掉。先把角色命名固定下來，讓後續新畫面
-/// 有唯一來源可引用；收斂提案與差異清單見 docs/visual-handbook.md。
+/// 收斂前正式碼散落 17 種圓角（4、6、8、9、10、11、12、14、15、16、17、
+/// 18、20、22、24、28、30），同一個角色常常有兩三種值並存。這五階由那些
+/// 數值合併而來，每一處位移都 ≤3pt —— 肉眼不可辨，但往後只剩五個選擇。
+///
+/// 階與階之間刻意拉開，讓「這是哪一層」在程式碼裡就讀得出來，
+/// 而不是靠 1–2pt 的差別去猜。
+///
+/// PDF 匯出的繪圖碼（`UIBezierPath`，個人與團隊戰報）不套這組 token：
+/// 那是另一種媒介，與畫面上的層級無關。
 enum BombRadius {
-    /// 覆蓋整個畫面的浮動面板：表單 Sheet、Poke 覆蓋層。
+    /// 覆蓋整個畫面的浮動面板：表單 Sheet、Poke 覆蓋層。（原 28、30）
     static let overlay: CGFloat = 28
-    /// 對話框。
-    static let dialog: CGFloat = 24
-    /// 主要內容卡：群組卡、新手教學卡。
+    /// 主要內容卡與對話框：群組卡、新手教學卡、`bombDialog`。（原 20、22、24）
     static let card: CGFloat = 22
-    /// 區塊卡，即 `comicCard()` 的共用treatment。
+    /// 區塊卡，即 `comicCard()`。（原 16、17、18）
     static let panel: CGFloat = 18
-    /// 輸入欄位。
-    static let field: CGFloat = 15
-    /// 卡片內的小區塊、標籤。
-    static let chip: CGFloat = 10
-    /// 進度徽章一類的小底板。
-    static let badge: CGFloat = 8
-    /// 縮圖。
-    static let thumbnail: CGFloat = 6
+    /// 輸入欄位、按鈕、列內控制項。（原 12、14、15）
+    static let control: CGFloat = 14
+    /// 卡片內的小區塊、標籤、縮圖、徽章底板。（原 6、8、9、10、11）
+    static let inner: CGFloat = 8
 }
 
 /// 外框粗細。黃黑漫畫風靠粗黑邊界定，粗細代表層級而非裝飾。

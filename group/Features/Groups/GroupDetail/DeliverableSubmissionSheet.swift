@@ -297,8 +297,8 @@ struct DeliverableSubmissionSheet: View {
         .frame(height: 150)
         .padding(.horizontal, 16)
         .background(BombTheme.yellow.opacity(0.45))
-        .clipShape(RoundedRectangle(cornerRadius: 18))
-        .overlay(RoundedRectangle(cornerRadius: 18).stroke(BombTheme.ink, style: StrokeStyle(lineWidth: 3, dash: [8])))
+        .clipShape(RoundedRectangle(cornerRadius: BombRadius.panel))
+        .overlay(RoundedRectangle(cornerRadius: BombRadius.panel).stroke(BombTheme.ink, style: StrokeStyle(lineWidth: 3, dash: [8])))
     }
 
     @ViewBuilder
@@ -391,8 +391,8 @@ private struct PhotoSelectionLabel: View {
                 .scaledToFill()
                 .frame(maxWidth: .infinity)
                 .frame(height: 190)
-                .clipShape(RoundedRectangle(cornerRadius: 18))
-                .overlay(RoundedRectangle(cornerRadius: 18).stroke(BombTheme.ink, lineWidth: 3))
+                .clipShape(RoundedRectangle(cornerRadius: BombRadius.panel))
+                .overlay(RoundedRectangle(cornerRadius: BombRadius.panel).stroke(BombTheme.ink, lineWidth: 3))
         } else {
             VStack(spacing: 10) {
                 Image(systemName: "photo.badge.plus")
@@ -404,8 +404,8 @@ private struct PhotoSelectionLabel: View {
             .frame(maxWidth: .infinity)
             .frame(height: 150)
             .background(BombTheme.yellow.opacity(0.45))
-            .clipShape(RoundedRectangle(cornerRadius: 18))
-            .overlay(RoundedRectangle(cornerRadius: 18).stroke(BombTheme.ink, style: StrokeStyle(lineWidth: 3, dash: [8])))
+            .clipShape(RoundedRectangle(cornerRadius: BombRadius.panel))
+            .overlay(RoundedRectangle(cornerRadius: BombRadius.panel).stroke(BombTheme.ink, style: StrokeStyle(lineWidth: 3, dash: [8])))
         }
     }
 }

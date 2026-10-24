@@ -351,10 +351,10 @@ struct ChatRoomView: View {
                     .padding(.horizontal, 14)
                     .padding(.vertical, 11)
                     .background(isCurrentUser ? BombTheme.ink : BombTheme.paper)
-                    .clipShape(RoundedRectangle(cornerRadius: 17, style: .continuous))
+                    .clipShape(RoundedRectangle(cornerRadius: BombRadius.panel, style: .continuous))
                     .overlay {
                         if !isCurrentUser {
-                            RoundedRectangle(cornerRadius: 17, style: .continuous)
+                            RoundedRectangle(cornerRadius: BombRadius.panel, style: .continuous)
                                 .stroke(BombTheme.ink, lineWidth: 2)
                         }
                     }
@@ -458,9 +458,9 @@ struct ChatRoomView: View {
                     .padding(.horizontal, 14)
                     .padding(.vertical, 11)
                     .background(BombTheme.paper)
-                    .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
+                    .clipShape(RoundedRectangle(cornerRadius: BombRadius.panel, style: .continuous))
                     .overlay {
-                        RoundedRectangle(cornerRadius: 18, style: .continuous)
+                        RoundedRectangle(cornerRadius: BombRadius.panel, style: .continuous)
                             .stroke(BombTheme.ink, lineWidth: 2)
                     }
 
@@ -825,9 +825,9 @@ private struct ChatBotReplyBubble: View {
                     .padding(.horizontal, 14)
                     .padding(.vertical, 11)
                     .background(BombTheme.paper)
-                    .clipShape(RoundedRectangle(cornerRadius: 17, style: .continuous))
+                    .clipShape(RoundedRectangle(cornerRadius: BombRadius.panel, style: .continuous))
                     .overlay {
-                        RoundedRectangle(cornerRadius: 17, style: .continuous)
+                        RoundedRectangle(cornerRadius: BombRadius.panel, style: .continuous)
                             .stroke(BombTheme.ink, lineWidth: 2)
                     }
 

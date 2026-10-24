@@ -259,8 +259,8 @@ struct AuthenticationView: View {
         .padding(.horizontal, 14)
         .frame(height: 52)
         .background(.white.opacity(0.6))
-        .clipShape(RoundedRectangle(cornerRadius: 14))
-        .overlay(RoundedRectangle(cornerRadius: 14).stroke(BombTheme.ink, lineWidth: 2))
+        .clipShape(RoundedRectangle(cornerRadius: BombRadius.control))
+        .overlay(RoundedRectangle(cornerRadius: BombRadius.control).stroke(BombTheme.ink, lineWidth: 2))
     }
 
     private func submit() {
@@ -335,8 +335,8 @@ struct PasswordResetView: View {
 
                         .frame(height: 52)
                         .background(.white.opacity(0.6))
-                        .clipShape(RoundedRectangle(cornerRadius: 14))
-                        .overlay(RoundedRectangle(cornerRadius: 14).stroke(BombTheme.ink, lineWidth: 2))
+                        .clipShape(RoundedRectangle(cornerRadius: BombRadius.control))
+                        .overlay(RoundedRectangle(cornerRadius: BombRadius.control).stroke(BombTheme.ink, lineWidth: 2))
 
                         if let message = session.errorMessage {
                             Label(session.text(message), systemImage: "exclamationmark.triangle.fill")

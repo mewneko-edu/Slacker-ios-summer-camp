@@ -67,9 +67,9 @@ struct PublishTaskSheet: View {
             )
         }
         .background(BombTheme.yellow)
-        .clipShape(RoundedRectangle(cornerRadius: 30, style: .continuous))
+        .clipShape(RoundedRectangle(cornerRadius: BombRadius.overlay, style: .continuous))
         .overlay {
-            RoundedRectangle(cornerRadius: 30, style: .continuous)
+            RoundedRectangle(cornerRadius: BombRadius.overlay, style: .continuous)
                 .stroke(BombTheme.ink, lineWidth: 3)
         }
         .shadow(color: BombTheme.ink.opacity(0.3), radius: 14, y: 4)
@@ -188,9 +188,9 @@ struct PublishTaskSheet: View {
             .padding(.horizontal, 11)
             .padding(.vertical, 9)
             .background(isSelected ? BombTheme.yellow : BombTheme.paper)
-            .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+            .clipShape(RoundedRectangle(cornerRadius: BombRadius.panel, style: .continuous))
             .overlay {
-                RoundedRectangle(cornerRadius: 16, style: .continuous)
+                RoundedRectangle(cornerRadius: BombRadius.panel, style: .continuous)
                     .stroke(BombTheme.ink, lineWidth: isSelected ? 4 : 2)
             }
         }

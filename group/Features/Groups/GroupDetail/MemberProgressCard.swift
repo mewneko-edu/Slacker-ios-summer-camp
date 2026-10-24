@@ -129,9 +129,9 @@ struct MemberProgressCard: View {
         }
         .foregroundStyle(BombTheme.ink)
         .padding(16)
-        .background(BombTheme.paper, in: RoundedRectangle(cornerRadius: 16))
-        .clipShape(RoundedRectangle(cornerRadius: 16))
-        .overlay(RoundedRectangle(cornerRadius: 16).stroke(BombTheme.ink, lineWidth: 3))
+        .background(BombTheme.paper, in: RoundedRectangle(cornerRadius: BombRadius.panel))
+        .clipShape(RoundedRectangle(cornerRadius: BombRadius.panel))
+        .overlay(RoundedRectangle(cornerRadius: BombRadius.panel).stroke(BombTheme.ink, lineWidth: 3))
         .sheet(item: $managedTask) { task in
             AttachmentManagementSheet(model: model, task: task, onSubmit: { onSubmitDeliverable(task.id, $0) })
         }
@@ -251,9 +251,9 @@ struct MemberProgressCard: View {
                 .transition(.opacity)
             }
         }
-        .background(BombTheme.paper, in: RoundedRectangle(cornerRadius: 14))
-        .clipShape(RoundedRectangle(cornerRadius: 14))
-        .overlay(RoundedRectangle(cornerRadius: 14).stroke(BombTheme.ink.opacity(0.7), lineWidth: 1.5))
+        .background(BombTheme.paper, in: RoundedRectangle(cornerRadius: BombRadius.control))
+        .clipShape(RoundedRectangle(cornerRadius: BombRadius.control))
+        .overlay(RoundedRectangle(cornerRadius: BombRadius.control).stroke(BombTheme.ink.opacity(0.7), lineWidth: 1.5))
     }
 
     private func toggleTaskExpansion(_ taskID: UUID, isExpanded: Bool) {
@@ -272,7 +272,7 @@ struct MemberProgressCard: View {
         .foregroundStyle(BombTheme.secondaryText)
         .frame(maxWidth: .infinity)
         .padding(.vertical, 20)
-        .background(BombTheme.ink.opacity(0.04), in: RoundedRectangle(cornerRadius: 12))
+        .background(BombTheme.ink.opacity(0.04), in: RoundedRectangle(cornerRadius: BombRadius.control))
     }
 
     private var header: some View {
@@ -361,7 +361,7 @@ struct MemberProgressCard: View {
         }
         .padding(.vertical, 7)
         .padding(.horizontal, 10)
-        .background(BombTheme.ink.opacity(0.04), in: RoundedRectangle(cornerRadius: 9))
+        .background(BombTheme.ink.opacity(0.04), in: RoundedRectangle(cornerRadius: BombRadius.inner))
         .contentShape(Rectangle())
     }
 
@@ -441,7 +441,7 @@ struct MemberProgressCard: View {
                         .foregroundStyle(.white)
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 12)
-                        .background(BombTheme.ink, in: RoundedRectangle(cornerRadius: 12))
+                        .background(BombTheme.ink, in: RoundedRectangle(cornerRadius: BombRadius.control))
                 }
                 .buttonStyle(.plain)
                 .disabled(model.pendingTaskUpdates.contains(task.id))
