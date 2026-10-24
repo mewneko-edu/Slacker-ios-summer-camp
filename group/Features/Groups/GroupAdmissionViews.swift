@@ -83,7 +83,7 @@ struct GroupAdmissionReviewSheet: View {
                         Text(L10n.text("個人戰力檔案"))
                             .font(.caption.weight(.semibold))
                             .foregroundStyle(BombTheme.secondaryText)
-                        Text(request.applicantName).font(.largeTitle.weight(.black))
+                        Text(request.applicantName).font(.system(.largeTitle, design: .rounded, weight: .black))
                         Text(L10n.format("申請加入「{0}」", request.groupName))
                             .font(.subheadline)
                             .foregroundStyle(BombTheme.secondaryText)

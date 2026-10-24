@@ -112,7 +112,7 @@ struct ChatRoomView: View {
                                     .background(BombTheme.paper)
                                     .clipShape(.circle)
                                     .overlay(Circle().stroke(BombTheme.ink, lineWidth: 2))
-                                    .shadow(color: BombTheme.ink.opacity(0.18), radius: 6, y: 3)
+                                    .bombControlShadow()
                             }
                             .buttonStyle(.plain)
                             .padding(.trailing, 16)
@@ -270,7 +270,7 @@ struct ChatRoomView: View {
                     Image(systemName: "xmark")
                         .font(.caption.weight(.black))
                         .frame(width: 32, height: 32)
-                        .contentShape(Rectangle())
+                        .bombHitTarget()
                 }
                 .buttonStyle(.plain)
                 .accessibilityLabel(L10n.text("取消置頂訊息"))
@@ -351,10 +351,10 @@ struct ChatRoomView: View {
                     .padding(.horizontal, 14)
                     .padding(.vertical, 11)
                     .background(isCurrentUser ? BombTheme.ink : BombTheme.paper)
-                    .clipShape(RoundedRectangle(cornerRadius: 17, style: .continuous))
+                    .clipShape(RoundedRectangle(cornerRadius: BombRadius.panel, style: .continuous))
                     .overlay {
                         if !isCurrentUser {
-                            RoundedRectangle(cornerRadius: 17, style: .continuous)
+                            RoundedRectangle(cornerRadius: BombRadius.panel, style: .continuous)
                                 .stroke(BombTheme.ink, lineWidth: 2)
                         }
                     }
@@ -446,6 +446,7 @@ struct ChatRoomView: View {
                         .background(BombTheme.paper)
                         .clipShape(.circle)
                         .overlay(Circle().stroke(BombTheme.ink, lineWidth: 2))
+                        .bombHitTarget()
                 }
                 .buttonStyle(.plain)
                 .accessibilityLabel(showsShortcuts ? L10n.text("收起快捷指令") : L10n.text("展開快捷指令"))
@@ -457,9 +458,9 @@ struct ChatRoomView: View {
                     .padding(.horizontal, 14)
                     .padding(.vertical, 11)
                     .background(BombTheme.paper)
-                    .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
+                    .clipShape(RoundedRectangle(cornerRadius: BombRadius.panel, style: .continuous))
                     .overlay {
-                        RoundedRectangle(cornerRadius: 18, style: .continuous)
+                        RoundedRectangle(cornerRadius: BombRadius.panel, style: .continuous)
                             .stroke(BombTheme.ink, lineWidth: 2)
                     }
 
@@ -824,9 +825,9 @@ private struct ChatBotReplyBubble: View {
                     .padding(.horizontal, 14)
                     .padding(.vertical, 11)
                     .background(BombTheme.paper)
-                    .clipShape(RoundedRectangle(cornerRadius: 17, style: .continuous))
+                    .clipShape(RoundedRectangle(cornerRadius: BombRadius.panel, style: .continuous))
                     .overlay {
-                        RoundedRectangle(cornerRadius: 17, style: .continuous)
+                        RoundedRectangle(cornerRadius: BombRadius.panel, style: .continuous)
                             .stroke(BombTheme.ink, lineWidth: 2)
                     }
 

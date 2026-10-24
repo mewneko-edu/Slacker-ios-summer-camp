@@ -31,17 +31,11 @@ struct SmartAgendaManager: View {
                     VStack(alignment: .leading, spacing: 16) {
                         HStack {
                             Label(L10n.text(deletion == nil ? "管理議程" : "刪除議程"), systemImage: "list.bullet")
-                                .font(.title2.weight(.black))
+                                .font(.system(.title2, design: .rounded, weight: .black))
                                 .accessibilityAddTraits(.isHeader)
                             Spacer()
-                            Button(action: onClose) {
-                                Image(systemName: "xmark").font(.headline.weight(.black))
-                                    .foregroundStyle(.white).frame(width: 36, height: 36)
-                                    .background(BombTheme.ink, in: Circle())
-                            }
-                            .buttonStyle(.plain)
-                            .accessibilityLabel(L10n.text("取消"))
-                            .disabled(deleting)
+                            BombCloseButton(action: onClose)
+                                .disabled(deleting)
                         }
                         if let deletion {
                             Text(deletion.topic).font(.headline)
@@ -91,7 +85,7 @@ struct SmartAgendaManager: View {
                                             }
                                             .padding(12)
                                             .frame(maxWidth: .infinity, alignment: .leading)
-                                            .overlay(RoundedRectangle(cornerRadius: 14).stroke(BombTheme.ink, lineWidth: 1.5))
+                                            .overlay(RoundedRectangle(cornerRadius: BombRadius.control).stroke(BombTheme.ink, lineWidth: 1.5))
                                         }
                                     }
                                 }
@@ -107,8 +101,8 @@ struct SmartAgendaManager: View {
                     .disabled(deleting)
                     .foregroundStyle(BombTheme.ink)
                     .padding(20)
-                    .background(BombTheme.paper, in: RoundedRectangle(cornerRadius: 22))
-                    .overlay(RoundedRectangle(cornerRadius: 22).stroke(BombTheme.ink, lineWidth: 3))
+                    .background(BombTheme.paper, in: RoundedRectangle(cornerRadius: BombRadius.card))
+                    .overlay(RoundedRectangle(cornerRadius: BombRadius.card).stroke(BombTheme.ink, lineWidth: 3))
                     .padding(.horizontal, 28)
                     .frame(maxWidth: 480)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -126,7 +120,7 @@ struct SmartAgendaManager: View {
                 .foregroundStyle(color == BombTheme.yellow ? BombTheme.ink : .white)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.horizontal, 16).padding(.vertical, 14)
-                .background(color, in: RoundedRectangle(cornerRadius: 14))
+                .background(color, in: RoundedRectangle(cornerRadius: BombRadius.control))
         }
         .buttonStyle(.plain)
     }

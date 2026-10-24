@@ -34,7 +34,7 @@ struct ApplicantBattleProfileView: View {
             } else {
                 VStack(alignment: .leading, spacing: 14) {
                     Text(L10n.text("能力概覽"))
-                        .font(.title3.weight(.black))
+                        .font(.system(.title3, design: .rounded, weight: .black))
                     Text(L10n.format("累積 {0} 個專案 · {1} 份匿名互評",
                                      String(projects.count), String(projects.reduce(0) { $0 + $1.reviewCount })))
                         .font(.caption)
@@ -60,7 +60,7 @@ struct ApplicantBattleProfileView: View {
                 }
                 Divider()
                 Text(L10n.text("專案紀錄"))
-                    .font(.title3.weight(.black))
+                    .font(.system(.title3, design: .rounded, weight: .black))
                 ForEach(projects) { project in
                     VStack(alignment: .leading, spacing: 6) {
                         ViewThatFits(in: .horizontal) {

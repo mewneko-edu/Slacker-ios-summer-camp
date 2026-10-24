@@ -52,12 +52,12 @@ struct PokeReceptionOverlay: View {
             .padding(28)
             .frame(maxWidth: 340)
             .background(.white)
-            .clipShape(RoundedRectangle(cornerRadius: 28, style: .continuous))
+            .clipShape(RoundedRectangle(cornerRadius: BombRadius.overlay, style: .continuous))
             .overlay {
-                RoundedRectangle(cornerRadius: 28, style: .continuous)
-                    .stroke(BombTheme.ink, lineWidth: 4)
+                RoundedRectangle(cornerRadius: BombRadius.overlay, style: .continuous)
+                    .stroke(BombTheme.ink, lineWidth: BombBorder.emphasis)
             }
-            .shadow(color: .black.opacity(0.35), radius: 18, y: 10)
+            .bombModalShadow()
             .padding(24)
         }
         .accessibilityElement(children: .contain)

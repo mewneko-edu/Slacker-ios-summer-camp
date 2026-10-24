@@ -62,7 +62,7 @@ struct PersonalBattleReportView: View {
 
                         HStack {
                             Text(L10n.text("專案紀錄"))
-                                .font(.title2.weight(.black))
+                                .font(.system(.title2, design: .rounded, weight: .black))
                             Spacer()
                             Text(L10n.format("{0} 個專案", String(describing: projects.count)))
                                 .font(.caption.weight(.black))
@@ -127,7 +127,7 @@ struct PersonalBattleReportView: View {
             .font(.caption.weight(.bold))
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(12)
-            .background(BombTheme.paper, in: RoundedRectangle(cornerRadius: 16))
+            .background(BombTheme.paper, in: RoundedRectangle(cornerRadius: BombRadius.panel))
     }
 
     private var emptyState: some View {
@@ -164,18 +164,17 @@ struct PersonalBattleReportView: View {
         }
         .padding(16)
         .background(BombTheme.paper)
-        .clipShape(RoundedRectangle(cornerRadius: 24))
-        .overlay(RoundedRectangle(cornerRadius: 24).stroke(BombTheme.ink, lineWidth: 3))
-        .compositingGroup()
-        .shadow(color: BombTheme.ink, radius: 0, x: 5, y: 5)
+        .clipShape(RoundedRectangle(cornerRadius: BombRadius.card))
+        .overlay(RoundedRectangle(cornerRadius: BombRadius.card).stroke(BombTheme.ink, lineWidth: 3))
+        .bombCardShadow()
     }
 
     private var evidencePendingCard: some View {
         VStack(spacing: 14) {
             Image(systemName: "chart.line.uptrend.xyaxis")
-                .font(.system(size: 34, weight: .black))
+                .font(.system(.largeTitle, weight: .black))
             Text(L10n.text("資料累積中"))
-                .font(.title2.weight(.black))
+                .font(.system(.title2, design: .rounded, weight: .black))
             Text(L10n.format("目前只有 {0} 個專案，仍可匯出分享，但會標示為初步資料。累積 3 個專案後，結果會更具參考性。", String(describing: projects.count)))
                 .font(.subheadline.weight(.semibold))
                 .foregroundStyle(.secondary)
@@ -186,10 +185,9 @@ struct PersonalBattleReportView: View {
         .frame(maxWidth: .infinity)
         .padding(24)
         .background(BombTheme.paper)
-        .clipShape(RoundedRectangle(cornerRadius: 24))
-        .overlay(RoundedRectangle(cornerRadius: 24).stroke(BombTheme.ink, lineWidth: 3))
-        .compositingGroup()
-        .shadow(color: BombTheme.ink, radius: 0, x: 5, y: 5)
+        .clipShape(RoundedRectangle(cornerRadius: BombRadius.card))
+        .overlay(RoundedRectangle(cornerRadius: BombRadius.card).stroke(BombTheme.ink, lineWidth: 3))
+        .bombCardShadow()
     }
 
     private func normalized(_ projectScore: Double) -> Double {
@@ -235,7 +233,7 @@ struct ProjectRecordCard: View {
             Spacer()
             VStack(alignment: .trailing, spacing: 2) {
                 Text("\(project.overallAverage.formatted(.number.precision(.fractionLength(1)))) / 5")
-                    .font(.title3.weight(.black).monospacedDigit())
+                    .font(.system(.title3, design: .rounded, weight: .black).monospacedDigit())
                 Text(L10n.text("專案平均"))
                     .font(.caption2.weight(.bold))
                     .foregroundStyle(.secondary)

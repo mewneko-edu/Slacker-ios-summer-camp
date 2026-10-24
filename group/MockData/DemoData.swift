@@ -12,9 +12,6 @@ struct DemoDataSnapshot {
     let members: [Member]
     let projectTasks: [ProjectTask]
     let peerReviews: [PeerReview]
-    let tasks: [MissionTask]
-    let agents: [Agent]
-    let radar: [RadarMetric]
     let communicationAnalyses: [UUID: CommunicationAnalysis]
 }
 
@@ -204,25 +201,6 @@ enum DemoData {
             projectTasks: allProjectTasks,
             peerReviews: completedReviews(groupID: summerCampGroupID, deadline: summerCampDeadline, reviewers: [xiaoYu, miMi])
                 + completedReviews(groupID: maicGroupID, deadline: maicDeadline, reviewers: allMembers),
-            tasks: [
-                MissionTask(title: "蒐集市場數據", detail: "找到 3 個可信來源", points: 120, owner: nil),
-                MissionTask(title: "製作競品分析", detail: "完成比較矩陣", points: 180, owner: "小宇"),
-                MissionTask(title: "簡報視覺統整", detail: "統一圖表與版面", points: 150, owner: nil),
-                MissionTask(title: "結論與建議", detail: "收斂成 3 個重點", points: 200, owner: "阿凱")
-            ],
-            agents: [
-                Agent(name: "我", role: "拆彈手", progress: 62, status: "正在攻堅"),
-                Agent(name: "小宇", role: "情報員", progress: 78, status: "火力全開"),
-                Agent(name: "米米", role: "分析師", progress: 28, status: "訊號微弱"),
-                Agent(name: "阿凱", role: "簡報手", progress: 43, status: "緩慢推進")
-            ],
-            radar: [
-                RadarMetric(title: "準時", score: 0.82),
-                RadarMetric(title: "品質", score: 0.75),
-                RadarMetric(title: "溝通", score: 0.92),
-                RadarMetric(title: "救火", score: 0.68),
-                RadarMetric(title: "合作", score: 0.88)
-            ],
             communicationAnalyses: communicationAnalyses
         )
     }

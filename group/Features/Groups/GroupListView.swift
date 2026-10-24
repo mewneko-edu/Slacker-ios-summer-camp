@@ -150,7 +150,7 @@ struct GroupListView: View {
 
             VStack(alignment: .leading, spacing: 16) {
                 Label(L10n.text("加入群組"), systemImage: "person.3.fill")
-                    .font(.title2.weight(.black))
+                    .font(.system(.title2, design: .rounded, weight: .black))
                     .foregroundStyle(BombTheme.ink)
 
                 Text(message)
@@ -174,8 +174,8 @@ struct GroupListView: View {
             }
             .padding(20)
             .background(BombTheme.paper)
-            .clipShape(RoundedRectangle(cornerRadius: 22))
-            .overlay(RoundedRectangle(cornerRadius: 22).stroke(BombTheme.ink, lineWidth: 3))
+            .clipShape(RoundedRectangle(cornerRadius: BombRadius.card))
+            .overlay(RoundedRectangle(cornerRadius: BombRadius.card).stroke(BombTheme.ink, lineWidth: 3))
             .padding(.horizontal, 28)
             .frame(maxWidth: 480)
         }
@@ -473,7 +473,7 @@ private struct AddGroupSheet: View {
     private var joinInviteTicket: some View {
         VStack(spacing: 16) {
             Text(L10n.text("6 位邀請碼"))
-                .font(.title3.weight(.black))
+                .font(.system(.title3, design: .rounded, weight: .black))
 
             inviteCodeBoxes
 
@@ -524,9 +524,9 @@ private struct AddGroupSheet: View {
                         .frame(maxWidth: .infinity)
                         .frame(height: 52)
                         .background(BombTheme.paper)
-                        .clipShape(RoundedRectangle(cornerRadius: 8))
+                        .clipShape(RoundedRectangle(cornerRadius: BombRadius.inner))
                         .overlay {
-                            RoundedRectangle(cornerRadius: 8)
+                            RoundedRectangle(cornerRadius: BombRadius.inner)
                                 .stroke(BombTheme.ink.opacity(0.18), lineWidth: 1.5)
                         }
                 }
@@ -936,7 +936,7 @@ private struct GroupRow: View {
                         .font(.title2.weight(.black))
                         .foregroundStyle(statusForegroundColor)
                     Text(group.name)
-                        .font(.title2.weight(.black))
+                        .font(.system(.title2, design: .rounded, weight: .black))
                         .fixedSize(horizontal: false, vertical: true)
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -987,9 +987,9 @@ private struct GroupRow: View {
         .foregroundStyle(BombTheme.ink)
         .padding(20)
         .background(BombTheme.paper)
-        .clipShape(RoundedRectangle(cornerRadius: 22))
+        .clipShape(RoundedRectangle(cornerRadius: BombRadius.card))
         .overlay {
-            RoundedRectangle(cornerRadius: 22)
+            RoundedRectangle(cornerRadius: BombRadius.card)
                 .stroke(BombTheme.ink, lineWidth: 3)
         }
         .task(id: animationSequence) {

@@ -89,7 +89,7 @@ struct PeerReviewReportView: View {
                     )
 
                     Text(L10n.text("專案成果與 AI 復盤"))
-                        .font(.title2.weight(.black))
+                        .font(.system(.title2, design: .rounded, weight: .black))
                     AIReportCard(
                         progress: model.projectProgress(for: group.id),
                         tasks: groupTasks,
@@ -97,7 +97,7 @@ struct PeerReviewReportView: View {
                     )
 
                     Text(L10n.text("成員貢獻明細"))
-                        .font(.title2.weight(.black))
+                        .font(.system(.title2, design: .rounded, weight: .black))
 
                     Label(
                         L10n.text("依 App 內紀錄整理，不包含口頭討論或線下工作，不應作為評分或考核的唯一依據。"),
@@ -114,8 +114,8 @@ struct PeerReviewReportView: View {
                             .frame(maxWidth: .infinity)
                             .padding(16)
                             .background(BombTheme.paper)
-                            .clipShape(RoundedRectangle(cornerRadius: 24))
-                            .overlay(RoundedRectangle(cornerRadius: 24).stroke(BombTheme.ink, lineWidth: 3))
+                            .clipShape(RoundedRectangle(cornerRadius: BombRadius.card))
+                            .overlay(RoundedRectangle(cornerRadius: BombRadius.card).stroke(BombTheme.ink, lineWidth: 3))
                     } else {
                         ForEach(groupMembers) { member in
                             MemberContributionCard(
@@ -258,16 +258,16 @@ private struct RadarReportCard: View {
                         }
                         .padding(16)
                         .frame(maxWidth: 250)
-                        .background(BombTheme.paper, in: RoundedRectangle(cornerRadius: 18))
-                        .overlay(RoundedRectangle(cornerRadius: 18).stroke(BombTheme.ink, lineWidth: 2))
+                        .background(BombTheme.paper, in: RoundedRectangle(cornerRadius: BombRadius.panel))
+                        .overlay(RoundedRectangle(cornerRadius: BombRadius.panel).stroke(BombTheme.ink, lineWidth: 2))
                     }
                 }
         }
         .foregroundStyle(BombTheme.ink)
         .padding(16)
         .background(BombTheme.paper)
-        .clipShape(RoundedRectangle(cornerRadius: 24))
-        .overlay(RoundedRectangle(cornerRadius: 24).stroke(BombTheme.ink, lineWidth: 3))
+        .clipShape(RoundedRectangle(cornerRadius: BombRadius.card))
+        .overlay(RoundedRectangle(cornerRadius: BombRadius.card).stroke(BombTheme.ink, lineWidth: 3))
     }
 }
 
@@ -310,8 +310,8 @@ private struct AIReportCard: View {
         }
         .padding(16)
         .background(BombTheme.paper)
-        .clipShape(RoundedRectangle(cornerRadius: 24))
-        .overlay(RoundedRectangle(cornerRadius: 24).stroke(BombTheme.ink, lineWidth: 3))
+        .clipShape(RoundedRectangle(cornerRadius: BombRadius.card))
+        .overlay(RoundedRectangle(cornerRadius: BombRadius.card).stroke(BombTheme.ink, lineWidth: 3))
     }
 }
 
@@ -370,7 +370,7 @@ private struct MemberContributionCard: View {
                 Spacer()
 
                 Text("\(averageProgress)%")
-                    .font(.title2.weight(.black).monospacedDigit())
+                    .font(.system(.title2, design: .rounded, weight: .black).monospacedDigit())
             }
 
             if tasks.isEmpty {
@@ -426,8 +426,8 @@ private struct MemberContributionCard: View {
         }
         .padding(16)
         .background(BombTheme.paper)
-        .clipShape(RoundedRectangle(cornerRadius: 24))
-        .overlay(RoundedRectangle(cornerRadius: 24).stroke(BombTheme.ink, lineWidth: 3))
+        .clipShape(RoundedRectangle(cornerRadius: BombRadius.card))
+        .overlay(RoundedRectangle(cornerRadius: BombRadius.card).stroke(BombTheme.ink, lineWidth: 3))
     }
 
     private func contributionValue(_ value: String, label: String) -> some View {
