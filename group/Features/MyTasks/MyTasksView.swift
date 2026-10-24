@@ -5,6 +5,7 @@ struct MyTasksView: View {
     let model: GroupBombModel
     let isSelected: Bool
     @State private var showCompleted = false
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     init(model: GroupBombModel, isSelected: Bool = true) {
         self.model = model
@@ -113,8 +114,16 @@ struct MyTasksView: View {
         }
     }
 
+    /// 兩個選項並排時各只分到約 135pt，輔助使用字級下三個中文字塞不下就會
+    /// 折行成「待 完成」。這是內容不是外框，所以改排列方式而不是限制縮放：
+    /// 大字級時改縱向，每個選項獨佔整個寬度。
     private var taskStatusSwitch: some View {
-        HStack(spacing: 4) {
+        let isAccessibility = dynamicTypeSize.isAccessibilitySize
+        let layout = isAccessibility
+            ? AnyLayout(VStackLayout(spacing: 4))
+            : AnyLayout(HStackLayout(spacing: 4))
+
+        return layout {
             ForEach([false, true], id: \.self) { completed in
                 Button {
                     showCompleted = completed
@@ -131,8 +140,9 @@ struct MyTasksView: View {
             }
         }
         .padding(3)
-        .background(BombTheme.ink, in: Capsule())
-        .frame(maxWidth: 280)
+        // 縱向時膠囊會變成細長的跑道形，所以外框改用卡片圓角。
+        .background(BombTheme.ink, in: RoundedRectangle(cornerRadius: isAccessibility ? BombRadius.card : 999))
+        .frame(maxWidth: isAccessibility ? .infinity : 280)
         .frame(maxWidth: .infinity)
         .accessibilityElement(children: .contain)
         .accessibilityLabel(L10n.text("任務狀態"))
@@ -324,39 +334,73 @@ private struct ProgressDial: View, Animatable {
 private struct MyTaskCard: View {
     let task: ProjectTask
     let groupName: String
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+
+    private var statusDot: some View {
+        Circle()
+            .fill(task.isCompleted ? BombTheme.green : (isOverdue ? BombTheme.red : BombTheme.yellow))
+            .frame(width: 18, height: 18)
+            .accessibilityHidden(true)
+    }
+
+    private var titleText: some View {
+        Text(task.title)
+            .font(.system(.title3, design: .rounded, weight: .black))
+            .foregroundStyle(task.isCompleted ? Color.secondary : BombTheme.ink)
+            .strikethrough(task.isCompleted)
+    }
+
+    private var groupNameText: some View {
+        Text(groupName)
+            .font(.footnote.weight(.semibold))
+            .foregroundStyle(BombTheme.secondaryText)
+    }
+
+    private var progressText: some View {
+        Text("\(task.progress)%")
+            .font(.system(.title3, design: .rounded, weight: .black).monospacedDigit())
+            .fixedSize()
+    }
+
+    private var chevron: some View {
+        Image(systemName: "chevron.right")
+            .font(.body.weight(.black))
+            .accessibilityHidden(true)
+    }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 22) {
-            HStack(spacing: 8) {
-                Circle()
-                    .fill(task.isCompleted ? BombTheme.green : (isOverdue ? BombTheme.red : BombTheme.yellow))
-                    .frame(width: 18, height: 18)
-                    .accessibilityHidden(true)
-
-                HStack(alignment: .firstTextBaseline, spacing: 8) {
-                    Text(task.title)
-                        .font(.system(.title3, design: .rounded, weight: .black))
-                        .foregroundStyle(task.isCompleted ? Color.secondary : BombTheme.ink)
-                        .strikethrough(task.isCompleted)
-                        .layoutPriority(1)
-
-                    if !groupName.isEmpty {
-                        Text(groupName)
-                            .font(.footnote.weight(.semibold))
-                            .foregroundStyle(BombTheme.secondaryText)
+            // 一般字級維持一整列；輔助使用字級下百分比（fixedSize）與箭頭會吃掉
+            // 大半寬度，標題只剩幾個字，單純放寬 lineLimit 只會讓它逐字直排。
+            // 所以改成標題獨佔一列、百分比與箭頭退到下一列。
+            if dynamicTypeSize.isAccessibilitySize {
+                VStack(alignment: .leading, spacing: 10) {
+                    HStack(alignment: .top, spacing: 8) {
+                        statusDot
+                        titleText
+                    }
+                    if !groupName.isEmpty { groupNameText }
+                    HStack(spacing: 8) {
+                        progressText
+                        Spacer(minLength: 0)
+                        chevron
                     }
                 }
-                .lineLimit(1)
+            } else {
+                HStack(spacing: 8) {
+                    statusDot
 
-                Spacer(minLength: 0)
+                    HStack(alignment: .firstTextBaseline, spacing: 8) {
+                        titleText.layoutPriority(1)
+                        if !groupName.isEmpty { groupNameText }
+                    }
+                    .lineLimit(1)
 
-                Text("\(task.progress)%")
-                    .font(.system(.title3, design: .rounded, weight: .black).monospacedDigit())
-                    .fixedSize()
+                    Spacer(minLength: 0)
 
-                Image(systemName: "chevron.right")
-                    .font(.body.weight(.black))
-                    .accessibilityHidden(true)
+                    progressText
+                    chevron
+                }
             }
 
             VStack(alignment: .leading, spacing: 6) {

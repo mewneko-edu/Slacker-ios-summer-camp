@@ -325,12 +325,17 @@ struct BombCloseButton: View {
     var label: String?
     let action: () -> Void
 
+    /// 圓圈跟著符號一起縮放。符號用 `.headline`，會隨系統字級放大，
+    /// 圓圈若維持固定 36pt，大字級下叉號就會撐出圓外。兩者綁在同一個
+    /// 基準上，比例才會固定；關閉鈕是控制項，放大也讓它更好按。
+    @ScaledMetric(relativeTo: .headline) private var diameter: CGFloat = 36
+
     var body: some View {
         Button(action: action) {
             Image(systemName: systemImage)
                 .font(.headline.weight(.black))
                 .foregroundStyle(.white)
-                .frame(width: 36, height: 36)
+                .frame(width: diameter, height: diameter)
                 .background(BombTheme.ink, in: Circle())
                 .bombHitTarget()
         }
