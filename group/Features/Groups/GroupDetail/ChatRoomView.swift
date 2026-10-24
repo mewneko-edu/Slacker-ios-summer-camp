@@ -112,7 +112,7 @@ struct ChatRoomView: View {
                                     .background(BombTheme.paper)
                                     .clipShape(.circle)
                                     .overlay(Circle().stroke(BombTheme.ink, lineWidth: 2))
-                                    .shadow(color: BombTheme.ink.opacity(0.18), radius: 6, y: 3)
+                                    .bombControlShadow()
                             }
                             .buttonStyle(.plain)
                             .padding(.trailing, 16)

@@ -69,7 +69,7 @@ struct TaskEditorSheet: View {
             RoundedRectangle(cornerRadius: BombRadius.overlay, style: .continuous)
                 .stroke(BombTheme.ink, lineWidth: 3)
         }
-        .shadow(color: BombTheme.ink.opacity(0.3), radius: 14, y: 4)
+        .bombPanelShadow()
         .bombDialog(L10n.text("捨棄未儲存的內容？"), isPresented: $confirmsDiscard, destructiveIsRed: true) {
             Button(L10n.text("繼續編輯"), role: .cancel) { }
             Button(L10n.text("捨棄"), role: .destructive, action: onCancel)

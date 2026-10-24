@@ -662,8 +662,7 @@ struct GroupDetailView: View {
             .background(BombTheme.paper)
             .clipShape(RoundedRectangle(cornerRadius: BombRadius.card))
             .overlay(RoundedRectangle(cornerRadius: BombRadius.card).stroke(BombTheme.ink, lineWidth: 3))
-            .compositingGroup()
-            .shadow(color: BombTheme.ink, radius: 0, x: 6, y: 6)
+            .bombCardShadow()
             .padding(18)
         }
     }

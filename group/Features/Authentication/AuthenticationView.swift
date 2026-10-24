@@ -106,7 +106,7 @@ struct AuthenticationView: View {
                 .background(BombTheme.ink)
                 .clipShape(.circle)
                 .overlay(Circle().stroke(BombTheme.paper, lineWidth: 5))
-                .shadow(color: BombTheme.ink, radius: 0, x: 5, y: 5)
+                .bombCardShadow()
 
             Text(session.text("Oops Bomb"))
                 .font(.system(.largeTitle, design: .rounded, weight: .black))

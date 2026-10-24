@@ -109,7 +109,7 @@ private struct PokeSheet: View {
             RoundedRectangle(cornerRadius: BombRadius.overlay, style: .continuous)
                 .stroke(BombTheme.ink, lineWidth: 3)
         }
-        .shadow(color: BombTheme.ink.opacity(0.3), radius: 14, y: 4)
+        .bombPanelShadow()
         .sensoryFeedback(.success, trigger: isSent)
     }
 

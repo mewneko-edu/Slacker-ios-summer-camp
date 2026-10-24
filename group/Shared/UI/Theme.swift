@@ -46,6 +46,35 @@ enum BombBorder {
     static let hairline: CGFloat = 1
 }
 
+/// 陰影＝浮起的高度，不是裝飾。沒有浮起語意的表面不加陰影 ——
+/// 區塊內的次級卡片就不該有。
+///
+/// 硬陰影是品牌本身（黃黑漫畫風的實心偏移），柔陰影只用在真正浮在
+/// 其他內容之上的表面。柔陰影分三級，因為**模糊半徑必須隨元件尺寸走**：
+/// 44pt 的圓鈕套上 14pt 模糊會糊成一團，340pt 的 modal 用 6pt 模糊則幾乎
+/// 看不出浮起。這不是尚未收斂，是三種不同的尺度。
+extension View {
+    /// 卡片：漫畫風實心偏移。`comicCard()` 已內含，單獨鋪卡片時才需要。
+    func bombCardShadow() -> some View {
+        compositingGroup().shadow(color: BombTheme.ink, radius: 0, x: 5, y: 5)
+    }
+
+    /// 小型浮動控制項：聊天室的回到底部圓鈕一類。
+    func bombControlShadow() -> some View {
+        shadow(color: BombTheme.ink.opacity(0.18), radius: 6, y: 3)
+    }
+
+    /// 表單 Sheet 與行內浮動面板。
+    func bombPanelShadow() -> some View {
+        shadow(color: BombTheme.ink.opacity(0.3), radius: 14, y: 4)
+    }
+
+    /// 蓋住整個畫面的 modal。
+    func bombModalShadow() -> some View {
+        shadow(color: .black.opacity(0.35), radius: 18, y: 10)
+    }
+}
+
 private struct BombSafeAreaInsetsKey: EnvironmentKey {
     static let defaultValue = EdgeInsets()
 }
@@ -63,8 +92,7 @@ struct ComicCard: ViewModifier {
         content.padding(16).background(BombTheme.paper)
             .clipShape(RoundedRectangle(cornerRadius: BombRadius.panel))
             .overlay(RoundedRectangle(cornerRadius: BombRadius.panel).stroke(BombTheme.ink, lineWidth: BombBorder.card))
-            .compositingGroup()
-            .shadow(color: BombTheme.ink, radius: 0, x: 5, y: 5)
+            .bombCardShadow()
     }
 }
 

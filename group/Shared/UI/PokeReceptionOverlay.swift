@@ -57,7 +57,7 @@ struct PokeReceptionOverlay: View {
                 RoundedRectangle(cornerRadius: BombRadius.overlay, style: .continuous)
                     .stroke(BombTheme.ink, lineWidth: BombBorder.emphasis)
             }
-            .shadow(color: .black.opacity(0.35), radius: 18, y: 10)
+            .bombModalShadow()
             .padding(24)
         }
         .accessibilityElement(children: .contain)
