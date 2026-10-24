@@ -29,7 +29,7 @@ struct NotificationTestView: View {
                     pokeCount = count
                 } label: {
                     Label(L10n.text("戳自己一下"), systemImage: "hand.tap.fill")
-                        .font(.title3.weight(.black))
+                        .font(.system(.title3, design: .rounded, weight: .black))
                         .padding(.horizontal, 22)
                         .padding(.vertical, 15)
                         .foregroundStyle(.white)

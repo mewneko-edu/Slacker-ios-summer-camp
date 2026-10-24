@@ -464,7 +464,7 @@ struct GroupDetailView: View {
                     L10n.format("確定退出「{0}」？", String(describing: currentGroup.name)),
                     systemImage: "exclamationmark.triangle.fill"
                 )
-                .font(.title2.weight(.black))
+                .font(.system(.title2, design: .rounded, weight: .black))
                 .foregroundStyle(BombTheme.red)
 
                 Text(L10n.text("退出後將無法查看此群組。最後一位成員退出後，群組資料會永久刪除。"))
@@ -505,8 +505,8 @@ struct GroupDetailView: View {
             }
             .padding(20)
             .background(BombTheme.paper)
-            .clipShape(RoundedRectangle(cornerRadius: 22))
-            .overlay(RoundedRectangle(cornerRadius: 22).stroke(BombTheme.ink, lineWidth: 3))
+            .clipShape(RoundedRectangle(cornerRadius: BombRadius.card))
+            .overlay(RoundedRectangle(cornerRadius: BombRadius.card).stroke(BombTheme.ink, lineWidth: 3))
             .padding(.horizontal, 28)
             .frame(maxWidth: 480)
         }
@@ -587,7 +587,7 @@ struct GroupDetailView: View {
                 VStack(alignment: .leading, spacing: 10) {
                     HStack {
                         Text(L10n.text("測試工具"))
-                            .font(.title2.weight(.black))
+                            .font(.system(.title2, design: .rounded, weight: .black))
                         Spacer()
                         Button(L10n.text("關閉")) { showsDebugPanel = false }
                             .font(.caption.weight(.black))
@@ -660,10 +660,9 @@ struct GroupDetailView: View {
             .scrollIndicators(.hidden)
             .frame(maxWidth: 360, maxHeight: 620)
             .background(BombTheme.paper)
-            .clipShape(RoundedRectangle(cornerRadius: 24))
-            .overlay(RoundedRectangle(cornerRadius: 24).stroke(BombTheme.ink, lineWidth: 3))
-            .compositingGroup()
-            .shadow(color: BombTheme.ink, radius: 0, x: 6, y: 6)
+            .clipShape(RoundedRectangle(cornerRadius: BombRadius.card))
+            .overlay(RoundedRectangle(cornerRadius: BombRadius.card).stroke(BombTheme.ink, lineWidth: 3))
+            .bombCardShadow()
             .padding(18)
         }
     }
@@ -680,8 +679,8 @@ struct GroupDetailView: View {
                 .padding(.horizontal, 14)
                 .padding(.vertical, 11)
                 .background(BombTheme.yellow.opacity(0.5))
-                .clipShape(RoundedRectangle(cornerRadius: 12))
-                .overlay(RoundedRectangle(cornerRadius: 12).stroke(BombTheme.ink, lineWidth: 2))
+                .clipShape(RoundedRectangle(cornerRadius: BombRadius.control))
+                .overlay(RoundedRectangle(cornerRadius: BombRadius.control).stroke(BombTheme.ink, lineWidth: 2))
         }
         .buttonStyle(.plain)
     }
@@ -834,8 +833,8 @@ struct GroupDetailView: View {
         }
         .padding(15)
         .background(alertOrange)
-        .clipShape(RoundedRectangle(cornerRadius: 18))
-        .overlay(RoundedRectangle(cornerRadius: 18).stroke(BombTheme.ink, lineWidth: 3))
+        .clipShape(RoundedRectangle(cornerRadius: BombRadius.panel))
+        .overlay(RoundedRectangle(cornerRadius: BombRadius.panel).stroke(BombTheme.ink, lineWidth: 3))
     }
 
     private func reviewSubmissionDate(now: Date) -> Date {
@@ -1061,19 +1060,11 @@ struct GroupDetailView: View {
             VStack(alignment: .leading, spacing: 16) {
                 HStack {
                     Label(L10n.text("修改群組"), systemImage: "pencil")
-                        .font(.title2.weight(.black))
+                        .font(.system(.title2, design: .rounded, weight: .black))
 
                     Spacer()
 
-                    Button(action: dismissEditOptions) {
-                        Image(systemName: "xmark")
-                            .font(.headline.weight(.black))
-                            .foregroundStyle(.white)
-                            .frame(width: 36, height: 36)
-                            .background(BombTheme.ink, in: Circle())
-                    }
-                    .buttonStyle(.plain)
-                    .accessibilityLabel(L10n.text("取消"))
+                    BombCloseButton(action: dismissEditOptions)
                 }
 
                 Button {
@@ -1087,8 +1078,8 @@ struct GroupDetailView: View {
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.horizontal, 16)
                         .padding(.vertical, 14)
-                        .background(BombTheme.yellow, in: RoundedRectangle(cornerRadius: 14))
-                        .contentShape(RoundedRectangle(cornerRadius: 14))
+                        .background(BombTheme.yellow, in: RoundedRectangle(cornerRadius: BombRadius.control))
+                        .contentShape(RoundedRectangle(cornerRadius: BombRadius.control))
                 }
                 .buttonStyle(.plain)
 
@@ -1103,8 +1094,8 @@ struct GroupDetailView: View {
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.horizontal, 16)
                         .padding(.vertical, 14)
-                        .background(BombTheme.ink, in: RoundedRectangle(cornerRadius: 14))
-                        .contentShape(RoundedRectangle(cornerRadius: 14))
+                        .background(BombTheme.ink, in: RoundedRectangle(cornerRadius: BombRadius.control))
+                        .contentShape(RoundedRectangle(cornerRadius: BombRadius.control))
                 }
                 .buttonStyle(.plain)
 
@@ -1119,16 +1110,16 @@ struct GroupDetailView: View {
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .padding(.horizontal, 16)
                             .padding(.vertical, 14)
-                            .background(BombTheme.red, in: RoundedRectangle(cornerRadius: 14))
-                            .contentShape(RoundedRectangle(cornerRadius: 14))
+                            .background(BombTheme.red, in: RoundedRectangle(cornerRadius: BombRadius.control))
+                            .contentShape(RoundedRectangle(cornerRadius: BombRadius.control))
                     }
                     .buttonStyle(.plain)
                 }
             }
             .foregroundStyle(BombTheme.ink)
             .padding(20)
-            .background(BombTheme.paper, in: RoundedRectangle(cornerRadius: 22))
-            .overlay(RoundedRectangle(cornerRadius: 22).stroke(BombTheme.ink, lineWidth: 3))
+            .background(BombTheme.paper, in: RoundedRectangle(cornerRadius: BombRadius.card))
+            .overlay(RoundedRectangle(cornerRadius: BombRadius.card).stroke(BombTheme.ink, lineWidth: 3))
             .padding(.horizontal, 28)
             .frame(maxWidth: 480)
         }
@@ -1155,7 +1146,7 @@ struct GroupDetailView: View {
                     }
                     .frame(maxWidth: .infinity, minHeight: 48)
                     .padding(.horizontal, 14)
-                    .background(BombTheme.paper, in: RoundedRectangle(cornerRadius: 14))
+                    .background(BombTheme.paper, in: RoundedRectangle(cornerRadius: BombRadius.control))
                 }
                 .buttonStyle(.plain)
                 .disabled(isRemovingMember)
@@ -1233,7 +1224,7 @@ struct GroupDetailView: View {
         .padding(.horizontal, 18)
         .padding(.vertical, 24)
         .background(BombTheme.ink)
-        .clipShape(RoundedRectangle(cornerRadius: 24))
+        .clipShape(RoundedRectangle(cornerRadius: BombRadius.card))
         .overlay(alignment: .top) {
             HazardStripe(height: 10)
                 .clipShape(.capsule)
@@ -1258,8 +1249,8 @@ struct GroupDetailView: View {
             .foregroundStyle(BombTheme.ink)
             .frame(maxWidth: .infinity)
             .padding(.vertical, 15)
-            .background(BombTheme.paper, in: RoundedRectangle(cornerRadius: 18))
-            .overlay(RoundedRectangle(cornerRadius: 18).stroke(BombTheme.ink, lineWidth: 3))
+            .background(BombTheme.paper, in: RoundedRectangle(cornerRadius: BombRadius.panel))
+            .overlay(RoundedRectangle(cornerRadius: BombRadius.panel).stroke(BombTheme.ink, lineWidth: 3))
         }
         .buttonStyle(.plain)
         .disabled(isSettling || !isManualSettlementReady)
@@ -1350,18 +1341,10 @@ struct GroupDetailView: View {
                 VStack(alignment: .leading, spacing: 16) {
                     HStack {
                         Label(L10n.text("釘選成員"), systemImage: "pin.fill")
-                            .font(.title2.weight(.black))
+                            .font(.system(.title2, design: .rounded, weight: .black))
                             .accessibilityAddTraits(.isHeader)
                         Spacer()
-                        Button { showsPinnedMemberPicker = false } label: {
-                            Image(systemName: "xmark")
-                                .font(.headline.weight(.black))
-                                .foregroundStyle(.white)
-                                .frame(width: 36, height: 36)
-                                .background(BombTheme.ink, in: Circle())
-                        }
-                        .buttonStyle(.plain)
-                        .accessibilityLabel(L10n.text("取消"))
+                        BombCloseButton { showsPinnedMemberPicker = false }
                     }
                     ScrollView {
                         LazyVStack(spacing: 8) {
@@ -1387,8 +1370,8 @@ struct GroupDetailView: View {
                                     .padding(12)
                                     .frame(maxWidth: .infinity, minHeight: 68)
                                     .background(isPinned ? BombTheme.yellow : BombTheme.paper,
-                                                in: RoundedRectangle(cornerRadius: 14))
-                                    .contentShape(RoundedRectangle(cornerRadius: 14))
+                                                in: RoundedRectangle(cornerRadius: BombRadius.control))
+                                    .contentShape(RoundedRectangle(cornerRadius: BombRadius.control))
                                 }
                                 .buttonStyle(.plain)
                                 .accessibilityAddTraits(isPinned ? [.isSelected] : [])
@@ -1400,8 +1383,8 @@ struct GroupDetailView: View {
                 }
                 .foregroundStyle(BombTheme.ink)
                 .padding(20)
-                .background(BombTheme.paper, in: RoundedRectangle(cornerRadius: 22))
-                .overlay(RoundedRectangle(cornerRadius: 22).stroke(BombTheme.ink, lineWidth: 3))
+                .background(BombTheme.paper, in: RoundedRectangle(cornerRadius: BombRadius.card))
+                .overlay(RoundedRectangle(cornerRadius: BombRadius.card).stroke(BombTheme.ink, lineWidth: 3))
                 .padding(.horizontal, 28)
                 .frame(maxWidth: 480)
                 .accessibilityAddTraits(.isModal)
@@ -1420,26 +1403,18 @@ struct GroupDetailView: View {
                 VStack(alignment: .leading, spacing: 16) {
                     HStack {
                         Label(L10n.text("更換組長"), systemImage: "crown.fill")
-                            .font(.title2.weight(.black))
+                            .font(.system(.title2, design: .rounded, weight: .black))
                             .accessibilityAddTraits(.isHeader)
                         Spacer()
-                        Button { showsLeaderPicker = false } label: {
-                            Image(systemName: "xmark")
-                                .font(.headline.weight(.black))
-                                .foregroundStyle(.white)
-                                .frame(width: 36, height: 36)
-                                .background(BombTheme.ink, in: Circle())
-                        }
-                        .buttonStyle(.plain)
-                        .accessibilityLabel(L10n.text("取消"))
+                        BombCloseButton { showsLeaderPicker = false }
                         .disabled(isChoosingLeader)
                     }
                     leadershipSection
                 }
                 .foregroundStyle(BombTheme.ink)
                 .padding(20)
-                .background(BombTheme.paper, in: RoundedRectangle(cornerRadius: 22))
-                .overlay(RoundedRectangle(cornerRadius: 22).stroke(BombTheme.ink, lineWidth: 3))
+                .background(BombTheme.paper, in: RoundedRectangle(cornerRadius: BombRadius.card))
+                .overlay(RoundedRectangle(cornerRadius: BombRadius.card).stroke(BombTheme.ink, lineWidth: 3))
                 .padding(.horizontal, 28)
                 .padding(.vertical, 20)
                 .frame(maxWidth: 480)
@@ -1667,7 +1642,7 @@ struct GroupDetailView: View {
                     L10n.format("確定刪除「{0}」？", String(describing: task.title)),
                     systemImage: "trash.fill"
                 )
-                .font(.title2.weight(.black))
+                .font(.system(.title2, design: .rounded, weight: .black))
                 .foregroundStyle(BombTheme.red)
 
                 Text(L10n.text("刪除後，這項任務的子任務、進度與成果附件都無法復原。"))
@@ -1704,8 +1679,8 @@ struct GroupDetailView: View {
             }
             .padding(20)
             .background(BombTheme.paper)
-            .clipShape(RoundedRectangle(cornerRadius: 22))
-            .overlay(RoundedRectangle(cornerRadius: 22).stroke(BombTheme.ink, lineWidth: 3))
+            .clipShape(RoundedRectangle(cornerRadius: BombRadius.card))
+            .overlay(RoundedRectangle(cornerRadius: BombRadius.card).stroke(BombTheme.ink, lineWidth: 3))
             .padding(.horizontal, 28)
             .frame(maxWidth: 480)
         }
@@ -2015,7 +1990,7 @@ private struct ExplosionMemeOverlay: View {
                     VStack(spacing: 16) {
                         HStack(alignment: .center, spacing: 12) {
                             Image(systemName: "exclamationmark.triangle.fill")
-                                .font(.system(size: 28, weight: .black))
+                                .font(.system(.title, weight: .black))
                                 .foregroundStyle(BombTheme.red)
 
                             VStack(alignment: .leading, spacing: 3) {
@@ -2028,16 +2003,7 @@ private struct ExplosionMemeOverlay: View {
 
                             Spacer(minLength: 0)
 
-                            Button(action: onDismiss) {
-                                Image(systemName: "xmark")
-                                    .font(.headline.weight(.black))
-                                    .foregroundStyle(BombTheme.paper)
-                                    .frame(width: 40, height: 40)
-                                    .background(BombTheme.ink)
-                                    .clipShape(Circle())
-                            }
-                            .buttonStyle(.plain)
-                            .accessibilityLabel(L10n.text("關閉梗圖"))
+                            BombCloseButton(label: L10n.text("關閉梗圖"), action: onDismiss)
                         }
 
                         FailureMemeImage(
@@ -2049,16 +2015,16 @@ private struct ExplosionMemeOverlay: View {
                                 width: min(340, proxy.size.width - 64),
                                 height: min(340, proxy.size.width - 64)
                             )
-                            .clipShape(RoundedRectangle(cornerRadius: 16))
+                            .clipShape(RoundedRectangle(cornerRadius: BombRadius.panel))
                             .overlay(
-                                RoundedRectangle(cornerRadius: 16)
+                                RoundedRectangle(cornerRadius: BombRadius.panel)
                                     .stroke(BombTheme.ink, lineWidth: 2)
                             )
                             .accessibilityLabel(L10n.text("爆炸專案梗圖"))
 
                         VStack(spacing: 9) {
                             Text(groupName)
-                                .font(.title3.weight(.black))
+                                .font(.system(.title3, design: .rounded, weight: .black))
                                 .multilineTextAlignment(.center)
 
                             HStack(spacing: 12) {
@@ -2073,8 +2039,8 @@ private struct ExplosionMemeOverlay: View {
                         .frame(maxWidth: .infinity)
                         .padding(12)
                         .background(BombTheme.yellow.opacity(0.32))
-                        .clipShape(RoundedRectangle(cornerRadius: 14))
-                        .overlay(RoundedRectangle(cornerRadius: 14).stroke(BombTheme.ink, lineWidth: 2))
+                        .clipShape(RoundedRectangle(cornerRadius: BombRadius.control))
+                        .overlay(RoundedRectangle(cornerRadius: BombRadius.control).stroke(BombTheme.ink, lineWidth: 2))
 
                         Text(L10n.text("本次任務未能如期完成，\n請查看團隊戰報並完成匿名隊員互評。"))
                             .font(.subheadline.weight(.bold))
@@ -2104,8 +2070,8 @@ private struct ExplosionMemeOverlay: View {
                 }
                 .scrollIndicators(.hidden)
                 .background(BombTheme.paper)
-                .clipShape(RoundedRectangle(cornerRadius: 16))
-                .overlay(RoundedRectangle(cornerRadius: 16).stroke(BombTheme.ink, lineWidth: 3))
+                .clipShape(RoundedRectangle(cornerRadius: BombRadius.panel))
+                .overlay(RoundedRectangle(cornerRadius: BombRadius.panel).stroke(BombTheme.ink, lineWidth: 3))
                 .frame(maxWidth: 560)
                 .frame(maxHeight: max(320, proxy.size.height - 64))
                 .padding(.horizontal, 16)
@@ -2194,7 +2160,7 @@ private struct SuccessMemeOverlay: View {
                     VStack(spacing: 16) {
                         HStack(alignment: .center, spacing: 12) {
                             Image(systemName: "checkmark.seal.fill")
-                                .font(.system(size: 28, weight: .black))
+                                .font(.system(.title, weight: .black))
                                 .foregroundStyle(BombTheme.green)
 
                             VStack(alignment: .leading, spacing: 3) {
@@ -2207,16 +2173,7 @@ private struct SuccessMemeOverlay: View {
 
                             Spacer(minLength: 0)
 
-                            Button(action: onDismiss) {
-                                Image(systemName: "xmark")
-                                    .font(.headline.weight(.black))
-                                    .foregroundStyle(BombTheme.paper)
-                                    .frame(width: 40, height: 40)
-                                    .background(BombTheme.ink)
-                                    .clipShape(Circle())
-                            }
-                            .buttonStyle(.plain)
-                            .accessibilityLabel(L10n.text("關閉梗圖"))
+                            BombCloseButton(label: L10n.text("關閉梗圖"), action: onDismiss)
                         }
 
                         SuccessMemeImage(groupName: groupName)
@@ -2250,8 +2207,8 @@ private struct SuccessMemeOverlay: View {
                 }
                 .scrollIndicators(.hidden)
                 .background(BombTheme.paper)
-                .clipShape(RoundedRectangle(cornerRadius: 16))
-                .overlay(RoundedRectangle(cornerRadius: 16).stroke(BombTheme.ink, lineWidth: 3))
+                .clipShape(RoundedRectangle(cornerRadius: BombRadius.panel))
+                .overlay(RoundedRectangle(cornerRadius: BombRadius.panel).stroke(BombTheme.ink, lineWidth: 3))
                 .frame(maxWidth: 560)
                 .frame(maxHeight: max(320, proxy.size.height - 64))
                 .padding(.horizontal, 16)

@@ -4,37 +4,6 @@ import FirebaseAuth
 import FirebaseCore
 import FirebaseFirestore
 
-/// 舊版任務看板暫時使用的任務型別。
-/// 新畫面請改用 Models/ProjectTask.swift；保留此型別是為了不破壞既有 demo。
-struct MissionTask: Identifiable {
-    /// 任務唯一識別碼。
-    let id = UUID()
-    /// 舊看板顯示的任務名稱。
-    var title: String
-    /// 舊看板顯示的任務說明。
-    var detail: String
-    /// 舊看板的遊戲化經驗值。
-    var points: Int
-    /// 舊看板使用的負責人名稱；新功能請改用 ownerMemberID。
-    var owner: String?
-}
-
-/// 舊版特工畫面暫時使用的成員型別。
-/// 新畫面請改用 Models/Member.swift；保留此型別是為了不破壞既有 demo。
-struct Agent: Identifiable {
-    /// 特工唯一識別碼，舊催進度功能會使用它。
-    let id = UUID()
-    /// 特工顯示名稱。
-    var name: String
-    /// 特工顯示角色。
-    var role: String
-    /// 舊畫面使用的進度百分比；新功能應由子任務自動計算。
-    var progress: Int
-    /// 是否啟動「我在做了」護盾。
-    var isShielded = false
-    /// 顯示在特工卡上的目前狀態。
-    var status = L10n.text("待命")
-}
 
 /// 互評雷達圖中的單一評分指標。
 struct RadarMetric: Identifiable {
@@ -268,15 +237,6 @@ final class AppStore {
         didSet { refreshDeadlineReminders() }
     }
 
-    /// 舊版任務看板資料；等 C 完成新群組詳細頁後再移除。
-    var tasks: [MissionTask] = []
-
-    /// 舊版特工頁資料；等 C 完成新版成員進度卡後再移除。
-    var agents: [Agent] = []
-
-    /// 互評雷達圖的 mock 資料。
-    var radar: [RadarMetric]
-
     /// 聊天室 AI 機器人的溝通評分；key 是群組 ID，設定頁與聊天室共用同一份結果。
     var communicationAnalyses: [UUID: CommunicationAnalysis] = [:]
 
@@ -356,9 +316,6 @@ final class AppStore {
         peerReviewSummariesByGroupID = [:]
         peerReviewCommentsByGroupID = [:]
         personalPeerReviewProjects = []
-        tasks = []
-        agents = []
-        radar = []
         communicationAnalyses = [:]
         lastEvent = ""
         self.dataMode = .live
@@ -406,9 +363,6 @@ final class AppStore {
             peerReviewSummariesByGroupID = [:]
             peerReviewCommentsByGroupID = [:]
             personalPeerReviewProjects = []
-            tasks = demo.tasks
-            agents = demo.agents
-            radar = demo.radar
             communicationAnalyses = demo.communicationAnalyses
             cloudGroupSyncErrorMessage = nil
             lastEvent = L10n.text("測試資料已載入")
@@ -441,9 +395,6 @@ final class AppStore {
             peerReviewSummariesByGroupID = [:]
             peerReviewCommentsByGroupID = [:]
             personalPeerReviewProjects = []
-            tasks = []
-            agents = []
-            radar = []
             communicationAnalyses = [:]
             chatItemsByGroupID = [:]
             cloudChatMessageIDsByGroupID = [:]
@@ -480,12 +431,6 @@ final class AppStore {
         peerReviewCommentsSyncErrorsByGroupID.removeAll()
         personalPeerReviewSyncError = nil
     }
-
-    /// 舊任務看板中「我已認領幾項任務」的數值。
-    var claimedCount: Int { tasks.filter { $0.owner == userName }.count }
-
-    /// 舊特工頁的平均進度；新版畫面請使用 projectProgress(for:)。
-    var teamProgress: Int { agents.map(\.progress).reduce(0, +) / max(agents.count, 1) }
 
     /// 取得最近更新的一份溝通分析。
     var latestCommunicationAnalysis: CommunicationAnalysis? {
@@ -1715,9 +1660,6 @@ final class AppStore {
         peerReviewSummariesByGroupID = [:]
         peerReviewCommentsByGroupID = [:]
         personalPeerReviewProjects = []
-        tasks = []
-        agents = []
-        radar = []
         chatItemsByGroupID = [:]
         chatSenderIDsByGroupID = [:]
         cloudChatMessageIDsByGroupID = [:]
@@ -2646,28 +2588,6 @@ final class AppStore {
         pokeCounts[key] = pokeCount
         pokeNotifications.deliver(group: group, pokeCount: pokeCount, style: .gentle)
         return pokeCount
-    }
-
-    /// 舊任務看板的認領行為；等新任務畫面完成後改用 ProjectTask.ownerMemberID。
-    func claim(_ id: UUID) {
-        guard let index = tasks.firstIndex(where: { $0.id == id }), tasks[index].owner == nil else { return }
-        tasks[index].owner = userName
-        lastEvent = L10n.format("已認領「{0}」", String(describing: tasks[index].title))
-    }
-
-    /// 舊版催進度行為；新版群組詳細頁請改呼叫 poke(memberID:in:style:)。
-    func poke(agentID: UUID, style: PokeStyle) {
-        guard let index = agents.firstIndex(where: { $0.id == agentID }) else { return }
-        lastEvent = L10n.format("用「{0}」戳了 {1}", L10n.text(style.rawValue), String(describing: agents[index].name))
-    }
-
-    /// 舊版「我在做了」護盾行為；新版可改成綁定個別 ProjectTask。
-    func shield(minutes: Int, note: String) {
-        guard let index = agents.firstIndex(where: { $0.name == userName }) else { return }
-        agents[index].isShielded = true
-        agents[index].status = L10n.format("護盾 {0} 分鐘｜{1}", String(describing: minutes), String(describing: note))
-        agents[index].progress = min(100, agents[index].progress + 5)
-        lastEvent = L10n.text("護盾啟動，隊友看得到你在做了")
     }
 }
 

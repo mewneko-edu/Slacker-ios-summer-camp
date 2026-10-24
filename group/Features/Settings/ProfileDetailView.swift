@@ -154,9 +154,9 @@ struct ProfileDetailView: View {
                     .lineLimit(3...6)
                     .padding(12)
                     .background(.white.opacity(0.58))
-                    .clipShape(RoundedRectangle(cornerRadius: 12))
+                    .clipShape(RoundedRectangle(cornerRadius: BombRadius.control))
                     .overlay(
-                        RoundedRectangle(cornerRadius: 12)
+                        RoundedRectangle(cornerRadius: BombRadius.control)
                             .stroke(BombTheme.ink.opacity(0.20), lineWidth: 1.5)
                     )
             }
@@ -227,9 +227,9 @@ private struct EditProfileField: View {
                 .font(.body.weight(.semibold))
                 .padding(12)
                 .background(.white.opacity(0.58))
-                .clipShape(RoundedRectangle(cornerRadius: 12))
+                .clipShape(RoundedRectangle(cornerRadius: BombRadius.control))
                 .overlay(
-                    RoundedRectangle(cornerRadius: 12)
+                    RoundedRectangle(cornerRadius: BombRadius.control)
                         .stroke(BombTheme.ink.opacity(0.20), lineWidth: 1.5)
                 )
         }

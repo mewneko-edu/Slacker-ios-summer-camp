@@ -10,6 +10,71 @@ enum BombTheme {
     static let green = Color(red: 0.16, green: 0.55, blue: 0.32)
 }
 
+/// 圓角尺度。五階，**不要再寫裸數字，也不要新增階級**。
+///
+/// 收斂前正式碼散落 17 種圓角（4、6、8、9、10、11、12、14、15、16、17、
+/// 18、20、22、24、28、30），同一個角色常常有兩三種值並存。這五階由那些
+/// 數值合併而來，每一處位移都 ≤3pt —— 肉眼不可辨，但往後只剩五個選擇。
+///
+/// 階與階之間刻意拉開，讓「這是哪一層」在程式碼裡就讀得出來，
+/// 而不是靠 1–2pt 的差別去猜。
+///
+/// PDF 匯出的繪圖碼（`UIBezierPath`，個人與團隊戰報）不套這組 token：
+/// 那是另一種媒介，與畫面上的層級無關。
+enum BombRadius {
+    /// 覆蓋整個畫面的浮動面板：表單 Sheet、Poke 覆蓋層。（原 28、30）
+    static let overlay: CGFloat = 28
+    /// 主要內容卡與對話框：群組卡、新手教學卡、`bombDialog`。（原 20、22、24）
+    static let card: CGFloat = 22
+    /// 區塊卡，即 `comicCard()`。（原 16、17、18）
+    static let panel: CGFloat = 18
+    /// 輸入欄位、按鈕、列內控制項。（原 12、14、15）
+    static let control: CGFloat = 14
+    /// 卡片內的小區塊、標籤、縮圖、徽章底板。（原 6、8、9、10、11）
+    static let inner: CGFloat = 8
+}
+
+/// 外框粗細。黃黑漫畫風靠粗黑邊界定，粗細代表層級而非裝飾。
+enum BombBorder {
+    /// 卡片、對話框、浮動面板的主外框。
+    static let card: CGFloat = 3
+    /// 卡片內部元素、膠囊按鈕。
+    static let inner: CGFloat = 2
+    /// 新手教學的強調外框。
+    static let emphasis: CGFloat = 4
+    /// 極淡的分隔描邊。
+    static let hairline: CGFloat = 1
+}
+
+/// 陰影＝浮起的高度，不是裝飾。沒有浮起語意的表面不加陰影 ——
+/// 區塊內的次級卡片就不該有。
+///
+/// 硬陰影是品牌本身（黃黑漫畫風的實心偏移），柔陰影只用在真正浮在
+/// 其他內容之上的表面。柔陰影分三級，因為**模糊半徑必須隨元件尺寸走**：
+/// 44pt 的圓鈕套上 14pt 模糊會糊成一團，340pt 的 modal 用 6pt 模糊則幾乎
+/// 看不出浮起。這不是尚未收斂，是三種不同的尺度。
+extension View {
+    /// 卡片：漫畫風實心偏移。`comicCard()` 已內含，單獨鋪卡片時才需要。
+    func bombCardShadow() -> some View {
+        compositingGroup().shadow(color: BombTheme.ink, radius: 0, x: 5, y: 5)
+    }
+
+    /// 小型浮動控制項：聊天室的回到底部圓鈕一類。
+    func bombControlShadow() -> some View {
+        shadow(color: BombTheme.ink.opacity(0.18), radius: 6, y: 3)
+    }
+
+    /// 表單 Sheet 與行內浮動面板。
+    func bombPanelShadow() -> some View {
+        shadow(color: BombTheme.ink.opacity(0.3), radius: 14, y: 4)
+    }
+
+    /// 蓋住整個畫面的 modal。
+    func bombModalShadow() -> some View {
+        shadow(color: .black.opacity(0.35), radius: 18, y: 10)
+    }
+}
+
 private struct BombSafeAreaInsetsKey: EnvironmentKey {
     static let defaultValue = EdgeInsets()
 }
@@ -25,10 +90,9 @@ extension EnvironmentValues {
 struct ComicCard: ViewModifier {
     func body(content: Content) -> some View {
         content.padding(16).background(BombTheme.paper)
-            .clipShape(RoundedRectangle(cornerRadius: 18))
-            .overlay(RoundedRectangle(cornerRadius: 18).stroke(BombTheme.ink, lineWidth: 3))
-            .compositingGroup()
-            .shadow(color: BombTheme.ink, radius: 0, x: 5, y: 5)
+            .clipShape(RoundedRectangle(cornerRadius: BombRadius.panel))
+            .overlay(RoundedRectangle(cornerRadius: BombRadius.panel).stroke(BombTheme.ink, lineWidth: BombBorder.card))
+            .bombCardShadow()
     }
 }
 
@@ -236,5 +300,46 @@ struct BombHeaderButtonStyle: ButtonStyle {
             .clipShape(.circle)
             .scaleEffect(configuration.isPressed ? 0.9 : 1)
             .animation(.snappy(duration: 0.16), value: configuration.isPressed)
+    }
+}
+
+/// 保持視覺尺寸不變，只把可點擊範圍撐到 HIG 要求的最小值。
+///
+/// 用在「圖示看起來就該是小的、但手指需要更大範圍」的地方，例如列內的
+/// 鉛筆／加號鈕。外層 frame 會讓版面多佔幾點，這是刻意的取捨：
+/// 命中範圍不足比位移幾點嚴重得多。
+extension View {
+    func bombHitTarget(_ minimum: CGFloat = 44) -> some View {
+        frame(minWidth: minimum, minHeight: minimum).contentShape(.rect)
+    }
+}
+
+/// 共用的圓形關閉鈕。
+///
+/// 收斂前專案有 10 處各自手寫的 xmark 圓鈕，尺寸（36／40）、構造
+/// （`background(_:in:)` 對 `background` + `clipShape`）與前景色
+/// （`.white` 對 `BombTheme.paper`）三個軸都不一致，且都沒有 44pt 命中範圍。
+/// 這裡採用原本占多數的 36pt／`.white` 規格。
+struct BombCloseButton: View {
+    var systemImage: String = "xmark"
+    var label: String?
+    let action: () -> Void
+
+    /// 圓圈跟著符號一起縮放。符號用 `.headline`，會隨系統字級放大，
+    /// 圓圈若維持固定 36pt，大字級下叉號就會撐出圓外。兩者綁在同一個
+    /// 基準上，比例才會固定；關閉鈕是控制項，放大也讓它更好按。
+    @ScaledMetric(relativeTo: .headline) private var diameter: CGFloat = 36
+
+    var body: some View {
+        Button(action: action) {
+            Image(systemName: systemImage)
+                .font(.headline.weight(.black))
+                .foregroundStyle(.white)
+                .frame(width: diameter, height: diameter)
+                .background(BombTheme.ink, in: Circle())
+                .bombHitTarget()
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel(label ?? L10n.text("取消"))
     }
 }

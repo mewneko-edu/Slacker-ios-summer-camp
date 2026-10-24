@@ -108,20 +108,10 @@ struct SmartAgendaDetailView: View {
         return VStack(alignment: .leading, spacing: 16) {
             HStack {
                 Label(L10n.text("編輯議程"), systemImage: "square.and.pencil")
-                    .font(.title2.weight(.black))
+                    .font(.system(.title2, design: .rounded, weight: .black))
                     .accessibilityAddTraits(.isHeader)
                 Spacer()
-                Button {
-                    showsEditOptions = false
-                } label: {
-                    Image(systemName: "xmark")
-                        .font(.headline.weight(.black))
-                        .foregroundStyle(.white)
-                        .frame(width: 36, height: 36)
-                        .background(BombTheme.ink, in: Circle())
-                }
-                .buttonStyle(.plain)
-                .accessibilityLabel(L10n.text("取消"))
+                BombCloseButton { showsEditOptions = false }
             }
 
             ScrollView {
@@ -150,8 +140,8 @@ struct SmartAgendaDetailView: View {
         }
         .foregroundStyle(BombTheme.ink)
         .padding(20)
-        .background(BombTheme.paper, in: RoundedRectangle(cornerRadius: 22))
-        .overlay(RoundedRectangle(cornerRadius: 22).stroke(BombTheme.ink, lineWidth: 3))
+        .background(BombTheme.paper, in: RoundedRectangle(cornerRadius: BombRadius.card))
+        .overlay(RoundedRectangle(cornerRadius: BombRadius.card).stroke(BombTheme.ink, lineWidth: 3))
         .padding(.horizontal, 28)
         .frame(maxWidth: 480)
     }
@@ -165,8 +155,8 @@ struct SmartAgendaDetailView: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.horizontal, 16)
                 .padding(.vertical, 14)
-                .background(highlighted ? BombTheme.yellow : BombTheme.ink, in: RoundedRectangle(cornerRadius: 14))
-                .contentShape(RoundedRectangle(cornerRadius: 14))
+                .background(highlighted ? BombTheme.yellow : BombTheme.ink, in: RoundedRectangle(cornerRadius: BombRadius.control))
+                .contentShape(RoundedRectangle(cornerRadius: BombRadius.control))
         }
         .buttonStyle(.plain)
     }
@@ -266,9 +256,9 @@ private struct SmartAgendaCard: View {
             if store.isDownloading { ProgressView().padding(.top, 8) }
         }
         .padding(16)
-        .background(BombTheme.paper, in: RoundedRectangle(cornerRadius: 20))
-        .overlay(RoundedRectangle(cornerRadius: 20).stroke(BombTheme.ink, lineWidth: 3))
-        .contentShape(RoundedRectangle(cornerRadius: 20))
+        .background(BombTheme.paper, in: RoundedRectangle(cornerRadius: BombRadius.card))
+        .overlay(RoundedRectangle(cornerRadius: BombRadius.card).stroke(BombTheme.ink, lineWidth: 3))
+        .contentShape(RoundedRectangle(cornerRadius: BombRadius.card))
     }
 
     private var preparedMembers: [Member] {
@@ -486,18 +476,10 @@ struct SmartAgendaMeetingEditor: View {
             VStack(alignment: .leading, spacing: 16) {
                 HStack {
                     Label(L10n.text(revision == nil ? "設定會議" : "編輯會議"), systemImage: "list.bullet")
-                        .font(.title2.weight(.black))
+                        .font(.system(.title2, design: .rounded, weight: .black))
                         .accessibilityAddTraits(.isHeader)
                     Spacer()
-                    Button(action: onDismiss) {
-                        Image(systemName: "xmark")
-                            .font(.headline.weight(.black))
-                            .foregroundStyle(.white)
-                            .frame(width: 36, height: 36)
-                            .background(BombTheme.ink, in: Circle())
-                    }
-                    .buttonStyle(.plain)
-                    .accessibilityLabel(L10n.text("取消"))
+                    BombCloseButton(action: onDismiss)
                 }
                 VStack(alignment: .leading, spacing: 6) {
                     Text(L10n.text("會議主題")).font(.subheadline.weight(.black))
@@ -525,8 +507,8 @@ struct SmartAgendaMeetingEditor: View {
             .foregroundStyle(BombTheme.ink)
             .tint(BombTheme.ink)
             .padding(20)
-            .background(BombTheme.paper, in: RoundedRectangle(cornerRadius: 22))
-            .overlay(RoundedRectangle(cornerRadius: 22).stroke(BombTheme.ink, lineWidth: 3))
+            .background(BombTheme.paper, in: RoundedRectangle(cornerRadius: BombRadius.card))
+            .overlay(RoundedRectangle(cornerRadius: BombRadius.card).stroke(BombTheme.ink, lineWidth: 3))
             .padding(.horizontal, 28)
             .padding(.vertical, 20)
             .frame(maxWidth: 480)
@@ -547,8 +529,8 @@ struct SmartAgendaMeetingEditor: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.horizontal, 16)
                 .padding(.vertical, 14)
-                .background(highlighted ? BombTheme.yellow : BombTheme.ink, in: RoundedRectangle(cornerRadius: 14))
-                .contentShape(RoundedRectangle(cornerRadius: 14))
+                .background(highlighted ? BombTheme.yellow : BombTheme.ink, in: RoundedRectangle(cornerRadius: BombRadius.control))
+                .contentShape(RoundedRectangle(cornerRadius: BombRadius.control))
         }
         .buttonStyle(.plain)
     }
@@ -608,18 +590,10 @@ private struct SmartAgendaMaterialEditor: View {
             VStack(alignment: .leading, spacing: 16) {
                 HStack {
                     Label(L10n.text(draft.material == nil ? "新增我的資料" : "編輯我的資料"), systemImage: "person.crop.circle")
-                        .font(.title2.weight(.black))
+                        .font(.system(.title2, design: .rounded, weight: .black))
                         .accessibilityAddTraits(.isHeader)
                     Spacer()
-                    Button(action: onDismiss) {
-                        Image(systemName: "xmark")
-                            .font(.headline.weight(.black))
-                            .foregroundStyle(.white)
-                            .frame(width: 36, height: 36)
-                            .background(BombTheme.ink, in: Circle())
-                    }
-                    .buttonStyle(.plain)
-                    .accessibilityLabel(L10n.text("取消"))
+                    BombCloseButton(action: onDismiss)
                 }
                 VStack(alignment: .leading, spacing: 6) {
                     Text(L10n.text("準備內容")).font(.subheadline.weight(.black))
@@ -653,8 +627,8 @@ private struct SmartAgendaMaterialEditor: View {
             .foregroundStyle(BombTheme.ink)
             .tint(BombTheme.ink)
             .padding(20)
-            .background(BombTheme.paper, in: RoundedRectangle(cornerRadius: 22))
-            .overlay(RoundedRectangle(cornerRadius: 22).stroke(BombTheme.ink, lineWidth: 3))
+            .background(BombTheme.paper, in: RoundedRectangle(cornerRadius: BombRadius.card))
+            .overlay(RoundedRectangle(cornerRadius: BombRadius.card).stroke(BombTheme.ink, lineWidth: 3))
             .padding(.horizontal, 28)
             .padding(.vertical, 20)
             .frame(maxWidth: 480)
@@ -680,8 +654,8 @@ private struct SmartAgendaMaterialEditor: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.horizontal, 16)
                 .padding(.vertical, 14)
-                .background(highlighted ? BombTheme.yellow : BombTheme.ink, in: RoundedRectangle(cornerRadius: 14))
-                .contentShape(RoundedRectangle(cornerRadius: 14))
+                .background(highlighted ? BombTheme.yellow : BombTheme.ink, in: RoundedRectangle(cornerRadius: BombRadius.control))
+                .contentShape(RoundedRectangle(cornerRadius: BombRadius.control))
         }
         .buttonStyle(.plain)
     }
@@ -703,6 +677,8 @@ private struct SmartAgendaMeetingSession: View {
     let isLeader: Bool
     @Environment(\.dismiss) private var dismiss
     @State private var error: String?
+    /// 會議中的剩餘時間是主要資訊，必須跟著系統字級放大。
+    @ScaledMetric(relativeTo: .largeTitle) private var countdownSize: CGFloat = 48
     var body: some View {
         NavigationStack {
             TimelineView(.periodic(from: .now, by: 1)) { context in
@@ -710,14 +686,16 @@ private struct SmartAgendaMeetingSession: View {
                     let elapsed = max(0, Int(context.date.timeIntervalSince(started)))
                     let remaining = max(0, agenda.duration * 60 - elapsed)
                     VStack(alignment: .leading, spacing: 20) {
-                        Text(agenda.displayTopic).font(.title2.bold())
+                        Text(agenda.displayTopic).font(.system(.title2, design: .rounded, weight: .black))
                         Text(String(format: "%02d:%02d", remaining / 60, remaining % 60))
-                            .font(.system(size: 48, weight: .bold, design: .monospaced))
+                            .font(.system(size: countdownSize, weight: .bold, design: .monospaced))
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.6)
                         if let current = agenda.stages.first(where: { elapsed < $0.end * 60 }) {
                             Text(current.time).foregroundStyle(BombTheme.secondaryText)
-                            Text(agenda.displayTitle(current)).font(.title3.bold())
+                            Text(agenda.displayTitle(current)).font(.system(.title3, design: .rounded, weight: .black))
                             Text(agenda.displayGoal(current))
-                        } else { Text(L10n.text("會議已結束")).font(.title3.bold()) }
+                        } else { Text(L10n.text("會議已結束")).font(.system(.title3, design: .rounded, weight: .black)) }
                         Spacer()
                         if let error { Text(L10n.text(error)).font(.caption).foregroundStyle(BombTheme.red) }
                         if isLeader {

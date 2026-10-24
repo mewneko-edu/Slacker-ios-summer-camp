@@ -130,7 +130,7 @@ struct PeerReviewOverlay: View {
 
             HStack(alignment: .top, spacing: 14) {
                 Image(systemName: theme.iconName)
-                    .font(.system(size: 32, weight: .black))
+                    .font(.system(.largeTitle, weight: .black))
                     .foregroundStyle(theme.accentColor)
                     .frame(width: 58, height: 58)
                     .background(theme.iconBackground)
@@ -164,8 +164,8 @@ struct PeerReviewOverlay: View {
             }
             .padding(14)
             .background(theme.summaryBackground)
-            .clipShape(RoundedRectangle(cornerRadius: 16))
-            .overlay(RoundedRectangle(cornerRadius: 16).stroke(BombTheme.ink, lineWidth: 2))
+            .clipShape(RoundedRectangle(cornerRadius: BombRadius.panel))
+            .overlay(RoundedRectangle(cornerRadius: BombRadius.panel).stroke(BombTheme.ink, lineWidth: 2))
 
             if theme.isIncident && !unfinishedTasks.isEmpty {
                 VStack(alignment: .leading, spacing: 8) {
@@ -181,8 +181,8 @@ struct PeerReviewOverlay: View {
                 .padding(14)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .background(BombTheme.red.opacity(0.1))
-                .clipShape(RoundedRectangle(cornerRadius: 16))
-                .overlay(RoundedRectangle(cornerRadius: 16).stroke(BombTheme.red, lineWidth: 2))
+                .clipShape(RoundedRectangle(cornerRadius: BombRadius.panel))
+                .overlay(RoundedRectangle(cornerRadius: BombRadius.panel).stroke(BombTheme.red, lineWidth: 2))
             }
 
             Button(theme.startButtonTitle) {
@@ -273,8 +273,8 @@ struct PeerReviewOverlay: View {
         }
         .padding(12)
         .background(BombTheme.paper)
-        .clipShape(RoundedRectangle(cornerRadius: 16))
-        .overlay(RoundedRectangle(cornerRadius: 16).stroke(BombTheme.ink, lineWidth: 2))
+        .clipShape(RoundedRectangle(cornerRadius: BombRadius.panel))
+        .overlay(RoundedRectangle(cornerRadius: BombRadius.panel).stroke(BombTheme.ink, lineWidth: 2))
     }
 
     private func reviewForm(for member: Member) -> some View {
@@ -282,7 +282,7 @@ struct PeerReviewOverlay: View {
             HStack(spacing: 12) {
                 avatar(for: member, size: 52)
                 VStack(alignment: .leading, spacing: 3) {
-                    Text(member.name).font(.title2.weight(.black))
+                    Text(member.name).font(.system(.title2, design: .rounded, weight: .black))
                     Text(member.role.title).font(.subheadline.weight(.bold)).foregroundStyle(.secondary)
                 }
             }
@@ -326,8 +326,8 @@ struct PeerReviewOverlay: View {
                         isCommentFocused = false
                     }
             }
-            .clipShape(RoundedRectangle(cornerRadius: 16))
-            .overlay(RoundedRectangle(cornerRadius: 16).stroke(BombTheme.ink, lineWidth: 2))
+            .clipShape(RoundedRectangle(cornerRadius: BombRadius.panel))
+            .overlay(RoundedRectangle(cornerRadius: BombRadius.panel).stroke(BombTheme.ink, lineWidth: 2))
 
             anonymityNotice
                 .contentShape(Rectangle())
@@ -363,8 +363,8 @@ struct PeerReviewOverlay: View {
         }
         .padding(12)
         .background(BombTheme.paper)
-        .clipShape(RoundedRectangle(cornerRadius: 14))
-        .overlay(RoundedRectangle(cornerRadius: 14).stroke(BombTheme.ink, lineWidth: 2))
+        .clipShape(RoundedRectangle(cornerRadius: BombRadius.control))
+        .overlay(RoundedRectangle(cornerRadius: BombRadius.control).stroke(BombTheme.ink, lineWidth: 2))
     }
 
     private func summaryRow(label: String, value: String, font: Font = .caption) -> some View {
@@ -486,8 +486,8 @@ struct PeerReviewOverlay: View {
             .padding(8)
             .id("peer-review-comment")
             .background(Color.white.opacity(0.55))
-            .clipShape(RoundedRectangle(cornerRadius: 14))
-            .overlay(RoundedRectangle(cornerRadius: 14).stroke(BombTheme.ink, lineWidth: 2))
+            .clipShape(RoundedRectangle(cornerRadius: BombRadius.control))
+            .overlay(RoundedRectangle(cornerRadius: BombRadius.control).stroke(BombTheme.ink, lineWidth: 2))
 
             Text("\(comment.count) / 200")
                 .font(.caption2.weight(.black))
@@ -501,7 +501,7 @@ struct PeerReviewOverlay: View {
             BombTheme.ink.opacity(0.48).ignoresSafeArea()
 
             VStack(alignment: .leading, spacing: 16) {
-                Text(theme.confirmationTitle).font(.title2.weight(.black))
+                Text(theme.confirmationTitle).font(.system(.title2, design: .rounded, weight: .black))
                 Text(theme.confirmationMessage)
                     .font(.subheadline.weight(.bold))
 
@@ -538,8 +538,8 @@ struct PeerReviewOverlay: View {
             }
             .padding(20)
             .background(BombTheme.paper)
-            .clipShape(RoundedRectangle(cornerRadius: 22))
-            .overlay(RoundedRectangle(cornerRadius: 22).stroke(BombTheme.ink, lineWidth: 3))
+            .clipShape(RoundedRectangle(cornerRadius: BombRadius.card))
+            .overlay(RoundedRectangle(cornerRadius: BombRadius.card).stroke(BombTheme.ink, lineWidth: 3))
             .padding(.horizontal, 28)
             .frame(maxWidth: 480)
         }
@@ -552,7 +552,7 @@ struct PeerReviewOverlay: View {
 
             VStack(alignment: .leading, spacing: 16) {
                 Label(L10n.text("尚未送出評價"), systemImage: "exclamationmark.triangle.fill")
-                    .font(.title2.weight(.black))
+                    .font(.system(.title2, design: .rounded, weight: .black))
                     .foregroundStyle(BombTheme.red)
 
                 Text(L10n.text("目前填寫的評分與評語尚未送出，確定要離開嗎？"))
@@ -591,8 +591,8 @@ struct PeerReviewOverlay: View {
             }
             .padding(20)
             .background(BombTheme.paper)
-            .clipShape(RoundedRectangle(cornerRadius: 22))
-            .overlay(RoundedRectangle(cornerRadius: 22).stroke(BombTheme.ink, lineWidth: 3))
+            .clipShape(RoundedRectangle(cornerRadius: BombRadius.card))
+            .overlay(RoundedRectangle(cornerRadius: BombRadius.card).stroke(BombTheme.ink, lineWidth: 3))
             .padding(.horizontal, 28)
             .frame(maxWidth: 480)
         }
@@ -606,7 +606,7 @@ struct PeerReviewOverlay: View {
         return VStack(alignment: .leading, spacing: 18) {
             titleBlock
             Label(theme.submissionSuccessMessage(for: member.name), systemImage: theme.successIconName)
-                .font(.title3.weight(.black))
+                .font(.system(.title3, design: .rounded, weight: .black))
                 .foregroundStyle(theme.accentColor)
 
             Text(L10n.format("剩餘 {0} 位隊員尚未評價", String(describing: remainingCount)))
@@ -631,7 +631,7 @@ struct PeerReviewOverlay: View {
             }
 
             titleBlock
-            Text(theme.completionTitle).font(.title2.weight(.black))
+            Text(theme.completionTitle).font(.system(.title2, design: .rounded, weight: .black))
             Text(theme.completionMessage)
                 .font(.subheadline.weight(.bold))
 

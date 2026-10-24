@@ -379,10 +379,9 @@ struct SpotlightOverlay: View {
         }
         .padding(18)
         .background(BombTheme.paper)
-        .clipShape(RoundedRectangle(cornerRadius: 22))
-        .overlay(RoundedRectangle(cornerRadius: 22).stroke(BombTheme.ink, lineWidth: 4))
-        .compositingGroup()
-        .shadow(color: BombTheme.ink, radius: 0, x: 6, y: 6)
+        .clipShape(RoundedRectangle(cornerRadius: BombRadius.card))
+        .overlay(RoundedRectangle(cornerRadius: BombRadius.card).stroke(BombTheme.ink, lineWidth: BombBorder.emphasis))
+        .bombCardShadow()
         .fixedSize(horizontal: false, vertical: true)
     }
 

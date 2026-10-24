@@ -46,8 +46,8 @@ struct BombFormSheet<Content: View, Actions: View>: View {
         .background(backgroundColor.ignoresSafeArea())
         .overlay {
             if !showsHandle {
-                RoundedRectangle(cornerRadius: 28, style: .continuous)
-                    .strokeBorder(BombTheme.ink, lineWidth: 3)
+                RoundedRectangle(cornerRadius: BombRadius.overlay, style: .continuous)
+                    .strokeBorder(BombTheme.ink, lineWidth: BombBorder.card)
                     .ignoresSafeArea()
                     .allowsHitTesting(false)
             }
@@ -101,10 +101,10 @@ extension View {
     func bombFormField() -> some View {
         font(.subheadline.weight(.semibold))
             .padding(13)
-            .background(BombTheme.paper, in: RoundedRectangle(cornerRadius: 15))
+            .background(BombTheme.paper, in: RoundedRectangle(cornerRadius: BombRadius.control))
             .overlay {
-                RoundedRectangle(cornerRadius: 15)
-                    .stroke(BombTheme.ink, lineWidth: 2)
+                RoundedRectangle(cornerRadius: BombRadius.control)
+                    .stroke(BombTheme.ink, lineWidth: BombBorder.inner)
             }
     }
 }
