@@ -111,7 +111,11 @@ final class AppStore {
     @ObservationIgnored private var attachmentRepository: AttachmentRepository?
     @ObservationIgnored private var progressSubscriptions: [UUID: GroupProgressSubscription] = [:]
     private(set) var pendingTaskUpdates: Set<UUID> = []
-    private(set) var pendingSubtaskUpdates: [UUID: UUID] = [:]
+    /// subtaskID → the completion state shown while its update is still on the way to the backend.
+    private(set) var pendingSubtaskUpdates: [UUID: Bool] = [:]
+    /// Each task's subtask updates go out one at a time, so quick taps queue up instead of being dropped.
+    @ObservationIgnored private var subtaskUpdateQueues: [UUID: Task<Bool, Never>] = [:]
+    @ObservationIgnored private var subtaskUpdateCounts: [UUID: Int] = [:]
     private(set) var isSavingNickname = false
     @ObservationIgnored private var groupRepository: GroupRepository?
     @ObservationIgnored private var taskMutationRepository: TaskMutationRepository?
@@ -1033,8 +1037,7 @@ final class AppStore {
                 resolved.insert(action.subtaskID)
                 continue
             }
-            let update = sendTaskUpdate(taskID: action.taskID, action: "setSubtask",
-                                        subtaskID: action.subtaskID.uuidString, isComplete: true)
+            let update = sendSubtaskUpdate(taskID: action.taskID, subtaskID: action.subtaskID, isComplete: true)
             if await update?.value == true {
                 // Drop it right away so a later un-tick in the app is not replayed over.
                 WidgetTodoActionQueue.remove(subtaskIDs: [action.subtaskID])
@@ -1824,6 +1827,8 @@ final class AppStore {
         progressSyncErrorsByGroupID = [:]
         pendingTaskUpdates = []
         pendingSubtaskUpdates = [:]
+        subtaskUpdateQueues = [:]
+        subtaskUpdateCounts = [:]
         attachmentListeners.values.forEach { $0.remove() }
         attachmentListeners.removeAll()
     }
@@ -2172,32 +2177,67 @@ final class AppStore {
               let groupID = task.firestoreGroupID, let documentID = task.firestoreDocumentID else { return nil }
         let generation = cloudGeneration
         pendingTaskUpdates.insert(taskID)
-        let updatingSubtaskID = subtaskID.flatMap(UUID.init(uuidString:))
-        if action == "setSubtask", let updatingSubtaskID {
-            pendingSubtaskUpdates[taskID] = updatingSubtaskID
-        }
         return Task { [weak self] in
             do {
                 try await TaskProgressRepository().update(groupID: groupID, taskID: documentID, action: action,
                     subtaskID: subtaskID, isComplete: isComplete, attachmentID: attachmentID)
                 guard let self, self.firebaseUID == uid, self.cloudGeneration == generation else { return false }
-                if action == "setSubtask", let updatingSubtaskID, let isComplete,
-                   let taskIndex = self.projectTasks.firstIndex(where: { $0.id == taskID }),
-                   let subtaskIndex = self.projectTasks[taskIndex].subtasks.firstIndex(where: { $0.id == updatingSubtaskID }) {
-                    self.projectTasks[taskIndex].subtasks[subtaskIndex].isComplete = isComplete
-                }
                 self.pendingTaskUpdates.remove(taskID)
-                self.pendingSubtaskUpdates.removeValue(forKey: taskID)
                 self.lastEvent = action == "confirm" ? L10n.text("已送出成果確認") : L10n.text("已更新子任務")
                 return true
             } catch {
                 guard let self, self.firebaseUID == uid, self.cloudGeneration == generation else { return false }
                 self.pendingTaskUpdates.remove(taskID)
-                self.pendingSubtaskUpdates.removeValue(forKey: taskID)
                 self.cloudErrorMessage = (error as? LocalizedError)?.errorDescription ?? L10n.text("任務更新失敗，請重試。")
                 return false
             }
         }
+    }
+
+    /// Shows the new state right away and queues the backend update behind any earlier one on the
+    /// same task. If the last queued update for the subtask fails, the tick is rolled back.
+    /// Returns the update, whose value is whether the backend accepted it, or nil when nothing was sent.
+    @discardableResult
+    private func sendSubtaskUpdate(taskID: UUID, subtaskID: UUID, isComplete: Bool) -> Task<Bool, Never>? {
+        guard let uid = firebaseUID,
+              let task = projectTasks.first(where: { $0.id == taskID }),
+              let groupID = task.firestoreGroupID, let documentID = task.firestoreDocumentID else { return nil }
+        let generation = cloudGeneration
+        setSubtask(subtaskID, of: taskID, isComplete: isComplete)
+        pendingSubtaskUpdates[subtaskID] = isComplete
+        subtaskUpdateCounts[subtaskID, default: 0] += 1
+        let previous = subtaskUpdateQueues[taskID]
+        let update = Task { [weak self] in
+            _ = await previous?.value
+            var failure: Error?
+            do {
+                try await TaskProgressRepository().update(groupID: groupID, taskID: documentID, action: "setSubtask",
+                    subtaskID: subtaskID.uuidString, isComplete: isComplete, attachmentID: nil)
+            } catch {
+                failure = error
+            }
+            guard let self, self.firebaseUID == uid, self.cloudGeneration == generation else { return false }
+            let remaining = (self.subtaskUpdateCounts[subtaskID] ?? 1) - 1
+            self.subtaskUpdateCounts[subtaskID] = remaining > 0 ? remaining : nil
+            if remaining <= 0 {
+                self.pendingSubtaskUpdates.removeValue(forKey: subtaskID)
+                if failure != nil { self.setSubtask(subtaskID, of: taskID, isComplete: !isComplete) }
+            }
+            if let failure {
+                self.cloudErrorMessage = (failure as? LocalizedError)?.errorDescription ?? L10n.text("任務更新失敗，請重試。")
+                return false
+            }
+            self.lastEvent = L10n.text("已更新子任務")
+            return true
+        }
+        subtaskUpdateQueues[taskID] = update
+        return update
+    }
+
+    private func setSubtask(_ subtaskID: UUID, of taskID: UUID, isComplete: Bool) {
+        guard let taskIndex = projectTasks.firstIndex(where: { $0.id == taskID }),
+              let subtaskIndex = projectTasks[taskIndex].subtasks.firstIndex(where: { $0.id == subtaskID }) else { return }
+        projectTasks[taskIndex].subtasks[subtaskIndex].isComplete = isComplete
     }
 
     private func startProgressSync(group: Group, uid: String, generation: UUID) {
@@ -2231,8 +2271,17 @@ final class AppStore {
                     else { self.members.append(member) }
                     if member.id == self.currentUserID { self.userName = member.name }
                 }
+                // Keep the ticks still on their way to the backend instead of flashing back to the old state.
+                var tasks = loaded.tasks
+                for taskIndex in tasks.indices {
+                    for subtaskIndex in tasks[taskIndex].subtasks.indices {
+                        if let isComplete = self.pendingSubtaskUpdates[tasks[taskIndex].subtasks[subtaskIndex].id] {
+                            tasks[taskIndex].subtasks[subtaskIndex].isComplete = isComplete
+                        }
+                    }
+                }
                 self.projectTasks.removeAll { $0.groupID == group.id }
-                self.projectTasks.append(contentsOf: loaded.tasks)
+                self.projectTasks.append(contentsOf: tasks)
                 for task in loaded.tasks {
                     self.applyCloudAttachments(self.attachmentsByTaskID[task.id] ?? [], to: task.id)
                     self.startAttachmentSync(for: task.id)
@@ -2411,16 +2460,14 @@ final class AppStore {
         }
     }
 
-    /// 切換子任務完成狀態；雲端任務等待後端確認，再由即時監聽更新畫面。
+    /// 切換子任務完成狀態；雲端任務立刻顯示新狀態，後端失敗時還原。
     func toggleSubtask(taskID: UUID, subtaskID: UUID) async {
         guard let taskIndex = projectTasks.firstIndex(where: { $0.id == taskID }),
               let subtaskIndex = projectTasks[taskIndex].subtasks.firstIndex(where: { $0.id == subtaskID }) else { return }
         if projectTasks[taskIndex].firestoreDocumentID != nil {
             let subtask = projectTasks[taskIndex].subtasks[subtaskIndex]
-            // Wait for the backend so a caller replaying several ticks on one task does not
-            // hit the in-flight guard in `sendTaskUpdate` and silently drop the later ones.
-            _ = await sendTaskUpdate(taskID: taskID, action: "setSubtask", subtaskID: subtask.id.uuidString,
-                                     isComplete: !subtask.isComplete)?.value
+            // Returns once the backend has answered, so callers can wait for the result.
+            _ = await sendSubtaskUpdate(taskID: taskID, subtaskID: subtask.id, isComplete: !subtask.isComplete)?.value
             return
         }
         projectTasks[taskIndex].subtasks[subtaskIndex].isComplete.toggle()
