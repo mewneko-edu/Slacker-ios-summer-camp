@@ -209,7 +209,7 @@ struct GroupDetailView: View {
                         .frame(height: proxy.size.height * 0.82)
                         .padding(.horizontal, 8)
                         .padding(.bottom, 8)
-                        .transition(.move(edge: .bottom).combined(with: .opacity))
+                        .transition(reduceMotion ? .opacity : .move(edge: .bottom).combined(with: .opacity))
                     }
 
 #if DEBUG
