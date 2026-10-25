@@ -1002,7 +1002,7 @@ final class AppStore {
     ///
     /// A queued tick is only applied while its subtask is still incomplete, so replaying the
     /// same queue twice cannot toggle a completed subtask back open. An entry is dropped once
-    /// the backend confirms it, or once it is too old to replay.
+    /// the backend confirms it, or once it is older than `WidgetTodoAction.replayExpiry`.
     ///
     /// An entry whose task is not in `projectTasks` is kept rather than dropped: the cloud
     /// tasks may simply not have loaded yet. Expiry is what eventually clears a tick that can
@@ -1013,7 +1013,7 @@ final class AppStore {
 
         var resolved: Set<UUID> = []
         for action in actions {
-            if action.isStale() {
+            if action.isStale(after: WidgetTodoAction.replayExpiry) {
                 resolved.insert(action.subtaskID)
                 continue
             }

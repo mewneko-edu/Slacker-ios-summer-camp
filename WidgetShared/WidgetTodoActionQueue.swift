@@ -9,12 +9,16 @@ struct WidgetTodoAction: Codable, Equatable {
     let taskID: UUID
     let requestedAt: Date
 
-    /// Pending ticks are hidden from the widget. Give up after a while so a tick that can
+    /// Pending ticks are hidden from the widget. Stop hiding after a while so a tick that can
     /// never be replayed (task deleted while offline, say) stops hiding a real to-do.
     static let expiry: TimeInterval = 15 * 60
 
-    func isStale(at date: Date = .now) -> Bool {
-        date.timeIntervalSince(requestedAt) > Self.expiry
+    /// How long the app still replays a tick. Much longer than `expiry`, so opening the app
+    /// late does not lose a completion the user made on the Home Screen.
+    static let replayExpiry: TimeInterval = 7 * 24 * 60 * 60
+
+    func isStale(at date: Date = .now, after interval: TimeInterval = Self.expiry) -> Bool {
+        date.timeIntervalSince(requestedAt) > interval
     }
 }
 
