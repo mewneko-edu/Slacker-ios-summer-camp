@@ -1021,7 +1021,9 @@ final class AppStore {
                   let subtask = task.subtasks.first(where: { $0.id == action.subtaskID }) else {
                 continue
             }
-            if subtask.isComplete {
+            // The widget only lists the current user's own tasks, so a tick on anyone else's
+            // (another account signed in since, or the task was reassigned) can never be replayed.
+            if subtask.isComplete || task.ownerMemberID != currentUserID {
                 resolved.insert(action.subtaskID)
                 continue
             }
