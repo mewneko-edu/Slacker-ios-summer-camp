@@ -246,6 +246,8 @@ final class AppStore {
 
     /// 每個群組的完整聊天時間軸；離開聊天室再進入時仍會讀取同一份記錄。
     var chatItemsByGroupID: [UUID: [ChatRoomItem]] = [:]
+    /// 每個群組在聊天室裡最後看過的訊息時間；只存在記憶體中，用來顯示聊天室按鈕的未讀圓點。
+    private var lastSeenChatDateByGroupID: [UUID: Date] = [:]
     private(set) var chatSenderIDsByGroupID: [UUID: [String: String]] = [:]
 
     var cloudChatMessageIDsByGroupID: [UUID: [String]] = [:]
@@ -444,6 +446,26 @@ final class AppStore {
     /// 取得指定群組目前保存的完整聊天內容。
     func chatItems(for groupID: UUID) -> [ChatRoomItem] {
         chatItemsByGroupID[groupID] ?? []
+    }
+
+    /// 記錄使用者已看過該群組目前的聊天內容。
+    func markChatSeen(in groupID: UUID) {
+        lastSeenChatDateByGroupID[groupID] = chatItems(for: groupID).map(\.createdAt).max() ?? .distantPast
+    }
+
+    /// 第一次看到群組時，以當下的聊天內容作為之後判斷新訊息的基準。
+    func beginTrackingUnreadChat(in groupID: UUID) {
+        guard lastSeenChatDateByGroupID[groupID] == nil else { return }
+        markChatSeen(in: groupID)
+    }
+
+    /// 是否有使用者還沒在聊天室看過、由別人送出的新內容。
+    func hasUnreadChat(in groupID: UUID) -> Bool {
+        guard let seenDate = lastSeenChatDateByGroupID[groupID] else { return false }
+        return chatItems(for: groupID).contains { item in
+            if case let .message(_, _, _, _, isCurrentUser, _, _) = item, isCurrentUser { return false }
+            return item.createdAt > seenDate
+        }
     }
 
     /// 將新訊息、系統事件或機器人回覆加入指定群組的聊天記錄。
@@ -1681,6 +1703,7 @@ final class AppStore {
         peerReviewCommentsByGroupID = [:]
         personalPeerReviewProjects = []
         chatItemsByGroupID = [:]
+        lastSeenChatDateByGroupID = [:]
         chatSenderIDsByGroupID = [:]
         cloudChatMessageIDsByGroupID = [:]
         chatReadReceiptsByGroupID = [:]

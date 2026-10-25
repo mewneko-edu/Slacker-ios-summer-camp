@@ -544,7 +544,19 @@ struct GroupDetailView: View {
                     Image(systemName: "bubble.left.and.bubble.right.fill")
                 }
                 .buttonStyle(BombHeaderButtonStyle())
+                .overlay(alignment: .topTrailing) {
+                    if model.hasUnreadChat(in: currentGroup.id) {
+                        Circle()
+                            .fill(BombTheme.red)
+                            .frame(width: 12, height: 12)
+                            .overlay(Circle().stroke(BombTheme.yellow, lineWidth: 2))
+                            .allowsHitTesting(false)
+                            .accessibilityHidden(true)
+                    }
+                }
                 .accessibilityLabel(L10n.text("聊天室"))
+                .accessibilityValue(model.hasUnreadChat(in: currentGroup.id) ? L10n.text("有新訊息") : "")
+                .onAppear { model.beginTrackingUnreadChat(in: currentGroup.id) }
                 .tutorialTarget(
                     .chatButton,
                     enabled: tutorialStep?.wrappedValue == .chatEntry

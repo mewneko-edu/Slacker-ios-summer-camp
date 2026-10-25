@@ -140,6 +140,7 @@ struct ChatRoomView: View {
             Text(aiFailureMessage ?? "")
         }
         .onAppear {
+            model.markChatSeen(in: group.id)
             if tutorialStep?.wrappedValue == .chatEntry {
                 tutorialStep?.wrappedValue = .aiChat
             }
@@ -160,6 +161,7 @@ struct ChatRoomView: View {
             model.markLatestChatMessageRead(groupID: group.id)
         }
         .onDisappear {
+            model.markChatSeen(in: group.id)
             model.stopChatSync(groupID: group.id, displayName: model.profileName)
         }
         .toolbar(.hidden, for: .tabBar)
