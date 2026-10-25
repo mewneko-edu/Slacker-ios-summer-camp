@@ -291,9 +291,6 @@ struct AppRootView: View {
                     .transition(.move(edge: .bottom).combined(with: .opacity))
             }
         }
-        .onChange(of: tab) { oldTab, _ in
-            if oldTab == .settings { navigationResetIDs[.settings] = UUID() }
-        }
         .onPreferenceChange(BombTabBarHiddenPreferenceKey.self) { hidden in
             withAnimation(.snappy) { isBombTabBarHidden = hidden }
         }
