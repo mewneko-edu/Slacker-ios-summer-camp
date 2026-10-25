@@ -132,7 +132,7 @@ struct MyTasksView: View {
                         .font(.subheadline.weight(.black))
                         .foregroundStyle(showCompleted == completed ? BombTheme.ink : BombTheme.paper)
                         .frame(maxWidth: .infinity, minHeight: 36)
-                        .background(showCompleted == completed ? BombTheme.yellow : .clear, in: Capsule())
+                        .background(showCompleted == completed ? BombTheme.paper : .clear, in: Capsule())
                         .contentShape(.capsule)
                 }
                 .buttonStyle(.plain)
@@ -202,7 +202,7 @@ private struct TaskProgressDashboard: View {
             }
             .offset(y: 31)
         }
-        .frame(height: 260)
+        .frame(height: 220)
         .onAppear {
             if isActive { animateProgress(fromZero: true) }
         }
