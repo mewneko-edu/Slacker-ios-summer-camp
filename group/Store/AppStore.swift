@@ -1649,7 +1649,11 @@ final class AppStore {
             settledAt = now
         }
 
-        groups[index].settledAt = settledAt
+        // A snapshot may reload or reorder the groups while the callable is in flight.
+        guard let currentIndex = groups.firstIndex(where: { $0.id == groupID }) else {
+            throw GroupSettlementError.groupNotFound
+        }
+        groups[currentIndex].settledAt = settledAt
         lastEvent = L10n.text("專案已提前結算")
         refreshDeadlineReminders()
     }
