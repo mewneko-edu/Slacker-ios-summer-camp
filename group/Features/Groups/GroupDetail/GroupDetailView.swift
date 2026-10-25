@@ -146,19 +146,6 @@ struct GroupDetailView: View {
                                 }
                                 if currentGroup.leaderElectionID != nil { leadershipSection }
                                 departedTasksSection
-                                Button(role: .destructive) {
-                                    showsLeaveConfirmation = true
-                                } label: {
-                                    Label(isLeaving ? L10n.text("退出中…") : L10n.text("退出群組"), systemImage: "rectangle.portrait.and.arrow.right")
-                                        .font(.headline.weight(.black))
-                                        .foregroundStyle(BombTheme.paper)
-                                        .frame(width: (proxy.size.width - 32) * 0.6, height: 52)
-                                        .background(BombTheme.red, in: Capsule())
-                                        .overlay(Capsule().stroke(BombTheme.ink, lineWidth: 2))
-                                }
-                                .buttonStyle(.plain)
-                                .frame(maxWidth: .infinity, alignment: .center)
-                                .disabled(isLeaving)
                             }
                             .padding(.horizontal, 16)
                             .padding(.top, 8)
@@ -1127,6 +1114,24 @@ struct GroupDetailView: View {
                     }
                     .buttonStyle(.plain)
                 }
+
+                Button(role: .destructive) {
+                    dismissEditOptions()
+                    withAnimation(.easeOut(duration: 0.2)) {
+                        showsLeaveConfirmation = true
+                    }
+                } label: {
+                    Label(isLeaving ? L10n.text("退出中…") : L10n.text("退出群組"), systemImage: "rectangle.portrait.and.arrow.right")
+                        .font(.headline.weight(.black))
+                        .foregroundStyle(BombTheme.red)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.horizontal, 16)
+                        .padding(.vertical, 14)
+                        .overlay(RoundedRectangle(cornerRadius: BombRadius.control).stroke(BombTheme.red, lineWidth: 2))
+                        .contentShape(RoundedRectangle(cornerRadius: BombRadius.control))
+                }
+                .buttonStyle(.plain)
+                .disabled(isLeaving)
             }
             .foregroundStyle(BombTheme.ink)
             .padding(20)
