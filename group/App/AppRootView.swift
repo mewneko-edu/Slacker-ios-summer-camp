@@ -11,7 +11,8 @@ struct AppRootView: View {
     @State private var subscription = SubscriptionStore()
     @State private var launchAnimationID = 0
     @State private var tab = AppTab.groups
-    @State private var settingsNavigationID = UUID()
+    /// 換掉某個分頁的 ID 會重建它的 NavigationStack，讓該分頁回到根畫面。
+    @State private var navigationResetIDs: [AppTab: UUID] = [:]
     @State private var tutorialStep: TutorialStep?
     @State private var isBombTabBarHidden = false
     @State private var safeAreaInsets = EdgeInsets()
@@ -249,6 +250,7 @@ struct AppRootView: View {
                     }
                 }
             }
+            .id(navigationResetIDs[.groups])
             .opacity(tab == .groups ? 1 : 0)
             .allowsHitTesting(tab == .groups)
             .accessibilityHidden(tab != .groups)
@@ -259,6 +261,7 @@ struct AppRootView: View {
             NavigationStack {
                 MyTasksView(model: store, isSelected: tab == .myTasks)
             }
+                .id(navigationResetIDs[.myTasks])
                 .opacity(tab == .myTasks ? 1 : 0)
                 .allowsHitTesting(tab == .myTasks)
                 .accessibilityHidden(tab != .myTasks)
@@ -274,7 +277,7 @@ struct AppRootView: View {
                     onReplayTutorial: replayTutorial
                 )
             }
-            .id(settingsNavigationID)
+            .id(navigationResetIDs[.settings])
             .opacity(tab == .settings ? 1 : 0)
             .allowsHitTesting(tab == .settings)
             .accessibilityHidden(tab != .settings)
@@ -284,12 +287,12 @@ struct AppRootView: View {
         }
         .safeAreaInset(edge: .bottom, spacing: 0) {
             if !isBombTabBarHidden {
-                BombTabBar(selection: $tab)
+                BombTabBar(selection: $tab, onReselect: popToRoot)
                     .transition(.move(edge: .bottom).combined(with: .opacity))
             }
         }
         .onChange(of: tab) { oldTab, _ in
-            if oldTab == .settings { settingsNavigationID = UUID() }
+            if oldTab == .settings { navigationResetIDs[.settings] = UUID() }
         }
         .onPreferenceChange(BombTabBarHiddenPreferenceKey.self) { hidden in
             withAnimation(.snappy) { isBombTabBarHidden = hidden }
@@ -319,6 +322,11 @@ struct AppRootView: View {
                 .controlSize(.large)
                 .tint(BombTheme.ink)
         }
+    }
+
+    private func popToRoot(_ tab: AppTab) {
+        if tab == .groups { reviewNotificationPath = [] }
+        navigationResetIDs[tab] = UUID()
     }
 
     private func openPendingReview() {

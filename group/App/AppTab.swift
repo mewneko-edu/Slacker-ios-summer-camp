@@ -28,6 +28,8 @@ struct BombTabBar: View {
     @State private var barHeight: CGFloat = 0
 
     @Binding var selection: AppTab
+    /// 再點一次目前的分頁時呼叫，讓該分頁回到導覽根畫面。
+    var onReselect: (AppTab) -> Void = { _ in }
 
     var body: some View {
         VStack(spacing: 0) {
@@ -37,7 +39,11 @@ struct BombTabBar: View {
             HStack(spacing: 4) {
                 ForEach(AppTab.allCases, id: \.self) { tab in
                     Button {
-                        selection = tab
+                        if selection == tab {
+                            onReselect(tab)
+                        } else {
+                            selection = tab
+                        }
                     } label: {
                         VStack(spacing: 2) {
                             Image(systemName: tab.symbol)
