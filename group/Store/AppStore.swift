@@ -1000,9 +1000,9 @@ final class AppStore {
     /// Replays the subtasks the user ticked on the widget, which cannot reach the backend
     /// from the extension. Call this whenever the app becomes active.
     ///
-    /// A queued tick is only applied while its subtask is still incomplete, so replaying the
-    /// same queue twice cannot toggle a completed subtask back open. An entry is dropped once
-    /// the backend confirms it, or once it is older than `WidgetTodoAction.replayExpiry`.
+    /// A queued tick always marks its subtask complete and is dropped as soon as the backend
+    /// confirms it, so un-ticking the subtask in the app afterwards sticks. An entry is also
+    /// dropped once it is older than `WidgetTodoAction.replayExpiry`.
     ///
     /// An entry whose task is not in `projectTasks` is kept rather than dropped: the cloud
     /// tasks may simply not have loaded yet. Expiry is what eventually clears a tick that can
@@ -1025,7 +1025,18 @@ final class AppStore {
                 resolved.insert(action.subtaskID)
                 continue
             }
-            await toggleSubtask(taskID: action.taskID, subtaskID: action.subtaskID)
+            guard task.firestoreDocumentID != nil else {
+                // Local tasks update synchronously; the subtask is incomplete, so this completes it.
+                await toggleSubtask(taskID: action.taskID, subtaskID: action.subtaskID)
+                resolved.insert(action.subtaskID)
+                continue
+            }
+            let update = sendTaskUpdate(taskID: action.taskID, action: "setSubtask",
+                                        subtaskID: action.subtaskID.uuidString, isComplete: true)
+            if await update?.value == true {
+                // Drop it right away so a later un-tick in the app is not replayed over.
+                WidgetTodoActionQueue.remove(subtaskIDs: [action.subtaskID])
+            }
         }
 
         WidgetTodoActionQueue.remove(subtaskIDs: resolved)
