@@ -23,11 +23,17 @@ struct WidgetTodoAction: Codable, Equatable {
 }
 
 /// Pending widget ticks, stored in the App Group so both processes see the same queue.
+///
+/// Each tick lives under its own key, so the app and the widget never rewrite each other's
+/// entries and a tick made while the app is replaying cannot be lost.
 enum WidgetTodoActionQueue {
+    private static let keyPrefix = WidgetSharedConfig.todoActionQueueKey + "."
+
     static func pending() -> [WidgetTodoAction] {
-        guard let data = WidgetSharedConfig.defaults?.data(forKey: WidgetSharedConfig.todoActionQueueKey),
-              let actions = try? JSONDecoder().decode([WidgetTodoAction].self, from: data) else { return [] }
-        return actions
+        guard let defaults = WidgetSharedConfig.defaults else { return [] }
+        return defaults.dictionaryRepresentation()
+            .filter { $0.key.hasPrefix(keyPrefix) }
+            .compactMap { ($0.value as? Data).flatMap { try? JSONDecoder().decode(WidgetTodoAction.self, from: $0) } }
     }
 
     /// Subtasks the app should treat as already completed, so a republished snapshot does not
@@ -39,24 +45,17 @@ enum WidgetTodoActionQueue {
     /// Called from the widget. Re-ticking the same subtask keeps the original timestamp so a
     /// repeated tap cannot extend the window in which the row stays hidden.
     static func enqueue(_ action: WidgetTodoAction) {
-        var actions = pending()
-        guard !actions.contains(where: { $0.subtaskID == action.subtaskID }) else { return }
-        actions.append(action)
-        write(actions)
+        guard let defaults = WidgetSharedConfig.defaults else { return }
+        let key = keyPrefix + action.subtaskID.uuidString
+        guard defaults.data(forKey: key) == nil,
+              let data = try? JSONEncoder().encode(action) else { return }
+        defaults.set(data, forKey: key)
     }
 
     static func remove(subtaskIDs: Set<UUID>) {
-        guard !subtaskIDs.isEmpty else { return }
-        let remaining = pending().filter { !subtaskIDs.contains($0.subtaskID) }
-        write(remaining)
-    }
-
-    private static func write(_ actions: [WidgetTodoAction]) {
         guard let defaults = WidgetSharedConfig.defaults else { return }
-        if actions.isEmpty {
-            defaults.removeObject(forKey: WidgetSharedConfig.todoActionQueueKey)
-        } else if let data = try? JSONEncoder().encode(actions) {
-            defaults.set(data, forKey: WidgetSharedConfig.todoActionQueueKey)
+        for id in subtaskIDs {
+            defaults.removeObject(forKey: keyPrefix + id.uuidString)
         }
     }
 }
