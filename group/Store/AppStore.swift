@@ -2233,6 +2233,3 @@ private struct PokeCountKey: Hashable {
     let groupID: UUID
     let memberID: UUID
 }
-
-/// 暫時相容舊 View 名稱；新檔案一律使用 AppStore。
-typealias GroupBombModel = AppStore

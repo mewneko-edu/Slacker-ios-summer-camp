@@ -4,7 +4,7 @@ import UIKit
 
 /// First tab: groups projects by their deadline and peer-review state.
 struct GroupListView: View {
-    let model: GroupBombModel
+    let model: AppStore
     let subscription: SubscriptionStore
     let isSelected: Bool
     private let tutorialStep: Binding<TutorialStep?>?
@@ -16,7 +16,7 @@ struct GroupListView: View {
     @State private var joinSuccessMessage: String?
 
     init(
-        model: GroupBombModel,
+        model: AppStore,
         subscription: SubscriptionStore,
         isSelected: Bool = true,
         tutorialStep: Binding<TutorialStep?>? = nil
@@ -284,7 +284,7 @@ struct GroupListView: View {
 }
 
 private struct AddGroupSheet: View {
-    let model: GroupBombModel
+    let model: AppStore
     let subscription: SubscriptionStore
     let enterGroup: (Group) -> Void
     let joinedGroup: (String) -> Void
@@ -307,7 +307,7 @@ private struct AddGroupSheet: View {
     @FocusState private var isCodeFieldFocused: Bool
 
     init(
-        model: GroupBombModel,
+        model: AppStore,
         subscription: SubscriptionStore,
         initialMode: GroupEntryMode,
         enterGroup: @escaping (Group) -> Void,

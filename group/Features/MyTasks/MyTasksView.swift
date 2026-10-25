@@ -2,12 +2,12 @@ import SwiftUI
 
 /// Second tab: aggregates the current user's tasks and opens task delivery details.
 struct MyTasksView: View {
-    let model: GroupBombModel
+    let model: AppStore
     let isSelected: Bool
     @State private var showCompleted = false
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
-    init(model: GroupBombModel, isSelected: Bool = true) {
+    init(model: AppStore, isSelected: Bool = true) {
         self.model = model
         self.isSelected = isSelected
     }
@@ -457,7 +457,7 @@ private struct TaskRemainingTime {
 
 struct MyTaskDetailView: View {
     @Environment(\.dismiss) private var dismiss
-    let model: GroupBombModel
+    let model: AppStore
     let taskID: UUID
     @State private var showsSubmissionSheet = false
 

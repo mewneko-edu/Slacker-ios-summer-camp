@@ -23,7 +23,7 @@ struct MemberProgressPreviewItem: Identifiable {
 }
 
 struct MemberProgressCard: View {
-    let model: GroupBombModel
+    let model: AppStore
     let firestoreGroupID: String?
     let member: MemberProgressPreviewItem
     let tasks: [ProjectTask]

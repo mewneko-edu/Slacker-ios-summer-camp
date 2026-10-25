@@ -5,7 +5,7 @@ import Combine
 struct AppRootView: View {
     var playsLaunchAnimation = true
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
-    @State private var store = GroupBombModel()
+    @State private var store = AppStore()
     @Environment(\.scenePhase) private var scenePhase
     @State private var authSession = AuthSessionStore()
     @State private var subscription = SubscriptionStore()
