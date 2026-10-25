@@ -922,7 +922,7 @@ private struct GroupRow: View {
     private var statusForegroundColor: Color {
         switch status {
         case .active: BombTheme.ink
-        case .awaitingReviewCompleted: status.accentColor
+        case .awaitingReviewCompleted: Color(red: 0.62, green: 0.30, blue: 0)
         case .awaitingReviewExploded: BombTheme.red
         case .closed: BombTheme.green
         }

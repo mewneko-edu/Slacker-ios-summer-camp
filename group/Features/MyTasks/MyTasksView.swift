@@ -390,11 +390,10 @@ private struct MyTaskCard: View {
                 HStack(spacing: 8) {
                     statusDot
 
-                    HStack(alignment: .firstTextBaseline, spacing: 8) {
-                        titleText.layoutPriority(1)
-                        if !groupName.isEmpty { groupNameText }
+                    VStack(alignment: .leading, spacing: 2) {
+                        titleText.lineLimit(2)
+                        if !groupName.isEmpty { groupNameText.lineLimit(1) }
                     }
-                    .lineLimit(1)
 
                     Spacer(minLength: 0)
 

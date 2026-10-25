@@ -42,6 +42,7 @@ struct BombTabBar: View {
                         VStack(spacing: 2) {
                             Image(systemName: tab.symbol)
                                 .font(.body.weight(.black))
+                                .frame(height: 26)
                             Text(tab.title)
                                 .font(.caption2.weight(.black))
                         }
