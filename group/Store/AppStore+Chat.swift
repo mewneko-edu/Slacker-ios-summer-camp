@@ -12,18 +12,43 @@ extension AppStore {
 
     /// 記錄使用者已看過該群組目前的聊天內容。
     func markChatSeen(in groupID: UUID) {
-        lastSeenChatDateByGroupID[groupID] = chatItems(for: groupID).map(\.createdAt).max() ?? .distantPast
+        let latest = chatItems(for: groupID).map(\.createdAt) + [latestOthersChatDateByGroupID[groupID]].compactMap { $0 }
+        lastSeenChatDateByGroupID[groupID] = latest.max() ?? .distantPast
     }
 
-    /// 第一次看到群組時，以當下的聊天內容作為之後判斷新訊息的基準。
+    /// 在群組頁開始追蹤未讀。雲端群組只監聽最新一則訊息，第一次收到時以它作為基準。
     func beginTrackingUnreadChat(in groupID: UUID) {
-        guard lastSeenChatDateByGroupID[groupID] == nil else { return }
-        markChatSeen(in: groupID)
+        guard dataMode == .live else {
+            if lastSeenChatDateByGroupID[groupID] == nil { markChatSeen(in: groupID) }
+            return
+        }
+        guard latestChatListeners[groupID] == nil, FirebaseApp.app() != nil else { return }
+        let repository = chatRepository ?? ChatRepository()
+        chatRepository = repository
+        latestChatListeners[groupID] = repository.listenToLatestMessage(
+            groupID: cloudGroupDocumentID(for: groupID)
+        ) { [weak self] createdAt, senderID in
+            Task { @MainActor in
+                guard let self else { return }
+                if self.lastSeenChatDateByGroupID[groupID] == nil {
+                    self.lastSeenChatDateByGroupID[groupID] = createdAt ?? .distantPast
+                }
+                if let createdAt, senderID != self.firebaseUID {
+                    self.latestOthersChatDateByGroupID[groupID] = createdAt
+                }
+            }
+        }
+    }
+
+    /// 離開群組頁時停止監聽最新訊息；聊天室內另有完整的訊息監聽。
+    func endTrackingUnreadChat(in groupID: UUID) {
+        latestChatListeners.removeValue(forKey: groupID)?.remove()
     }
 
     /// 是否有使用者還沒在聊天室看過、由別人送出的新內容。
     func hasUnreadChat(in groupID: UUID) -> Bool {
         guard let seenDate = lastSeenChatDateByGroupID[groupID] else { return false }
+        if let latest = latestOthersChatDateByGroupID[groupID], latest > seenDate { return true }
         return chatItems(for: groupID).contains { item in
             if case let .message(_, _, _, _, isCurrentUser, _, _) = item, isCurrentUser { return false }
             return item.createdAt > seenDate

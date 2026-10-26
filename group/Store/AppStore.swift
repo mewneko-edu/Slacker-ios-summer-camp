@@ -157,6 +157,7 @@ final class AppStore {
     @ObservationIgnored var chatPresenceListeners: [UUID: ListenerRegistration] = [:]
     @ObservationIgnored var chatReadListeners: [UUID: ListenerRegistration] = [:]
     @ObservationIgnored var chatPinListeners: [UUID: ListenerRegistration] = [:]
+    @ObservationIgnored var latestChatListeners: [UUID: ListenerRegistration] = [:]
     @ObservationIgnored var chatHeartbeatTasks: [UUID: Task<Void, Never>] = [:]
     @ObservationIgnored var chatRepository: ChatRepository?
     @ObservationIgnored var lastMarkedChatMessageIDByGroupID: [UUID: String] = [:]
@@ -248,6 +249,8 @@ final class AppStore {
     var chatItemsByGroupID: [UUID: [ChatRoomItem]] = [:]
     /// 每個群組在聊天室裡最後看過的訊息時間；只存在記憶體中，用來顯示聊天室按鈕的未讀圓點。
     var lastSeenChatDateByGroupID: [UUID: Date] = [:]
+    /// 聊天室外看到的最新一則別人送出的訊息時間；只在群組頁監聽，不載入完整聊天記錄。
+    var latestOthersChatDateByGroupID: [UUID: Date] = [:]
     var chatSenderIDsByGroupID: [UUID: [String: String]] = [:]
 
     var cloudChatMessageIDsByGroupID: [UUID: [String]] = [:]
@@ -1248,6 +1251,7 @@ final class AppStore {
         personalPeerReviewProjects = []
         chatItemsByGroupID = [:]
         lastSeenChatDateByGroupID = [:]
+        latestOthersChatDateByGroupID = [:]
         chatSenderIDsByGroupID = [:]
         cloudChatMessageIDsByGroupID = [:]
         chatReadReceiptsByGroupID = [:]
@@ -1374,6 +1378,8 @@ final class AppStore {
         chatPresenceListeners.values.forEach { $0.remove() }
         chatReadListeners.values.forEach { $0.remove() }
         chatPinListeners.values.forEach { $0.remove() }
+        latestChatListeners.values.forEach { $0.remove() }
+        latestChatListeners.removeAll()
         chatMessageListeners.removeAll()
         chatPresenceListeners.removeAll()
         chatReadListeners.removeAll()

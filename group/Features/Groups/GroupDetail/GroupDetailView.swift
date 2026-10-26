@@ -544,6 +544,7 @@ struct GroupDetailView: View {
                 .accessibilityLabel(L10n.text("聊天室"))
                 .accessibilityValue(model.hasUnreadChat(in: currentGroup.id) ? L10n.text("有新訊息") : "")
                 .onAppear { model.beginTrackingUnreadChat(in: currentGroup.id) }
+                .onDisappear { model.endTrackingUnreadChat(in: currentGroup.id) }
                 .tutorialTarget(
                     .chatButton,
                     enabled: tutorialStep?.wrappedValue == .chatEntry
